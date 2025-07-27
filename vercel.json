@@ -2,13 +2,6 @@
   "name": "magical-learning-platform",
   "version": 2,
   "regions": ["iad1", "sfo1", "fra1"],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase-url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase-anon-key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase-service-key",
-    "OPENAI_API_KEY": "@openai-api-key",
-    "NEXT_PUBLIC_APP_URL": "@app-url"
-  },
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
