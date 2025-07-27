@@ -18,6 +18,8 @@ interface APIRequest {
 }
 
 export async function POST(request: NextRequest) {
+  let body: APIRequest | null = null
+  
   try {
     // Check if at least OpenAI API key is configured
     if (!process.env.OPENAI_API_KEY) {
@@ -30,10 +32,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body: APIRequest = await request.json()
+    body = await request.json()
 
     // Validate required fields
-    if (!body.userProfile || !body.context || !body.useCase) {
+    if (!body || !body.userProfile || !body.context || !body.useCase) {
       return NextResponse.json(
         { 
           error: 'Missing required fields',
