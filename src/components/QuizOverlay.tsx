@@ -148,8 +148,9 @@ export default function QuizOverlay({ quiz, isOpen, onClose, onComplete, userPro
     
     // Record performance for difficulty adjustment
     if (userProfile) {
-      const difficultyLevel = quiz.difficulty === 'beginner' ? 3 : 
-                             quiz.difficulty === 'intermediate' ? 5 : 7
+      // Default difficulty level based on quiz complexity
+      const difficultyLevel = quiz.questions.length <= 3 ? 3 : 
+                             quiz.questions.length <= 6 ? 5 : 7
       const elapsedTime = Date.now() - startTime
       
       recordPerformance(
@@ -236,8 +237,8 @@ export default function QuizOverlay({ quiz, isOpen, onClose, onComplete, userPro
           performanceData: {
             score: results.score,
             attempts: 1,
-            correctAnswers: results.correct,
-            totalQuestions: results.total
+            correctAnswers: results.correctAnswers,
+            totalQuestions: results.totalQuestions
           }
         }),
       })
@@ -463,18 +464,18 @@ export default function QuizOverlay({ quiz, isOpen, onClose, onComplete, userPro
                         
                         {recommendation.adjustmentMagnitude > 0 && (
                           <div className={`p-3 rounded-lg ${
-                            recommendation.recommendedLevel > (quiz.difficulty === 'beginner' ? 3 : quiz.difficulty === 'intermediate' ? 5 : 7)
+                            recommendation.recommendedLevel > (quiz.questions.length <= 3 ? 3 : quiz.questions.length <= 6 ? 5 : 7)
                               ? 'bg-green-50 border border-green-200'
                               : 'bg-blue-50 border border-blue-200'
                           }`}>
                             <div className="flex items-center space-x-2 mb-1">
-                              {recommendation.recommendedLevel > (quiz.difficulty === 'beginner' ? 3 : quiz.difficulty === 'intermediate' ? 5 : 7) ? (
+                              {recommendation.recommendedLevel > (quiz.questions.length <= 3 ? 3 : quiz.questions.length <= 6 ? 5 : 7) ? (
                                 <TrendingUp className="w-4 h-4 text-green-600" />
                               ) : (
                                 <TrendingDown className="w-4 h-4 text-blue-600" />
                               )}
                               <span className="text-sm font-medium">
-                                {recommendation.recommendedLevel > (quiz.difficulty === 'beginner' ? 3 : quiz.difficulty === 'intermediate' ? 5 : 7)
+                                {recommendation.recommendedLevel > (quiz.questions.length <= 3 ? 3 : quiz.questions.length <= 6 ? 5 : 7)
                                   ? 'Ready for More Challenge'
                                   : 'Adjusting for Better Learning'
                                 }

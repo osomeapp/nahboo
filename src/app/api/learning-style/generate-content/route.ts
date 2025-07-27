@@ -257,7 +257,8 @@ async function generateContentForStyle(
       adaptationApplied: `${style}_optimization`,
       generatedAt: new Date().toISOString(),
       ...getStyleSpecificMetadata(style)
-    }
+    },
+    created_at: new Date().toISOString()
   }
 
   return {
@@ -507,7 +508,8 @@ function createFallbackContent(
       isFallback: true,
       styleOptimized: true,
       generatedAt: new Date().toISOString()
-    }
+    },
+    created_at: new Date().toISOString()
   }
 }
 

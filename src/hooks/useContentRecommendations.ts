@@ -419,7 +419,7 @@ export function useContentRecommendations(userId: string, userProfile: UserProfi
 
   // Filter recommendations based on current filters
   const filteredRecommendations = state.recommendations.filter(rec => {
-    if (filters.contentTypes.length > 0 && !filters.contentTypes.includes(rec.content.type)) {
+    if (filters.contentTypes.length > 0 && !filters.contentTypes.includes(rec.content.content_type)) {
       return false
     }
     
@@ -427,7 +427,7 @@ export function useContentRecommendations(userId: string, userProfile: UserProfi
       return false
     }
     
-    if (rec.content.estimatedTime > filters.timeAvailable) {
+    if (rec.content.estimated_time > filters.timeAvailable) {
       return false
     }
 
@@ -490,7 +490,7 @@ export function useContentRecommendations(userId: string, userProfile: UserProfi
     }, [state.recommendations]),
     
     getRecommendationsByType: useCallback((type: string) => {
-      return state.recommendations.filter(rec => rec.content.type === type)
+      return state.recommendations.filter(rec => rec.content.content_type === type)
     }, [state.recommendations]),
     
     getRecommendationsByPriority: useCallback((priority: 'low' | 'medium' | 'high' | 'critical') => {

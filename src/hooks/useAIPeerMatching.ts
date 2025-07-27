@@ -822,7 +822,7 @@ export function useSessionManagement() {
     hasActiveSession: !!activeSession,
     sessionCount: sessions.length,
     completedSessions: sessions.filter(s => s.session_outcomes.completion_status === 'completed'),
-    activeSessions: sessions.filter(s => s.session_outcomes.completion_status === 'in_progress')
+    activeSessions: sessions.filter(s => s.session_outcomes.completion_status === 'partial')
   }
 }
 

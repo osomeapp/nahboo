@@ -327,7 +327,7 @@ export function useStylePreferenceTracking() {
 
     // Convert to average scores
     const averageEffectiveness = Object.entries(styleEffectiveness).reduce((acc, [style, data]) => {
-      acc[style] = data.total / data.count
+      acc[style] = (data as any).total / (data as any).count
       return acc
     }, {} as Record<string, number>)
 

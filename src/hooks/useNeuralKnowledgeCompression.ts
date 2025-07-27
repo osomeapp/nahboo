@@ -136,7 +136,7 @@ export function useNeuralKnowledgeCompression() {
           prior_knowledge: params.learner_customization.prior_knowledge,
           learning_style: params.learner_customization.learning_style,
           cognitive_preferences: {
-            information_processing_style: 'balanced',
+            information_processing_style: 'mixed',
             abstraction_preference: 'balanced',
             example_preference: 'varied',
             relationship_focus: 'networked',

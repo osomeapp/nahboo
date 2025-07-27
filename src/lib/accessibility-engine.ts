@@ -515,12 +515,13 @@ Focus on evidence-based, actionable needs that require specific accommodations.`
 
     try {
       const response = await multiModelAI.generateContent({
-        prompt,
-        useCase: 'analysis',
-        options: {
-          temperature: 0.3,
-          maxTokens: 1000
-        }
+        context: prompt,
+        useCase: 'general_tutoring',
+        userProfile: { age_group: 'adult', level: 'intermediate', subject: 'accessibility', use_case: 'general_tutoring' } as any,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.3,
+        maxTokens: 1000
       })
 
       const synthesizedNeeds = JSON.parse(response.content)
@@ -590,12 +591,13 @@ Focus on practical, technology-enabled accommodations that can be implemented in
 
     try {
       const response = await multiModelAI.generateContent({
-        prompt,
-        useCase: 'creative_generation',
-        options: {
-          temperature: 0.4,
-          maxTokens: 500
-        }
+        context: prompt,
+        useCase: 'general_tutoring',
+        userProfile: { age_group: 'adult', level: 'intermediate', subject: 'accessibility', use_case: 'general_tutoring' } as any,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.4,
+        maxTokens: 500
       })
 
       const customAccommodations = JSON.parse(response.content)
@@ -795,12 +797,13 @@ Focus on clear indicators of disabilities or learning differences.`
 
     try {
       const response = await multiModelAI.generateContent({
-        prompt,
-        useCase: 'analysis',
-        options: {
-          temperature: 0.3,
-          maxTokens: 200
-        }
+        context: prompt,
+        useCase: 'general_tutoring',
+        userProfile: { age_group: 'adult', level: 'intermediate', subject: 'accessibility', use_case: 'general_tutoring' } as any,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.3,
+        maxTokens: 200
       })
 
       const result = JSON.parse(response.content)
@@ -877,9 +880,9 @@ Focus on clear indicators of disabilities or learning differences.`
       }, {} as Record<string, number>)
 
     const topTopic = Object.entries(frequentTopics)
-      .sort(([,a], [,b]) => b - a)[0]
+      .sort(([,a], [,b]) => (b as number) - (a as number))[0]
 
-    if (topTopic && topTopic[1] > assistanceRequests.length * 0.4) {
+    if (topTopic && (topTopic[1] as number) > assistanceRequests.length * 0.4) {
       // Frequent requests in specific area might indicate learning difference
       const [topic, count] = topTopic
       

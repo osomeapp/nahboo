@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { UserProfile } from '@/types'
 import { useLearningStyleAssessment } from '@/hooks/useLearningStyle'
-import { getStyleIcon, getStyleColor, getStyleDescription } from '@/lib/learning-style-engine'
+import { getStyleIcon, getStyleColor, getStyleDescription, type LearningStyleType } from '@/lib/learning-style-engine'
 
 interface LearningStyleAssessmentProps {
   userProfile: UserProfile
@@ -347,7 +347,7 @@ export default function LearningStyleAssessment({
                   >
                     <div className="flex items-center">
                       <span className="text-2xl mr-3">
-                        {getStyleIcon(option.style)}
+                        {getStyleIcon(option.style as LearningStyleType)}
                       </span>
                       <span className="font-medium">{option.text}</span>
                       {isSelected && (

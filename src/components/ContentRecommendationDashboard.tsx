@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useUserProfile } from '@/lib/store'
 import { useContentRecommendations, useRecommendationAnalytics } from '@/hooks/useContentRecommendations'
-import type { ContentRecommendation, RecommendationFilters } from '@/lib/content-recommendation-engine'
+import type { ContentRecommendation, RecommendationFactor } from '@/lib/content-recommendation-engine'
 import type { ContentItem } from '@/types'
 
 interface ContentRecommendationDashboardProps {
@@ -78,7 +78,7 @@ export default function ContentRecommendationDashboard({
   }, [recommendations, onRecommendationFeedback])
 
   // Handle filter updates
-  const handleFilterUpdate = useCallback((newFilters: Partial<RecommendationFilters>) => {
+  const handleFilterUpdate = useCallback((newFilters: any) => {
     recommendations.updateFilters(newFilters)
   }, [recommendations])
 

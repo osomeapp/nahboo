@@ -395,6 +395,8 @@ async function handleSearchCommunities(body: CommunityLearningRequest): Promise<
   return { 
     communities,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: communities.length
     }
   }
@@ -458,6 +460,8 @@ async function handleGetContentByCommunity(body: CommunityLearningRequest): Prom
   return { 
     contentList,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: contentList.length
     }
   }
@@ -517,6 +521,8 @@ async function handleGetPostsByCommunity(body: CommunityLearningRequest): Promis
   return { 
     posts,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: posts.length
     }
   }
@@ -552,6 +558,8 @@ async function handleGetCommentsByPost(body: CommunityLearningRequest): Promise<
   return { 
     comments,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: comments.length
     }
   }
@@ -567,6 +575,8 @@ async function handleGetCommentsByContent(body: CommunityLearningRequest): Promi
   return { 
     comments,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: comments.length
     }
   }
@@ -588,6 +598,8 @@ async function handleGetActiveChallenges(body: CommunityLearningRequest): Promis
   return { 
     challenges,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: challenges.length
     }
   }
@@ -603,6 +615,8 @@ async function handleGetChallengesByCommunity(body: CommunityLearningRequest): P
   return { 
     challenges,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: challenges.length
     }
   }
@@ -647,6 +661,8 @@ async function handleGetMemberProgress(body: CommunityLearningRequest): Promise<
   return { 
     progress,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: Array.isArray(progress) ? progress.length : 1
     }
   }
@@ -685,6 +701,8 @@ async function handleGetTrendingContent(body: CommunityLearningRequest): Promise
   return { 
     contentList,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: contentList.length
     }
   }
@@ -696,6 +714,8 @@ async function handleGetFeaturedCommunities(body: CommunityLearningRequest): Pro
   return { 
     communities,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: communities.length
     }
   }
@@ -711,6 +731,8 @@ async function handleSearchContent(body: CommunityLearningRequest): Promise<Part
   return { 
     contentList,
     metadata: {
+      processingTime: 0,
+      timestamp: new Date().toISOString(),
       totalResults: contentList.length
     }
   }

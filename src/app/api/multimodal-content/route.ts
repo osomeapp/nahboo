@@ -395,7 +395,7 @@ async function createRegenerationRequest(
       language: 'en'
     },
     context: {
-      use_case: 'education'
+      use_case: 'general_tutoring'
     }
   }
 }

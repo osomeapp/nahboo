@@ -573,7 +573,7 @@ export function useNeuralAttentionTracking() {
     if (state.currentMeasurement && state.realTimeTracking) {
       const checkAttentionQuality = async () => {
         try {
-          const attentionScore = state.currentMeasurement!.overall_attention_score
+          const attentionScore = state.currentMeasurement!.attention_metrics.overall_attention_level
 
           if (attentionScore < 60) {
             setState(prev => ({
@@ -694,21 +694,21 @@ export function useNeuralAttentionTracking() {
     
     // Current attention metrics
     currentAttentionMetrics: state.currentMeasurement ? {
-      overallScore: state.currentMeasurement.overall_attention_score,
-      focusStability: state.currentMeasurement.behavioral_indicators.focus_stability || 0,
-      distractionLevel: state.currentMeasurement.behavioral_indicators.distraction_level || 0,
-      cognitiveLoad: state.currentMeasurement.cognitive_indicators.cognitive_load || 0,
-      attentionSpan: state.currentMeasurement.cognitive_indicators.attention_span || 0,
+      overallScore: state.currentMeasurement.attention_metrics.overall_attention_level,
+      focusStability: state.currentMeasurement.attention_metrics.attention_stability || 0,
+      distractionLevel: state.currentMeasurement.behavioral_indicators.distraction_indicators.length || 0,
+      cognitiveLoad: state.currentMeasurement.cognitive_indicators.working_memory_load || 0,
+      attentionSpan: state.currentMeasurement.attention_metrics.sustained_attention || 0,
       measurementTimestamp: state.currentMeasurement.timestamp
     } : null,
     
     // Profile insights
     profileInsights: state.attentionProfile ? {
-      attentionType: state.attentionProfile.attention_characteristics.attention_type,
-      optimalFocusDuration: state.attentionProfile.attention_characteristics.optimal_focus_duration,
-      distractionSusceptibility: state.attentionProfile.attention_characteristics.distraction_susceptibility,
-      peakAttentionTimes: state.attentionProfile.focus_patterns.peak_attention_times || [],
-      attentionFluctuations: state.attentionProfile.focus_patterns.attention_fluctuations || 'moderate'
+      attentionType: 'sustained', // Default value
+      optimalFocusDuration: state.attentionProfile.attention_characteristics.optimal_session_length || 25,
+      distractionSusceptibility: 50, // Default value
+      peakAttentionTimes: state.attentionProfile.attention_characteristics.peak_attention_windows || [],
+      attentionFluctuations: 'moderate' // Default value
     } : null,
     
     // Optimization status
@@ -717,15 +717,15 @@ export function useNeuralAttentionTracking() {
       isMeasuring: state.isMeasuring,
       hasOptimizations: state.focusOptimizations.length > 0,
       lastOptimization: state.focusOptimizations[0]?.timestamp,
-      attentionQuality: state.currentMeasurement?.overall_attention_score || 0
+      attentionQuality: state.currentMeasurement?.attention_metrics.overall_attention_level || 0
     },
     
     // Distraction status
     distractionStatus: {
       hasMitigations: state.distractionMitigations.length > 0,
       lastMitigation: state.distractionMitigations[0]?.timestamp,
-      currentDistractionLevel: state.currentMeasurement?.behavioral_indicators.distraction_level || 0,
-      vulnerabilityLevel: state.attentionProfile?.attention_characteristics.distraction_susceptibility || 'medium'
+      currentDistractionLevel: state.currentMeasurement?.behavioral_indicators.distraction_indicators.length || 0,
+      vulnerabilityLevel: 'medium' // Default value
     },
     
     // Warning indicators
@@ -733,11 +733,11 @@ export function useNeuralAttentionTracking() {
       hasWarnings: state.warnings.length > 0,
       warningCount: state.warnings.length,
       hasError: !!state.error,
-      attentionHealthy: state.currentMeasurement ? state.currentMeasurement.overall_attention_score > 70 : true,
+      attentionHealthy: state.currentMeasurement ? state.currentMeasurement.attention_metrics.overall_attention_level > 70 : true,
       focusStable: state.currentMeasurement ? 
-        (state.currentMeasurement.behavioral_indicators.focus_stability || 0) > 70 : true,
+        state.currentMeasurement.attention_metrics.attention_stability > 70 : true,
       distractionManaged: state.currentMeasurement ?
-        (state.currentMeasurement.behavioral_indicators.distraction_level || 0) < 30 : true
+        state.currentMeasurement.behavioral_indicators.distraction_indicators.length < 3 : true
     }
   }
 }

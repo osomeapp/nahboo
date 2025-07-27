@@ -34,35 +34,35 @@ const useCaseConfigs: Record<UserProfile['use_case'], UseCaseConfig> = {
     description: 'Self-directed growth and skill development',
     keyMetrics: ['Learning Streak', 'Topics Explored', 'Satisfaction Score']
   },
-  corporate_training: {
+  work: {
     icon: Building,
     color: 'blue',
     title: 'Corporate Training Progress',
     description: 'Professional development and compliance tracking',
     keyMetrics: ['Completion Rate', 'Competencies', 'Team Performance']
   },
-  k12_education: {
+  student: {
     icon: BookOpen,
     color: 'green',
     title: 'Academic Progress',
     description: 'Curriculum mastery and grade improvement',
     keyMetrics: ['Grade Progress', 'Assignment Completion', 'Study Time']
   },
-  higher_education: {
+  college: {
     icon: GraduationCap,
     color: 'indigo',
     title: 'University Learning',
     description: 'Course completion and research progress',
     keyMetrics: ['Course Progress', 'Research Milestones', 'Collaboration']
   },
-  professional_development: {
+  tutor: {
     icon: TrendingUp,
     color: 'emerald',
     title: 'Career Development',
     description: 'Skills advancement and industry knowledge',
     keyMetrics: ['Certifications', 'Network Growth', 'Industry Relevance']
   },
-  hobbyist: {
+  lifelong: {
     icon: Star,
     color: 'orange',
     title: 'Hobby Learning',

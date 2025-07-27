@@ -238,7 +238,7 @@ function generateMockMetrics(useCase: UserProfile['use_case']) {
 
   // Adjust metrics based on use case
   switch (useCase) {
-    case 'corporate_training':
+    case 'work':
       return {
         ...baseMetrics,
         sessionDuration: baseMetrics.sessionDuration * 1.2, // Longer sessions
@@ -246,7 +246,7 @@ function generateMockMetrics(useCase: UserProfile['use_case']) {
         collaborationEngagement: Math.max(0.4, baseMetrics.collaborationEngagement) // More collaboration
       }
 
-    case 'k12_education':
+    case 'student':
       return {
         ...baseMetrics,
         sessionDuration: baseMetrics.sessionDuration * 0.8, // Shorter sessions
@@ -254,7 +254,7 @@ function generateMockMetrics(useCase: UserProfile['use_case']) {
         challengePreference: Math.min(0.6, baseMetrics.challengePreference) // Lower challenge preference
       }
 
-    case 'higher_education':
+    case 'college':
       return {
         ...baseMetrics,
         sessionDuration: baseMetrics.sessionDuration * 1.5, // Longest sessions
@@ -263,7 +263,7 @@ function generateMockMetrics(useCase: UserProfile['use_case']) {
       }
 
     case 'personal':
-    case 'hobbyist':
+    case 'personal':
       return {
         ...baseMetrics,
         satisfactionScore: Math.max(0.7, baseMetrics.satisfactionScore), // High satisfaction
@@ -293,7 +293,7 @@ function generateEngagementRecommendations(metrics: any, useCase: UserProfile['u
 
   // Use case-specific recommendations
   switch (useCase) {
-    case 'corporate_training':
+    case 'work':
       if (metrics.collaborationEngagement < 0.3) {
         recommendations.push('Engage with team learning activities for better outcomes')
       }
@@ -302,7 +302,7 @@ function generateEngagementRecommendations(metrics: any, useCase: UserProfile['u
       }
       break
 
-    case 'k12_education':
+    case 'student':
       if (metrics.interactionFrequency < 0.6) {
         recommendations.push('More frequent study sessions can improve understanding')
       }
@@ -311,7 +311,7 @@ function generateEngagementRecommendations(metrics: any, useCase: UserProfile['u
       }
       break
 
-    case 'higher_education':
+    case 'college':
       if (metrics.collaborationEngagement < 0.4) {
         recommendations.push('Join study groups for collaborative learning benefits')
       }
@@ -321,7 +321,7 @@ function generateEngagementRecommendations(metrics: any, useCase: UserProfile['u
       break
 
     case 'personal':
-    case 'hobbyist':
+    case 'personal':
       if (metrics.satisfactionScore < 0.7) {
         recommendations.push('Focus on topics that genuinely interest you')
       }
@@ -357,19 +357,19 @@ function generateReportRecommendations(report: any, userProfile: UserProfile): s
 
   // Use case-specific analysis
   switch (userProfile.use_case) {
-    case 'corporate_training':
+    case 'work':
       if (report.corporate?.trainingCompliance?.completed < 90) {
         recommendations.push('Prioritize compliance training to meet organizational requirements')
       }
       break
 
-    case 'k12_education':
+    case 'student':
       if (report.academic?.curriculumProgress?.completed < 75) {
         recommendations.push('Focus on core curriculum topics to stay on track')
       }
       break
 
-    case 'higher_education':
+    case 'college':
       if (report.academic?.courseProgress?.completed < 60) {
         recommendations.push('Create a study schedule to catch up with course requirements')
       }

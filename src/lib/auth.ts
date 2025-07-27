@@ -246,7 +246,10 @@ export async function completeOnboarding(
 
     // Update profile with onboarding data
     const updatedProfile = await updateUserProfileWithAuth(userId, {
-      ...onboardingData,
+      subjects: onboardingData.subjects,
+      level: onboardingData.level as 'beginner' | 'intermediate' | 'advanced',
+      age_group: onboardingData.ageGroup as 'child' | 'teen' | 'adult',
+      use_case: onboardingData.useCase as 'tutor' | 'student' | 'college' | 'work' | 'personal' | 'lifelong',
       onboarding_completed: true
     })
 

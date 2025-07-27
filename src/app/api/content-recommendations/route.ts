@@ -248,12 +248,12 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
     // Video content
     {
       id: `${subject.toLowerCase()}_video_1`,
-      type: 'video',
+      content_type: 'video',
       title: `${subject} Fundamentals: Core Concepts`,
       description: `Essential ${subject} concepts explained through engaging visual demonstrations`,
       subject,
       difficulty: difficultyBase - 1,
-      estimatedTime: 15,
+      estimated_time: 15,
       metadata: {
         video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         video_duration: 900,
@@ -261,18 +261,16 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
         hasSubtitles: true,
         qualityLevels: ['720p', '1080p']
       },
-      tags: [`${subject.toLowerCase()}`, 'fundamentals', 'video', 'beginner-friendly'],
-      createdAt: new Date('2024-01-15'),
-      updatedAt: new Date('2024-01-15')
+      created_at: new Date('2024-01-15').toISOString(),
     },
     {
       id: `${subject.toLowerCase()}_video_2`,
-      type: 'video',
+      content_type: 'video',
       title: `Advanced ${subject} Techniques`,
       description: `Advanced techniques and real-world applications in ${subject}`,
       subject,
       difficulty: difficultyBase + 2,
-      estimatedTime: 25,
+      estimated_time: 25,
       metadata: {
         video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         video_duration: 1500,
@@ -280,20 +278,18 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
         hasSubtitles: true,
         qualityLevels: ['720p', '1080p', '4K']
       },
-      tags: [`${subject.toLowerCase()}`, 'advanced', 'techniques', 'expert'],
-      createdAt: new Date('2024-01-20'),
-      updatedAt: new Date('2024-01-20')
+      created_at: new Date('2024-01-20').toISOString(),
     },
 
     // Interactive quiz content
     {
       id: `${subject.toLowerCase()}_quiz_1`,
-      type: 'quiz',
+      content_type: 'quiz',
       title: `${subject} Knowledge Check`,
       description: `Test your understanding of ${subject} concepts`,
       subject,
       difficulty: difficultyBase,
-      estimatedTime: 10,
+      estimated_time: 10,
       metadata: {
         quiz_questions: [
           {
@@ -301,39 +297,35 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
             question: `What is the most important principle in ${subject}?`,
             type: 'multiple_choice',
             options: ['Option A', 'Option B', 'Option C', 'Option D'],
-            correctAnswer: 0,
+            correct_answer: 'Option A',
             explanation: `The correct answer demonstrates key ${subject} understanding`,
             points: 10,
-            timeLimit: 60
           },
           {
             id: 'q2',
             question: `Explain a practical application of ${subject}`,
             type: 'short_answer',
-            correctAnswer: 'Any practical application',
+            correct_answer: 'Any practical application',
             explanation: `${subject} has many real-world applications`,
             points: 15,
-            timeLimit: 120
           }
         ],
         total_points: 25,
         passing_score: 0.7,
         attempts_allowed: 3
       },
-      tags: [`${subject.toLowerCase()}`, 'quiz', 'assessment', 'knowledge-check'],
-      createdAt: new Date('2024-01-18'),
-      updatedAt: new Date('2024-01-18')
+      created_at: new Date('2024-01-18').toISOString(),
     },
 
     // AI-generated lesson content
     {
       id: `${subject.toLowerCase()}_ai_lesson_1`,
-      type: 'ai_lesson',
+      content_type: 'ai_lesson',
       title: `Personalized ${subject} Learning Path`,
       description: `AI-powered lesson tailored to your learning style and pace`,
       subject,
       difficulty: difficultyBase,
-      estimatedTime: 20,
+      estimated_time: 20,
       metadata: {
         ai_generated: true,
         tutor_personality: 'friendly_teacher',
@@ -343,61 +335,57 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
           {
             title: 'Introduction',
             type: 'explanation',
-            estimatedTime: 5
+            estimated_time: 5
           },
           {
             title: 'Interactive Examples',
             type: 'practice',
-            estimatedTime: 10
+            estimated_time: 10
           },
           {
             title: 'Application Exercise',
             type: 'application',
-            estimatedTime: 5
+            estimated_time: 5
           }
         ]
       },
-      tags: [`${subject.toLowerCase()}`, 'ai-generated', 'personalized', 'adaptive'],
-      createdAt: new Date('2024-01-22'),
-      updatedAt: new Date('2024-01-22')
+      created_at: new Date('2024-01-22').toISOString(),
     },
 
     // External link content
     {
       id: `${subject.toLowerCase()}_link_1`,
-      type: 'link',
+      content_type: 'link',
       title: `${subject} Reference Guide`,
       description: `Comprehensive reference materials and documentation`,
       subject,
       difficulty: difficultyBase + 1,
-      estimatedTime: 30,
+      estimated_time: 30,
       metadata: {
         link_url: `https://example.com/${subject.toLowerCase()}-guide`,
         link_preview: {
           title: `Complete ${subject} Reference`,
           description: `Authoritative guide covering all aspects of ${subject}`,
-          image: 'https://example.com/preview.jpg',
+          image_url: 'https://example.com/preview.jpg',
           domain: 'example.com',
-          favicon: 'https://example.com/favicon.ico'
+          url: `https://example.com/${subject.toLowerCase()}-guide`
         },
         link_type: 'documentation',
         external_rating: 4.8,
         last_updated: '2024-01-25'
       },
-      tags: [`${subject.toLowerCase()}`, 'reference', 'documentation', 'external'],
-      createdAt: new Date('2024-01-25'),
-      updatedAt: new Date('2024-01-25')
+      created_at: new Date('2024-01-25').toISOString(),
     },
 
     // Interactive exercise content
     {
       id: `${subject.toLowerCase()}_interactive_1`,
-      type: 'interactive',
+      content_type: 'interactive',
       title: `${subject} Hands-On Workshop`,
       description: `Interactive exercises and simulations for practical ${subject} skills`,
       subject,
       difficulty: difficultyBase + 1,
-      estimatedTime: 35,
+      estimated_time: 35,
       metadata: {
         interaction_type: 'simulation',
         requires_tools: false,
@@ -407,29 +395,27 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
           {
             title: 'Basic Exercise',
             type: 'guided_practice',
-            estimatedTime: 15
+            estimated_time: 15
           },
           {
             title: 'Advanced Challenge',
             type: 'free_exploration',
-            estimatedTime: 20
+            estimated_time: 20
           }
         ]
       },
-      tags: [`${subject.toLowerCase()}`, 'interactive', 'hands-on', 'simulation'],
-      createdAt: new Date('2024-01-28'),
-      updatedAt: new Date('2024-01-28')
+      created_at: new Date('2024-01-28').toISOString(),
     },
 
     // Cross-subject integration content
     {
       id: `interdisciplinary_${subject.toLowerCase()}_1`,
-      type: 'video',
+      content_type: 'video',
       title: `${subject} in Real-World Context`,
       description: `How ${subject} connects with other fields and real-world applications`,
       subject: 'Interdisciplinary',
       difficulty: difficultyBase,
-      estimatedTime: 18,
+      estimated_time: 18,
       metadata: {
         video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         video_duration: 1080,
@@ -437,20 +423,18 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
         related_subjects: [subject, 'Applied Sciences', 'Technology'],
         hasSubtitles: true
       },
-      tags: ['interdisciplinary', subject.toLowerCase(), 'real-world', 'applications'],
-      createdAt: new Date('2024-01-30'),
-      updatedAt: new Date('2024-01-30')
+      created_at: new Date('2024-01-30').toISOString(),
     },
 
     // Quick review content
     {
       id: `${subject.toLowerCase()}_review_1`,
-      type: 'text',
+      content_type: 'text',
       title: `${subject} Quick Review`,
       description: `Brief summary of key ${subject} concepts for quick reinforcement`,
       subject,
       difficulty: difficultyBase - 2,
-      estimatedTime: 5,
+      estimated_time: 5,
       metadata: {
         content_format: 'summary',
         reading_level: level === 'beginner' ? 'elementary' : level === 'intermediate' ? 'middle' : 'advanced',
@@ -458,30 +442,27 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
         includes_diagrams: true,
         word_count: 300
       },
-      tags: [`${subject.toLowerCase()}`, 'review', 'summary', 'quick-read'],
-      createdAt: new Date('2024-02-01'),
-      updatedAt: new Date('2024-02-01')
+      created_at: new Date('2024-02-01').toISOString(),
     },
 
     // Challenge content for advanced learners
     {
       id: `${subject.toLowerCase()}_challenge_1`,
-      type: 'quiz',
+      content_type: 'quiz',
       title: `${subject} Master Challenge`,
       description: `Advanced problem-solving challenge for ${subject} experts`,
       subject,
       difficulty: Math.min(10, difficultyBase + 3),
-      estimatedTime: 45,
+      estimated_time: 45,
       metadata: {
         quiz_questions: [
           {
             id: 'challenge_q1',
             question: `Solve this advanced ${subject} problem`,
-            type: 'essay',
-            correctAnswer: 'Complex solution required',
+            type: 'short_answer',
+            correct_answer: 'Complex solution required',
             explanation: `This requires deep understanding of ${subject} principles`,
             points: 50,
-            timeLimit: 1800
           }
         ],
         total_points: 50,
@@ -489,9 +470,7 @@ function generateMockContentLibrary(userProfile: UserProfile): ContentItem[] {
         attempts_allowed: 1,
         difficulty_rating: 'expert'
       },
-      tags: [`${subject.toLowerCase()}`, 'challenge', 'expert', 'problem-solving'],
-      createdAt: new Date('2024-02-05'),
-      updatedAt: new Date('2024-02-05')
+      created_at: new Date('2024-02-05').toISOString(),
     }
   ]
 

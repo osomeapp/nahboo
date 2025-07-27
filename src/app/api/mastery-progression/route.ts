@@ -363,7 +363,7 @@ async function generateMockSkillTree(userId: string, subject: string, userProfil
             description: 'Complete intermediate assessments'
           },
           {
-            type: 'application_task' as const,
+            type: 'real_world_application' as const,
             weight: 0.6,
             requiredCount: 2,
             qualityThreshold: 0.7,

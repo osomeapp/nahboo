@@ -224,7 +224,7 @@ async function handleGetScalabilityMetrics(): Promise<Partial<ScalablePersonaliz
     }
   }
   
-  return { scalability_metrics: enhancedMetrics }
+  return { scalability_metrics: enhancedMetrics as any }
 }
 
 // Handle batch processing
@@ -276,7 +276,7 @@ async function handleGetClusterDistribution(): Promise<Partial<ScalablePersonali
     }
   }
   
-  return { cluster_distribution: enhancedDistribution }
+  return { cluster_distribution: enhancedDistribution as any }
 }
 
 // Handle adaptation event registration

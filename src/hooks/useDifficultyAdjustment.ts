@@ -356,9 +356,8 @@ export function useDifficultyAwareContent(
     timeSpent: number,
     score?: number
   ) => {
-    const difficultyLevel = adaptedContent?.metadata?.adaptedDifficulty || 
-                           (originalContent.difficulty_level === 'beginner' ? 3 :
-                            originalContent.difficulty_level === 'intermediate' ? 5 : 7)
+    const difficultyLevel = (adaptedContent?.metadata?.adaptedDifficulty as number) || 
+                           originalContent.difficulty || 5
     
     recordPerformance(
       originalContent.id,

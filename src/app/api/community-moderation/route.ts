@@ -391,7 +391,7 @@ async function getUserReports(userId: string, filters?: any): Promise<CommunityR
         evidenceId: 'evidence_2',
         evidenceType: 'url',
         content: 'https://factcheck.example.com/false-claim',
-        metadata: { verificationSource: 'fact-checker' },
+        metadata: { timestamp: new Date() },
         verificationStatus: 'verified',
         submittedBy: 'other_user'
       }],

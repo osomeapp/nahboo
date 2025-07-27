@@ -320,6 +320,7 @@ Please create educational content that is specifically optimized for ${style} le
     difficulty: userProfile.level === 'beginner' ? 3 : userProfile.level === 'intermediate' ? 5 : 7,
     estimated_time: 10,
     subject: userProfile.subject,
+    created_at: new Date().toISOString(),
     metadata: {
       learningStyle: style,
       aiGenerated: true,

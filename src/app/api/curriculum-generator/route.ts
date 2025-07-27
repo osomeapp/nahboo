@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { 
-  automatedCurriculumGenerator,
+  AutomatedCurriculumGenerator,
   type CurriculumGenerationRequest,
   type GeneratedCurriculum,
   type LearningObjective,
@@ -200,7 +200,8 @@ async function handleGenerateCurriculum(
     recommendations.push(...validationResults.recommendations)
   }
   
-  const generatedCurriculum = await automatedCurriculumGenerator.generateCurriculum(body.generation_request)
+  const generator = new AutomatedCurriculumGenerator()
+  const generatedCurriculum = await generator.generateCurriculum(body.generation_request)
   
   return { generated_curriculum: generatedCurriculum }
 }
@@ -297,7 +298,8 @@ async function handleGetImplementationGuidance(body: CurriculumGeneratorApiReque
 
 // Handle system analytics
 async function handleGetSystemAnalytics(): Promise<Partial<CurriculumGeneratorApiResponse>> {
-  const systemAnalytics = automatedCurriculumGenerator.getCurriculumGenerationAnalytics()
+  const generator = new AutomatedCurriculumGenerator()
+  const systemAnalytics = generator.getCurriculumGenerationAnalytics()
   
   // Enhance analytics with additional insights
   const enhancedAnalytics = {
@@ -385,28 +387,32 @@ async function generateLearningObjectives(
           description: `Assessment of ${goal} understanding`,
           performance_levels: [
             {
-              level_name: 'Novice',
+              level_id: 'novice',
+              name: 'Novice',
               description: 'Basic understanding',
-              score_range: [1, 3],
-              examples: ['Recalls basic facts', 'Identifies key concepts']
+              score_range: { min: 1, max: 3 },
+              indicators: ['Recalls basic facts', 'Identifies key concepts']
             },
             {
-              level_name: 'Proficient',
+              level_id: 'proficient',
+              name: 'Proficient',
               description: 'Solid understanding',
-              score_range: [4, 6],
-              examples: ['Explains concepts clearly', 'Applies knowledge correctly']
+              score_range: { min: 4, max: 6 },
+              indicators: ['Explains concepts clearly', 'Applies knowledge correctly']
             },
             {
-              level_name: 'Advanced',
+              level_id: 'advanced',
+              name: 'Advanced',
               description: 'Deep understanding',
-              score_range: [7, 9],
-              examples: ['Analyzes complex scenarios', 'Creates innovative solutions']
+              score_range: { min: 7, max: 9 },
+              indicators: ['Analyzes complex scenarios', 'Creates innovative solutions']
             },
             {
-              level_name: 'Expert',
+              level_id: 'expert',
+              name: 'Expert',
               description: 'Mastery level',
-              score_range: [10, 10],
-              examples: ['Teaches others effectively', 'Leads projects independently']
+              score_range: { min: 10, max: 10 },
+              indicators: ['Teaches others effectively', 'Leads projects independently']
             }
           ],
           weight: 1.0,

@@ -39,11 +39,11 @@ function ContentItem({ item, className = '', onInteraction }: ContentItemProps) 
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-            {item.type === 'video' && <Play className="w-4 h-4 text-red-500" />}
-            {item.type === 'quiz' && <MessageCircle className="w-4 h-4 text-green-500" />}
-            {item.type === 'ai_lesson' && <BookOpen className="w-4 h-4 text-blue-500" />}
-            {item.type === 'link' && <Share className="w-4 h-4 text-purple-500" />}
-            {item.type === 'text' && <BookOpen className="w-4 h-4 text-gray-500" />}
+            {item.content_type === 'video' && <Play className="w-4 h-4 text-red-500" />}
+            {item.content_type === 'quiz' && <MessageCircle className="w-4 h-4 text-green-500" />}
+            {item.content_type === 'ai_lesson' && <BookOpen className="w-4 h-4 text-blue-500" />}
+            {item.content_type === 'link' && <Share className="w-4 h-4 text-purple-500" />}
+            {item.content_type === 'text' && <BookOpen className="w-4 h-4 text-gray-500" />}
           </div>
           <div>
             <div className="font-medium text-gray-900 text-sm">
@@ -55,24 +55,24 @@ function ContentItem({ item, className = '', onInteraction }: ContentItemProps) 
           </div>
         </div>
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          item.type === 'video' ? 'bg-red-100 text-red-700' :
-          item.type === 'quiz' ? 'bg-green-100 text-green-700' :
-          item.type === 'ai_lesson' ? 'bg-blue-100 text-blue-700' :
-          item.type === 'link' ? 'bg-purple-100 text-purple-700' :
+          item.content_type === 'video' ? 'bg-red-100 text-red-700' :
+          item.content_type === 'quiz' ? 'bg-green-100 text-green-700' :
+          item.content_type === 'ai_lesson' ? 'bg-blue-100 text-blue-700' :
+          item.content_type === 'link' ? 'bg-purple-100 text-purple-700' :
           'bg-gray-100 text-gray-700'
         }`}>
-          {item.type.replace('_', ' ')}
+          {item.content_type.replace('_', ' ')}
         </span>
       </div>
 
       {/* Content Title */}
-      <h3 className={`${fontSizes.title} font-semibold text-gray-900 mb-3 leading-tight`}>
+      <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-tight">
         {item.title}
       </h3>
 
       {/* Content Body */}
-      <div className={`prose prose-sm max-w-none text-gray-700 leading-relaxed mb-4 ${fontSizes.body}`}>
-        {item.body.split('\n').map((paragraph, idx) => (
+      <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed mb-4 text-sm">
+        {item.description.split('\n').map((paragraph, idx) => (
           <p key={idx} className="mb-2 last:mb-0">
             {paragraph}
           </p>
@@ -80,9 +80,10 @@ function ContentItem({ item, className = '', onInteraction }: ContentItemProps) 
       </div>
 
       {/* Special Content Types */}
-      {item.type === 'video' && item.metadata?.video_url && (
+      {item.content_type === 'video' && item.metadata?.video_url && (
         <div className="mb-4">
           <VideoPlayer
+            videoId={item.id}
             videoUrl={item.metadata.video_url}
             duration={item.metadata.video_duration}
             title={item.title}
@@ -97,7 +98,7 @@ function ContentItem({ item, className = '', onInteraction }: ContentItemProps) 
         </div>
       )}
 
-      {item.type === 'quiz' && (
+      {item.content_type === 'quiz' && (
         <div className="mb-4">
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -125,7 +126,7 @@ function ContentItem({ item, className = '', onInteraction }: ContentItemProps) 
         </div>
       )}
 
-      {item.type === 'link' && item.metadata?.link_preview && (
+      {item.content_type === 'link' && item.metadata?.link_preview && (
         <div className="mb-4">
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -158,9 +159,9 @@ function ContentItem({ item, className = '', onInteraction }: ContentItemProps) 
         </div>
       )}
 
-      {item.type === 'ai_lesson' && userProfile && (
+      {item.content_type === 'ai_lesson' && userProfile && (
         <AILessonCard
-          topic={item.body.split('.')[0]} // Use first sentence as topic
+          topic={item.description.split('.')[0]} // Use first sentence as topic
           userProfile={userProfile}
           onInteraction={handleInteraction}
         />
@@ -195,15 +196,18 @@ function ContentItem({ item, className = '', onInteraction }: ContentItemProps) 
 export default function BookPage({ 
   page, 
   deviceType, 
-  characteristics, 
-  responsiveConfig, 
   onInteraction 
 }: BookPageProps) {
   // Enhanced layout configurations using responsive system
   const getLayoutClasses = () => {
     const { items } = page
-    const { itemsPerPage, contentPadding, pageSpacing } = responsiveConfig
-    const { isMobile, isTablet, width } = characteristics
+    // Use default responsive configuration
+    const itemsPerPage = deviceType === 'mobile' ? 1 : deviceType === 'tablet' ? 2 : 3
+    const contentPadding = deviceType === 'mobile' ? 'p-4' : 'p-6'
+    const pageSpacing = deviceType === 'mobile' ? 'space-y-4' : 'space-y-6'
+    const isMobile = deviceType === 'mobile'
+    const isTablet = deviceType === 'tablet'
+    const width = deviceType === 'mobile' ? 375 : deviceType === 'tablet' ? 768 : 1024
     
     // Base responsive styles
     const containerPadding = `p-[${contentPadding}px]`
@@ -237,7 +241,8 @@ export default function BookPage({
   
   // Responsive font sizing
   const getFontSizes = () => {
-    const { fontScale } = responsiveConfig
+    // Use default font scale based on device type
+    const fontScale = deviceType === 'mobile' ? 0.9 : deviceType === 'tablet' ? 1.0 : 1.1
     const baseSize = fontScale
     
     return {
@@ -250,7 +255,8 @@ export default function BookPage({
   
   // Touch target sizing for interactive elements
   const getTouchTargetSize = () => {
-    const { touchTargetSize } = responsiveConfig
+    // Use default touch target size based on device type
+    const touchTargetSize = deviceType === 'mobile' ? 44 : 48
     return {
       minWidth: `${touchTargetSize}px`,
       minHeight: `${touchTargetSize}px`

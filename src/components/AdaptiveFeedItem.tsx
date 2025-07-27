@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { UserProfile, ContentItem } from '@/types'
 import { useLearningStyle } from '@/hooks/useLearningStyle'
-import { getStyleColor, getStyleIcon, getStyleDescription } from '@/lib/learning-style-engine'
+import { getStyleColor, getStyleIcon, getStyleDescription, type LearningStyleType } from '@/lib/learning-style-engine'
 
 interface AdaptiveFeedItemProps {
   content: ContentItem
@@ -231,7 +231,7 @@ export default function AdaptiveFeedItem({
           {currentContent.metadata?.learningStyle && (
             <div className="flex items-center text-xs text-gray-600 ml-2">
               <span className="mr-1">
-                {getStyleIcon(currentContent.metadata.learningStyle)}
+                {getStyleIcon(currentContent.metadata.learningStyle as LearningStyleType)}
               </span>
               {currentContent.metadata.learningStyle} optimized
             </div>
@@ -355,9 +355,9 @@ function generateAdaptationSuggestions(contentAnalysis: any, profile: any): Adap
   return styles.map(style => ({
     style,
     confidence: userScores[style] || 0.5,
-    description: getStyleDescription(style),
-    icon: getStyleIcon(style),
-    color: getStyleColor(style).replace('#', ''),
+    description: getStyleDescription(style as LearningStyleType),
+    icon: getStyleIcon(style as LearningStyleType),
+    color: getStyleColor(style as LearningStyleType).replace('#', ''),
     enabled: userScores[style] > 0.3 // Only show styles with reasonable preference
   })).filter(suggestion => suggestion.enabled)
 }

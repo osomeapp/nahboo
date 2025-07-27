@@ -370,7 +370,7 @@ export function useContentSafety(userId: string, userProfile: UserProfile) {
       }
 
       // Check content type
-      if (!filters.allowedContentTypes.includes(item.type)) {
+      if (!filters.allowedContentTypes.includes(item.content_type)) {
         return false
       }
 
@@ -385,7 +385,7 @@ export function useContentSafety(userId: string, userProfile: UserProfile) {
       }
 
       // Check external links
-      if (filters.blockExternalLinks && item.type === 'link') {
+      if (filters.blockExternalLinks && item.content_type === 'link') {
         return false
       }
 

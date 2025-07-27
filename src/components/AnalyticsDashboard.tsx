@@ -164,7 +164,7 @@ export default function AnalyticsDashboard({
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => setActiveTab(tab.id as 'content' | 'user' | 'platform')}
               className={`flex items-center px-6 py-3 rounded-md text-sm font-medium transition-all ${
                 activeTab === tab.id
                   ? 'bg-white text-blue-600 shadow-sm'

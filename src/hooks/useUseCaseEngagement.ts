@@ -389,7 +389,7 @@ function generateAchievements(report: any, useCase: UserProfile['use_case']): an
 
   // Use case-specific achievements
   switch (useCase) {
-    case 'corporate_training':
+    case 'work':
       if (report.corporate?.competenciesAchieved?.length > 2) {
         achievements.push({
           id: 'competency_master',
@@ -401,7 +401,7 @@ function generateAchievements(report: any, useCase: UserProfile['use_case']): an
       }
       break
 
-    case 'k12_education':
+    case 'student':
       if (report.academic?.gradeImprovement) {
         achievements.push({
           id: 'grade_improvement',
@@ -413,7 +413,7 @@ function generateAchievements(report: any, useCase: UserProfile['use_case']): an
       }
       break
 
-    case 'higher_education':
+    case 'college':
       if (report.academic?.researchMilestones?.milestones > 0) {
         achievements.push({
           id: 'research_milestone',
@@ -449,20 +449,20 @@ function generateRecommendations(report: any, userProfile: UserProfile): string[
 
   // Use case-specific recommendations
   switch (userProfile.use_case) {
-    case 'corporate_training':
+    case 'work':
       recommendations.push('Connect learning to current work projects for better application')
       break
 
-    case 'k12_education':
+    case 'student':
       recommendations.push('Regular study breaks can improve focus and retention')
       break
 
-    case 'higher_education':
+    case 'college':
       recommendations.push('Consider forming study groups for collaborative learning')
       break
 
     case 'personal':
-    case 'hobbyist':
+    case 'lifelong':
       recommendations.push('Set personal learning goals to maintain motivation')
       break
   }

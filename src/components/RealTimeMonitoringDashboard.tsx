@@ -267,7 +267,7 @@ export default function RealTimeMonitoringDashboard({
               <span className="text-sm font-medium text-gray-600">Avg Response</span>
               <Clock className="w-4 h-4 text-gray-400" />
             </div>
-            <div className={`text-2xl font-bold ${getHealthColor(overallHealth.responseTime).split(' ')[0]}`}>
+            <div className={`text-2xl font-bold ${getHealthColor(overallHealth.responseTime as 'good' | 'warning' | 'critical').split(' ')[0]}`}>
               {formatNumber(summary.avgResponseTime, 'duration')}
             </div>
           </div>
@@ -277,7 +277,7 @@ export default function RealTimeMonitoringDashboard({
               <span className="text-sm font-medium text-gray-600">Error Rate</span>
               <AlertTriangle className="w-4 h-4 text-gray-400" />
             </div>
-            <div className={`text-2xl font-bold ${getHealthColor(overallHealth.errorRate).split(' ')[0]}`}>
+            <div className={`text-2xl font-bold ${getHealthColor(overallHealth.errorRate as 'good' | 'warning' | 'critical').split(' ')[0]}`}>
               {formatNumber(summary.errorRate, 'percentage')}
             </div>
           </div>
@@ -287,7 +287,7 @@ export default function RealTimeMonitoringDashboard({
               <span className="text-sm font-medium text-gray-600">Total Cost</span>
               <DollarSign className="w-4 h-4 text-gray-400" />
             </div>
-            <div className={`text-2xl font-bold ${getHealthColor(overallHealth.cost).split(' ')[0]}`}>
+            <div className={`text-2xl font-bold ${getHealthColor(overallHealth.cost as 'good' | 'warning' | 'critical').split(' ')[0]}`}>
               {formatNumber(summary.totalCost, 'currency')}
             </div>
           </div>

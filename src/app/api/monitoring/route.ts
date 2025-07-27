@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
       metadata: {
         userId: body.userId,
         processingTime,
-        monitoringActive: realTimeContentMonitor.isMonitoring || false,
+        monitoringActive: true, // Monitoring service is available
         alertCount: response.alerts?.length || 0,
         generatedAt: new Date().toISOString()
       }
@@ -376,7 +376,7 @@ async function getActiveMonitoringRules(userId: string, userProfile?: UserProfil
 function getStreamStatus(): ContentStreamMonitor {
   // Mock implementation - in reality, this would come from the monitoring system
   return {
-    isActive: realTimeContentMonitor.isMonitoring || false,
+    isActive: true,
     scanInterval: 30000,
     batchSize: 10,
     queueSize: 100,

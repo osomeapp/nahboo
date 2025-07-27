@@ -416,13 +416,16 @@ export class AdaptiveExamGenerationEngine {
     `
     
     try {
-      const questionsData = await multiModelAI.generateContent(
-        questionPrompt,
-        'assessment_generation',
-        { temperature: 0.4 }
-      )
+      const questionsData = await multiModelAI.generateContent({
+        context: questionPrompt,
+        useCase: 'general_tutoring',
+        userProfile: { age_group: 'adult', level: 'intermediate', subject: 'assessment', use_case: 'general_tutoring' } as any,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.4
+      })
       
-      return this.parseGeneratedQuestions(questionsData, objective, requirements)
+      return this.parseGeneratedQuestions(questionsData.content, objective, requirements)
       
     } catch (error) {
       console.error(`Question generation failed for objective ${objective.objective_id}:`, error)
@@ -458,13 +461,16 @@ export class AdaptiveExamGenerationEngine {
     `
     
     try {
-      const questionsData = await multiModelAI.generateContent(
-        distributionPrompt,
-        'assessment_generation',
-        { temperature: 0.4 }
-      )
+      const questionsData = await multiModelAI.generateContent({
+        context: distributionPrompt,
+        useCase: 'general_tutoring',
+        userProfile: { age_group: 'adult', level: 'intermediate', subject: 'assessment', use_case: 'general_tutoring' } as any,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.4
+      })
       
-      return this.parseDistributionQuestions(questionsData, requirements)
+      return this.parseDistributionQuestions(questionsData.content, requirements)
       
     } catch (error) {
       console.error('Distribution question generation failed:', error)
@@ -506,13 +512,16 @@ export class AdaptiveExamGenerationEngine {
     `
     
     try {
-      const calibrationResult = await multiModelAI.generateContent(
-        calibrationPrompt,
-        'statistical_analysis',
-        { temperature: 0.2 }
-      )
+      const calibrationResult = await multiModelAI.generateContent({
+        context: calibrationPrompt,
+        useCase: 'general_tutoring',
+        userProfile: { age_group: 'adult', level: 'intermediate', subject: 'assessment', use_case: 'general_tutoring' } as any,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.2
+      })
       
-      return this.parseCalibrationData(calibrationResult, questions, requirements)
+      return this.parseCalibrationData(calibrationResult.content, questions, requirements)
       
     } catch (error) {
       console.error('Question calibration failed:', error)
@@ -548,13 +557,16 @@ export class AdaptiveExamGenerationEngine {
     `
     
     try {
-      const selectionResult = await multiModelAI.generateContent(
-        selectionPrompt,
-        'optimization',
-        { temperature: 0.3 }
-      )
+      const selectionResult = await multiModelAI.generateContent({
+        context: selectionPrompt,
+        useCase: 'general_tutoring',
+        userProfile: { age_group: 'adult', level: 'intermediate', subject: 'assessment', use_case: 'general_tutoring' } as any,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.3
+      })
       
-      const selectedIds = this.parseQuestionSelection(selectionResult)
+      const selectedIds = this.parseQuestionSelection(selectionResult.content)
       return questionPool.filter(q => selectedIds.includes(q.question_id))
       
     } catch (error) {
@@ -624,13 +636,17 @@ export class AdaptiveExamGenerationEngine {
     `
     
     try {
-      const validation = await multiModelAI.generateContent(
-        validationPrompt,
-        'quality_assessment',
-        { temperature: 0.2 }
-      )
+      const validation = await multiModelAI.generateContent({
+        context: validationPrompt,
+        useCase: 'general_tutoring',
+        userProfile: { age_group: 'adult', level: 'intermediate', subject: 'assessment', use_case: 'general_tutoring' } as any,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.2,
+        maxTokens: 1000
+      })
       
-      return this.parseValidationMetrics(validation)
+      return this.parseValidationMetrics(validation.content)
       
     } catch (error) {
       console.error('Exam validation failed:', error)

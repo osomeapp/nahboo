@@ -411,7 +411,7 @@ export function useRealTimeAdaptation(
   const dismissFeedback = useCallback((feedbackId: string) => {
     setState(prev => ({
       ...prev,
-      activeVisualFeedback: prev.activeVisualFeedback.filter(f => f.id !== feedbackId)
+      activeVisualFeedback: prev.activeVisualFeedback.filter((f, index) => index.toString() !== feedbackId)
     }))
   }, [])
   

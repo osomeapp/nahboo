@@ -204,7 +204,11 @@ export function useAIRequestTracking(modelId: string, useCase: string, userId: s
       recordModelMetric(
         userId,
         responseTime,
-        tokenEstimate || { prompt: 0, completion: 0, total: 0 },
+        { 
+          prompt: tokenEstimate?.prompt || 0, 
+          completion: tokenEstimate?.completion || 0, 
+          total: ((tokenEstimate as any)?.total) || (tokenEstimate?.prompt || 0) + (tokenEstimate?.completion || 0) 
+        },
         costEstimate || 0,
         {
           success: true,
@@ -224,7 +228,11 @@ export function useAIRequestTracking(modelId: string, useCase: string, userId: s
       recordModelMetric(
         userId,
         responseTime,
-        tokenEstimate || { prompt: 0, completion: 0, total: 0 },
+        { 
+          prompt: tokenEstimate?.prompt || 0, 
+          completion: tokenEstimate?.completion || 0, 
+          total: ((tokenEstimate as any)?.total) || (tokenEstimate?.prompt || 0) + (tokenEstimate?.completion || 0) 
+        },
         0, // No cost for failed requests
         {
           success: false,

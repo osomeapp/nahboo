@@ -299,7 +299,7 @@ function calculateAdaptationStatistics(history: any[]) {
   }, {} as Record<string, number>)
 
   const mostCommonTrigger = Object.entries(triggerCounts)
-    .sort(([,a], [,b]) => b - a)[0]?.[0]
+    .sort(([,a], [,b]) => (b as number) - (a as number))[0]?.[0]
 
   const avgConfidence = history.reduce((sum, h) => {
     const confidence = h.performance_data?.confidence || 0.5

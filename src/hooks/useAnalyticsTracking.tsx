@@ -246,7 +246,7 @@ export function useSessionTracking() {
   useEffect(() => {
     sessionStartRef.current = Date.now()
     
-    analytics.trackSessionStart({
+    analytics.track('session_start', {
       subject: userProfile?.subject,
       difficulty_level: userProfile?.level,
       age_group: userProfile?.age_group,
@@ -258,7 +258,7 @@ export function useSessionTracking() {
     const handleUnload = () => {
       if (sessionStartRef.current) {
         const sessionDuration = (Date.now() - sessionStartRef.current) / 1000
-        analytics.trackSessionEnd(sessionDuration)
+        analytics.track('session_end', { session_duration: sessionDuration })
       }
     }
 
@@ -268,7 +268,7 @@ export function useSessionTracking() {
       window.removeEventListener('beforeunload', handleUnload)
       if (sessionStartRef.current) {
         const sessionDuration = (Date.now() - sessionStartRef.current) / 1000
-        analytics.trackSessionEnd(sessionDuration)
+        analytics.track('session_end', { session_duration: sessionDuration })
       }
     }
   }, [analytics, userProfile])
@@ -357,7 +357,7 @@ export function usePerformanceTracking() {
               dns_lookup_time: navigation.domainLookupEnd - navigation.domainLookupStart,
               connection_time: navigation.connectEnd - navigation.connectStart,
               server_response_time: navigation.responseEnd - navigation.requestStart,
-              dom_processing_time: navigation.domComplete - navigation.domLoading,
+              dom_processing_time: navigation.domComplete - (navigation as any).domLoading,
               page: window.location.pathname
             })
           }

@@ -1093,7 +1093,7 @@ function generateMockPerformanceAnalytics(optimizationId: string, analyticsType:
   return {
     analytics_id: `performance_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     optimization_id: optimizationId,
-    analytics_type,
+    analytics_type: analyticsType,
     date_range: dateRange,
     overall_performance: {
       completion_rate: 87,

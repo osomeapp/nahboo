@@ -148,7 +148,7 @@ export default function SimulationPlayer({
         values.supply = Math.max(0, (parameters.base_supply || 100) + (parameters.price || 10) * (parameters.supply_elasticity || 1))
         values.demand = Math.max(0, (parameters.base_demand || 100) - (parameters.price || 10) * (parameters.demand_elasticity || 1))
         values.price = parameters.price || 10
-        values.equilibrium = Math.abs(values.supply - values.demand) < 5
+        values.equilibrium = Math.abs(values.supply - values.demand) < 5 ? 1 : 0
         break
 
       case 'business':

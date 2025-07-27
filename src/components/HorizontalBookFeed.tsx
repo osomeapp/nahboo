@@ -310,8 +310,6 @@ export default function HorizontalBookFeed({
                 <BookPage
                   page={pages[currentPageIndex]}
                   deviceType={deviceType}
-                  characteristics={characteristics}
-                  responsiveConfig={responsiveConfig}
                   onInteraction={handlePageInteraction}
                 />
               </motion.div>

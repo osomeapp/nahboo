@@ -363,10 +363,10 @@ function OverviewTab({ currentGraph, statistics, learningPaths }: {
                       level === 'easy' ? 'bg-green-500' :
                       level === 'medium' ? 'bg-yellow-500' : 'bg-red-500'
                     }`}
-                    style={{ width: `${(count / statistics.totalConcepts) * 100}%` }}
+                    style={{ width: `${(Number(count) / statistics.totalConcepts) * 100}%` }}
                   />
                 </div>
-                <span className="text-sm text-gray-600">{count}</span>
+                <span className="text-sm text-gray-600">{String(count)}</span>
               </div>
             </div>
           ))}

@@ -24,7 +24,7 @@ import type { FeedItem, Quiz, QuizResults, LinkPreview, ContentItem } from '@/ty
 
 // Mock feed data for testing
 const generateMockFeedItems = (count: number, startIndex: number = 0, userProfile?: { subject: string } | null): FeedItem[] => {
-  const contentTypes: FeedItem['type'][] = ['video', 'text', 'quiz', 'link', 'ai_lesson', 'interactive']
+  const contentTypes: FeedItem['content_type'][] = ['video', 'text', 'quiz', 'link', 'ai_lesson', 'interactive']
   const mockItems: FeedItem[] = []
 
   for (let i = 0; i < count; i++) {
@@ -61,9 +61,9 @@ const generateMockFeedItems = (count: number, startIndex: number = 0, userProfil
     mockItems.push({
       id: `item-${index}`,
       user_id: 'user-1',
-      type,
+      content_type: type,
       title,
-      body,
+      description: body,
       created_at: new Date(Date.now() - index * 3600000).toISOString(),
       relevance_score: Math.random(),
       age_rating: 'all',
@@ -155,6 +155,9 @@ const generateMockFeedItems = (count: number, startIndex: number = 0, userProfil
           'Engage with interactive content'
         ]
       } : {},
+      subject: userProfile?.subject || 'General',
+      difficulty: Math.floor(Math.random() * 5) + 1,
+      estimated_time: Math.floor(Math.random() * 45) + 15,
       author: {
         id: 'author-1',
         full_name: 'AI Learning Assistant',
@@ -180,7 +183,9 @@ export default function MagicalMainPage() {
     subject: 'General',
     level: 'beginner',
     age_group: 'adult',
-    use_case: 'personal'
+    use_case: 'personal',
+    language: 'en',
+    created_at: new Date().toISOString()
   })
   
   const [useHorizontalLayout, setUseHorizontalLayout] = useState(false)
@@ -219,14 +224,14 @@ export default function MagicalMainPage() {
           await monitoring.queueContent(initialItems.map(item => ({
             id: item.id,
             title: item.title,
-            description: item.body,
-            type: item.type,
-            subject: userProfile.subject,
-            difficulty: Math.floor(Math.random() * 10) + 1,
-            estimatedTime: item.estimatedTime,
+            description: item.description,
+            content_type: item.content_type,
+            subject: item.subject,
+            difficulty: item.difficulty,
+            estimated_time: item.estimated_time,
             metadata: item.metadata || {},
-            tags: item.tags || [],
-            createdAt: new Date(),
+            tags: [],
+            created_at: item.created_at,
             updatedAt: new Date()
           })))
         }
@@ -253,14 +258,14 @@ export default function MagicalMainPage() {
         await monitoring.queueContent(moreItems.map(item => ({
           id: item.id,
           title: item.title,
-          description: item.body,
-          type: item.type,
-          subject: userProfile.subject,
-          difficulty: Math.floor(Math.random() * 10) + 1,
-          estimatedTime: item.estimatedTime,
+          description: item.description,
+          content_type: item.content_type,
+          subject: item.subject,
+          difficulty: item.difficulty,
+          estimated_time: item.estimated_time,
           metadata: item.metadata || {},
-          tags: item.tags || [],
-          createdAt: new Date(),
+          tags: [],
+          created_at: item.created_at,
           updatedAt: new Date()
         })))
       }
@@ -281,7 +286,7 @@ export default function MagicalMainPage() {
     // Find the content item to get its type
     const contentItem = feedItems.find(item => item.id === contentId)
     if (contentItem) {
-      analytics.content.trackContentView(contentId, contentItem.type, {
+      analytics.content.trackContentView(contentId, contentItem.content_type, {
         action,
         value,
         timestamp: Date.now()
@@ -295,7 +300,7 @@ export default function MagicalMainPage() {
       const quiz: Quiz = {
         id: item.id,
         title: item.title,
-        description: `Test your knowledge about: ${item.body.substring(0, 100)}...`,
+        description: `Test your knowledge about: ${item.description.substring(0, 100)}...`,
         questions: item.metadata.quiz_questions,
         time_limit: 300, // 5 minutes
         passing_score: 70,
@@ -351,18 +356,22 @@ export default function MagicalMainPage() {
     // Convert ContentItem to FeedItem format
     const feedItem: FeedItem = {
       id: content.id,
-      type: content.type,
+      content_type: content.content_type,
       title: content.title,
-      body: content.description,
+      description: content.description,
       metadata: content.metadata,
-      tags: content.tags || [],
+      user_id: userProfile?.id || 'guest',
+      subject: content.subject,
+      difficulty: content.difficulty,
+      estimated_time: content.estimated_time,
+      relevance_score: Math.random(),
+      age_rating: 'all',
       author: {
         id: 'recommendation-engine',
         full_name: 'AI Recommendation Engine',
         created_at: new Date().toISOString()
       },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      created_at: new Date().toISOString()
     }
 
     // Add recommended content to the top of the feed
@@ -374,7 +383,7 @@ export default function MagicalMainPage() {
     // Track interaction
     handleInteraction(content.id, 'recommended_content_selected', { 
       recommendationType: 'ai_recommendation',
-      contentType: content.type 
+      contentType: content.content_type 
     })
   }
 
@@ -400,22 +409,22 @@ export default function MagicalMainPage() {
       contentItems={feedItems.map(item => ({
         id: item.id,
         title: item.title,
-        description: item.body,
-        type: item.type,
+        description: item.description,
+        content_type: item.content_type,
         subject: userProfile.subject,
         difficulty: Math.floor(Math.random() * 10) + 1,
-        estimatedTime: item.estimatedTime,
+        estimated_time: item.estimated_time,
         metadata: item.metadata || {},
-        tags: item.tags || [],
-        createdAt: new Date(item.created_at),
-        updatedAt: new Date(item.updated_at || item.created_at)
+        created_at: item.created_at
       }))}
       enableRealTimeMonitoring={userProfile.age_group !== 'adult'}
       enableCommunityModeration={true}
       enableParentalControls={userProfile.age_group === 'child' || userProfile.age_group === 'teen'}
       onSafetyEvent={(event) => {
         console.log('Safety event:', event)
-        analytics.safety?.trackSafetyEvent?.(event.type, {
+        // Track safety events through main analytics
+        analytics.track('safety_event', {
+          eventType: event.type,
           severity: event.severity,
           contentId: event.contentId,
           details: event.details
@@ -536,15 +545,13 @@ export default function MagicalMainPage() {
             content={feedItems.map(item => ({
               id: item.id,
               title: item.title,
-              description: item.body,
-              type: item.type,
+              description: item.description,
+              content_type: item.content_type,
               subject: userProfile.subject,
               difficulty: Math.floor(Math.random() * 10) + 1,
-              estimatedTime: item.estimatedTime,
+              estimated_time: item.estimated_time,
               metadata: item.metadata || {},
-              tags: item.tags || [],
-              createdAt: new Date(),
-              updatedAt: new Date()
+              created_at: item.created_at
             }))}
             onContentFiltered={(filteredContent) => {
               // Filter feed items based on safe content
@@ -576,12 +583,12 @@ export default function MagicalMainPage() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                    {item.type === 'video' && <Play className="w-4 h-4 text-red-500" />}
-                    {item.type === 'quiz' && <MessageCircle className="w-4 h-4 text-green-500" />}
-                    {item.type === 'ai_lesson' && <BookOpen className="w-4 h-4 text-blue-500" />}
-                    {item.type === 'link' && <Share className="w-4 h-4 text-purple-500" />}
-                    {item.type === 'interactive' && <Gamepad2 className="w-4 h-4 text-orange-500" />}
-                    {item.type === 'text' && <BookOpen className="w-4 h-4 text-gray-500" />}
+                    {item.content_type === 'video' && <Play className="w-4 h-4 text-red-500" />}
+                    {item.content_type === 'quiz' && <MessageCircle className="w-4 h-4 text-green-500" />}
+                    {item.content_type === 'ai_lesson' && <BookOpen className="w-4 h-4 text-blue-500" />}
+                    {item.content_type === 'link' && <Share className="w-4 h-4 text-purple-500" />}
+                    {item.content_type === 'interactive' && <Gamepad2 className="w-4 h-4 text-orange-500" />}
+                    {item.content_type === 'text' && <BookOpen className="w-4 h-4 text-gray-500" />}
                   </div>
                   <div>
                     <div className="font-medium text-gray-900">
@@ -593,14 +600,14 @@ export default function MagicalMainPage() {
                   </div>
                 </div>
                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  item.type === 'video' ? 'bg-red-100 text-red-700' :
-                  item.type === 'quiz' ? 'bg-green-100 text-green-700' :
-                  item.type === 'ai_lesson' ? 'bg-blue-100 text-blue-700' :
-                  item.type === 'link' ? 'bg-purple-100 text-purple-700' :
-                  item.type === 'interactive' ? 'bg-orange-100 text-orange-700' :
+                  item.content_type === 'video' ? 'bg-red-100 text-red-700' :
+                  item.content_type === 'quiz' ? 'bg-green-100 text-green-700' :
+                  item.content_type === 'ai_lesson' ? 'bg-blue-100 text-blue-700' :
+                  item.content_type === 'link' ? 'bg-purple-100 text-purple-700' :
+                  item.content_type === 'interactive' ? 'bg-orange-100 text-orange-700' :
                   'bg-gray-100 text-gray-700'
                 }`}>
-                  {item.type.replace('_', ' ')}
+                  {item.content_type.replace('_', ' ')}
                 </span>
               </div>
 
@@ -611,7 +618,7 @@ export default function MagicalMainPage() {
 
               {/* Content Body */}
               <div className="prose max-w-none text-gray-700 leading-relaxed mb-4">
-                {item.body.split('\n').map((paragraph, idx) => (
+                {item.description.split('\n').map((paragraph, idx) => (
                   <p key={idx} className="mb-3 last:mb-0">
                     {paragraph}
                   </p>
@@ -619,7 +626,7 @@ export default function MagicalMainPage() {
               </div>
 
               {/* Special Content Types */}
-              {item.type === 'video' && item.metadata?.video_url && (
+              {item.content_type === 'video' && item.metadata?.video_url && (
                 <div className="mb-4">
                   <VideoPlayer
                     videoId={item.id}
@@ -637,7 +644,7 @@ export default function MagicalMainPage() {
                 </div>
               )}
 
-              {item.type === 'quiz' && (
+              {item.content_type === 'quiz' && (
                 <div className="mb-4 space-y-3">
                   {/* Regular Quiz */}
                   <motion.button
@@ -667,7 +674,7 @@ export default function MagicalMainPage() {
 
                   {/* AI Quiz Generator */}
                   <AIQuizGenerator
-                    topic={item.body.split('.')[0]} // Use first sentence as topic
+                    topic={item.description.split('.')[0]} // Use first sentence as topic
                     userProfile={userProfile}
                     onQuizGenerated={(quiz) => {
                       setActiveQuiz(quiz)
@@ -679,7 +686,7 @@ export default function MagicalMainPage() {
                 </div>
               )}
 
-              {item.type === 'link' && item.metadata?.link_preview && (
+              {item.content_type === 'link' && item.metadata?.link_preview && (
                 <div className="mb-4">
                   <motion.button
                     onClick={() => handleLinkOpen(item)}
@@ -717,25 +724,25 @@ export default function MagicalMainPage() {
                 </div>
               )}
 
-              {item.type === 'ai_lesson' && (
+              {item.content_type === 'ai_lesson' && (
                 <AILessonCard
-                  topic={item.body.split('.')[0]} // Use first sentence as topic
+                  topic={item.description.split('.')[0]} // Use first sentence as topic
                   userProfile={userProfile}
                   onInteraction={(action, data) => handleInteraction(item.id, action, data)}
                   safetyContext={(item as any).safetyContext}
                 />
               )}
 
-              {item.type === 'interactive' && item.metadata && (
+              {item.content_type === 'interactive' && item.metadata && (
                 <div className="mb-4">
                   <InteractiveContentPlayer
                     userProfile={userProfile}
                     learningContext={{
                       currentTopic: item.title,
-                      difficulty: item.metadata.difficulty || 3,
-                      timeAvailable: item.metadata.estimated_time || 20,
-                      preferredInteractionType: item.metadata.interactive_type,
-                      learningObjectives: item.metadata.learning_objectives || []
+                      difficulty: (item.metadata.difficulty as number) || 3,
+                      timeAvailable: (item.metadata.estimated_time as number) || 20,
+                      preferredInteractionType: (item.metadata.interactive_type as string),
+                      learningObjectives: (item.metadata.learning_objectives as string[]) || []
                     }}
                     onComplete={(result) => {
                       console.log('Interactive content completed:', result)

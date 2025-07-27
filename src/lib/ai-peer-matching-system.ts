@@ -420,6 +420,70 @@ export class AIPeerMatchingSystem {
   }
 
   /**
+   * Generate session structure for collaborative learning
+   */
+  async generateSessionStructure(match: PeerMatch, sessionPreferences: any): Promise<any> {
+    // TODO: Implement comprehensive session structure generation
+    return {
+      session_id: `session_${Date.now()}`,
+      structure: {
+        duration_minutes: sessionPreferences?.duration_minutes || 60,
+        activities: [
+          {
+            type: 'introduction',
+            duration_minutes: 5,
+            description: 'Participant introductions and goal setting'
+          },
+          {
+            type: 'collaborative_work',
+            duration_minutes: 45,
+            description: 'Main collaborative learning activity'
+          },
+          {
+            type: 'wrap_up',
+            duration_minutes: 10,
+            description: 'Summary and next steps'
+          }
+        ],
+        participants: [
+          {
+            user_id: match.primary_learner_id,
+            role: 'primary_learner',
+            strengths: []
+          },
+          // Add participants for each matched peer
+          ...match.matched_peers.map(peer => ({
+            user_id: peer.user_id,
+            role: 'peer_learner',
+            strengths: peer.strengths_brought || []
+          }))
+        ],
+        objectives: sessionPreferences?.objectives || [
+          'Collaborative problem solving',
+          'Knowledge sharing',
+          'Peer learning'
+        ]
+      },
+      schedule: {
+        start_time: sessionPreferences?.start_time || new Date().toISOString(),
+        end_time: sessionPreferences?.end_time || new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+        timezone: sessionPreferences?.timezone || 'UTC'
+      },
+      collaboration_tools: {
+        video_call: true,
+        shared_whiteboard: true,
+        document_sharing: true,
+        screen_sharing: true
+      },
+      assessment_criteria: {
+        participation_level: 'equal',
+        knowledge_sharing: 'bidirectional',
+        goal_achievement: 'collaborative'
+      }
+    }
+  }
+
+  /**
    * Create a collaborative session from a peer match
    */
   async createCollaborativeSession(
@@ -732,6 +796,147 @@ export class AIPeerMatchingSystem {
       engagement_trends: [],
       learning_velocity: {},
       collaboration_quality_evolution: []
+    }
+  }
+
+  // Missing method implementations
+  private async analyzeSessionState(session: CollaborativeSession): Promise<any> {
+    // TODO: Implement session state analysis
+    return {
+      engagement_level: 0.8,
+      collaboration_quality: 0.7,
+      learning_progress: 0.6,
+      time_elapsed: session.real_time_data.elapsed_time
+    }
+  }
+
+  private async detectSessionIssues(session: CollaborativeSession, analysis: any): Promise<SessionIssue[]> {
+    // TODO: Implement issue detection
+    return []
+  }
+
+  private async generateSessionAdaptations(
+    session: CollaborativeSession, 
+    analysis: any, 
+    issues: SessionIssue[]
+  ): Promise<SessionAdaptation[]> {
+    // TODO: Implement adaptation generation
+    return []
+  }
+
+  private async applySessionAdaptations(
+    session: CollaborativeSession, 
+    adaptations: SessionAdaptation[]
+  ): Promise<SessionAdaptation[]> {
+    // TODO: Implement adaptation application
+    return adaptations
+  }
+
+  private async generateSessionRecommendations(
+    session: CollaborativeSession,
+    analysis: any,
+    issues: SessionIssue[]
+  ): Promise<string[]> {
+    // TODO: Implement recommendation generation
+    return ['Continue with current approach', 'Monitor engagement levels']
+  }
+
+  private determineSessionStatus(session: CollaborativeSession, analysis: any): string {
+    // TODO: Implement status determination
+    return 'active'
+  }
+
+  private async getUserCollaborationHistory(userId: string, timeRange: string): Promise<any[]> {
+    // TODO: Implement history retrieval
+    return []
+  }
+
+  private calculateMatchingSuccessRate(userHistory: any[]): number {
+    // TODO: Implement success rate calculation
+    return 0.8
+  }
+
+  private calculateCollaborationEffectiveness(userHistory: any[]): number {
+    // TODO: Implement effectiveness calculation
+    return 0.75
+  }
+
+  private async analyzeLearningOutcomes(userHistory: any[]): Promise<any> {
+    // TODO: Implement learning outcome analysis
+    return {
+      improvement_rate: 0.8,
+      skill_development: 0.7,
+      knowledge_retention: 0.85
+    }
+  }
+
+  private async analyzePeerNetwork(userId: string, userHistory: any[]): Promise<any> {
+    // TODO: Implement peer network analysis
+    return {
+      network_size: 0,
+      connection_strength: 0,
+      diversity_score: 0
+    }
+  }
+
+  private async identifyImprovementAreas(userHistory: any[]): Promise<string[]> {
+    // TODO: Implement improvement area identification
+    return ['Communication skills', 'Time management']
+  }
+
+  private async generateUserRecommendations(userId: string, userHistory: any[]): Promise<string[]> {
+    // TODO: Implement user recommendation generation
+    return ['Practice active listening', 'Engage more in discussions']
+  }
+
+  private async generateCompatibilityAnalysis(match: PeerMatch): Promise<CompatibilityAnalysis> {
+    // TODO: Implement compatibility analysis
+    return {
+      overall_score: 85,
+      dimension_scores: {
+        learning_style_compatibility: 80,
+        personality_compatibility: 85,
+        skill_level_balance: 90,
+        communication_style_match: 75,
+        goal_alignment: 88,
+        availability_overlap: 95,
+        experience_compatibility: 82
+      },
+      potential_challenges: [],
+      collaboration_strengths: ['Complementary skills', 'Similar learning goals'],
+      recommended_interaction_style: 'collaborative',
+      success_factors: ['Regular communication', 'Clear goal setting']
+    }
+  }
+
+  private async generateSuccessPrediction(match: PeerMatch): Promise<SuccessPrediction> {
+    // TODO: Implement success prediction
+    return {
+      overall_prediction: 85,
+      learning_outcome_prediction: 80,
+      satisfaction_prediction: 90,
+      completion_probability: 88,
+      risk_factors: [],
+      success_enhancers: ['Strong compatibility', 'Clear objectives'],
+      monitoring_recommendations: ['Weekly check-ins', 'Progress tracking']
+    }
+  }
+
+  private async generateRecommendedActivities(match: PeerMatch): Promise<RecommendedActivity[]> {
+    // TODO: Implement activity recommendations
+    return []
+  }
+
+  private async updateParticipantProfiles(session: CollaborativeSession, analytics: any): Promise<void> {
+    // TODO: Implement profile updates
+  }
+
+  private async generateMatchingInsights(session: CollaborativeSession, analytics: any): Promise<any> {
+    // TODO: Implement matching insights generation
+    return {
+      successful_patterns: [],
+      improvement_areas: [],
+      recommendations: []
     }
   }
 }

@@ -397,7 +397,7 @@ function ObjectivesTab({ analytics, onObjectiveSelect }: any) {
                   {Object.entries(objective.skillProgression).slice(0, 4).map(([skill, progress]) => (
                     <div key={skill} className="flex items-center justify-between text-sm">
                       <span className="text-gray-600 capitalize">{skill.replace('_', ' ')}</span>
-                      <span className="font-medium">{Math.round(progress.currentLevel * 100)}%</span>
+                      <span className="font-medium">{Math.round((progress as any).currentLevel * 100)}%</span>
                     </div>
                   ))}
                 </div>
