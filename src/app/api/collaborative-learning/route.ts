@@ -284,7 +284,7 @@ async function handleAnalyzeCollaborationEffectiveness(body: any) {
       collaboration_effectiveness: effectiveness,
       analysis_insights: analysisInsights,
       comparative_analysis: comparativeAnalysis,
-      improvement_roadmap: generateImprovementRoadmap(effectiveness, analysisInsights)
+      improvement_roadmap: generateImprovementRoadmap(effectiveness)
     })
 
   } catch (error) {
@@ -364,10 +364,10 @@ async function handleManageGroupFormation(body: any) {
     // Generate optimal group formations
     const groupFormations = {
       recommended_groups: generateRecommendedGroups(participants, formation_criteria),
-      alternative_formations: generateAlternativeFormations(participants, formation_criteria),
-      formation_rationale: explainFormationRationale(participants, formation_criteria),
+      alternative_formations: generateAlternativeFormations(participants),
+      formation_rationale: explainFormationRationale(participants),
       compatibility_analysis: analyzeParticipantCompatibility(participants),
-      diversity_optimization: optimizeGroupDiversity(participants, formation_criteria)
+      diversity_optimization: optimizeGroupDiversity(participants)
     }
 
     // Create group management strategies
@@ -501,7 +501,7 @@ async function handleAssessCollaborativeLearning(body: any) {
       collaborative_learning_assessment: assessment,
       assessment_analytics: assessmentAnalytics,
       assessment_insights: assessmentInsights,
-      development_recommendations: generateDevelopmentRecommendations(assessment, assessmentInsights)
+      development_recommendations: generateDevelopmentRecommendations(assessment)
     })
 
   } catch (error) {
@@ -569,7 +569,7 @@ async function handleGenerateCollaborationInsights(body: any) {
       collaboration_insights: insights,
       actionable_recommendations: actionableRecommendations,
       insight_visualization: generateInsightVisualization(insights),
-      implementation_roadmap: createInsightImplementationRoadmap(insights, actionableRecommendations)
+      implementation_roadmap: createInsightImplementationRoadmap(insights)
     })
 
   } catch (error) {
@@ -602,10 +602,10 @@ async function handleExportCollaborationData(body: any) {
         data_types: data_types || ['sessions', 'interactions', 'outcomes', 'analytics']
       },
       collaboration_sessions: generateExportSessions(session_ids, date_range),
-      interaction_data: generateExportInteractions(session_ids, date_range),
-      learning_outcomes: generateExportOutcomes(session_ids, date_range),
-      analytics_data: generateExportAnalytics(session_ids, date_range),
-      insights_summary: generateExportInsightsSummary(session_ids, date_range)
+      interaction_data: generateExportInteractions(session_ids),
+      learning_outcomes: generateExportOutcomes(session_ids),
+      analytics_data: generateExportAnalytics(session_ids),
+      insights_summary: generateExportInsightsSummary(session_ids)
     }
 
     // Format data according to export format
