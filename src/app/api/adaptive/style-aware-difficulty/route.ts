@@ -444,7 +444,7 @@ function generateMockContext(): any {
       contentViewed: Math.floor(Math.random() * 10) + 3
     },
     environmentalFactors: {
-      timeOfDay: new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening',
+      timeOfDay: (new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening') as 'morning' | 'afternoon' | 'evening',
       deviceType: Math.random() > 0.7 ? 'mobile' : 'desktop',
       networkQuality: 'fast',
       estimatedDistractions: Math.random() * 0.4
