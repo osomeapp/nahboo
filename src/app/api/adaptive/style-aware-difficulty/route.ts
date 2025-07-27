@@ -429,7 +429,7 @@ function generateMockPerformanceData(userId: string, count: number): Performance
     timeSpent: Math.floor(Math.random() * 300) + 60,
     score: Math.random(),
     contextFactors: {
-      timeOfDay: new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening',
+      timeOfDay: (new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening') as 'morning' | 'afternoon' | 'evening',
       sessionDuration: i * 5,
       deviceType: Math.random() > 0.7 ? 'mobile' : 'desktop',
       distractionLevel: Math.random() * 0.5
