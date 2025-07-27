@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform - Smart Browser Detection</title>
+    <style>
+        /* Lightweight CSS that works everywhere */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .detection-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .detection-status {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .status-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .status-detail {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .redirect-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 8px;
+            border: 1px solid #4caf50;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+        
+        .manual-options {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .options-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        @media (max-width: 600px) {
+            .detection-container {
+                padding: 20px;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+            
+            .logo {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="detection-container">
+        <div class="logo">🎓</div>
+        <h1 class="title">Learning Platform</h1>
+        <p class="subtitle">Optimizing your experience...</p>
+        
+        <div class="detection-status" id="detectionStatus">
+            <div class="spinner"></div>
+            <div class="status-text">Detecting Browser Capabilities</div>
+            <div class="status-detail">Analyzing your browser for the best learning experience</div>
+        </div>
+        
+        <div class="redirect-info" id="redirectInfo" style="display: none;">
+            <!-- Redirect information will be populated -->
+        </div>
+        
+        <div class="manual-options" id="manualOptions" style="display: none;">
+            <div class="options-title">Choose Your Experience:</div>
+            <div>
+                <a href="/" class="btn btn-primary">🚀 React App (Modern)</a>
+                <a href="modern-demo.html" class="btn btn-secondary">⚡ Enhanced HTML</a>
+                <a href="compatible-demo.html" class="btn btn-secondary">🛡️ Maximum Compatible</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smart browser detection and routing system
+        var SmartDetector = {
+            score: 0,
+            recommendation: null,
+            redirectUrl: null,
+            
+            init: function() {
+                this.runDetection();
+            },
+            
+            runDetection: function() {
+                var self = this;
+                
+                // Step 1: Basic browser info
+                this.updateStatus('Analyzing Browser...', 'Checking user agent and basic capabilities');
+                
+                setTimeout(function() {
+                    self.detectBasicFeatures();
+                }, 500);
+            },
+            
+            detectBasicFeatures: function() {
+                var self = this;
+                
+                // Step 2: Feature detection
+                this.updateStatus('Testing Modern Features...', 'Checking ES6, Flexbox, and advanced APIs');
+                
+                setTimeout(function() {
+                    self.runFeatureTests();
+                }, 1000);
+            },
+            
+            runFeatureTests: function() {
+                var self = this;
+                var features = {
+                    es6: this.testES6(),
+                    flexbox: this.testFlexbox(),
+                    fetch: typeof fetch !== 'undefined',
+                    promises: typeof Promise !== 'undefined',
+                    localStorage: this.testLocalStorage(),
+                    classList: 'classList' in document.createElement('div'),
+                    intersectionObserver: typeof IntersectionObserver !== 'undefined',
+                    cssCalc: this.testCSSCalc()
+                };
+                
+                // Calculate score
+                var totalFeatures = Object.keys(features).length;
+                var supportedFeatures = 0;
+                
+                for (var feature in features) {
+                    if (features[feature]) {
+                        supportedFeatures++;
+                    }
+                }
+                
+                this.score = Math.round((supportedFeatures / totalFeatures) * 100);
+                
+                // Apply browser-specific adjustments
+                this.adjustScoreForBrowser();
+                
+                // Step 3: Test React server connectivity
+                this.updateStatus('Testing React Server...', 'Checking if Next.js application is available');
+                
+                setTimeout(function() {
+                    self.testReactServer();
+                }, 1000);
+            },
+            
+            testES6: function() {
+                try {
+                    eval('const x = () => {}; let y = 1;');
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            
+            testFlexbox: function() {
+                var div = document.createElement('div');
+                try {
+                    div.style.display = 'flex';
+                    return div.style.display === 'flex';
+                } catch (e) {
+                    return false;
+                }
+            },
+            
+            testLocalStorage: function() {
+                try {
+                    return typeof localStorage !== 'undefined' && localStorage !== null;
+                } catch (e) {
+                    return false;
+                }
+            },
+            
+            testCSSCalc: function() {
+                var div = document.createElement('div');
+                try {
+                    div.style.width = 'calc(50% + 10px)';
+                    return div.style.width.indexOf('calc') !== -1;
+                } catch (e) {
+                    return false;
+                }
+            },
+            
+            adjustScoreForBrowser: function() {
+                var ua = navigator.userAgent;
+                var browser = this.getBrowserInfo(ua);
+                
+                // Apply penalties for old browsers
+                if (browser.name === 'IE' && browser.version < 11) {
+                    this.score = Math.max(0, this.score - 40);
+                } else if (browser.name === 'Chrome' && browser.version < 50) {
+                    this.score = Math.max(0, this.score - 20);
+                } else if (browser.name === 'Firefox' && browser.version < 45) {
+                    this.score = Math.max(0, this.score - 20);
+                } else if (browser.name === 'Safari' && browser.version < 9) {
+                    this.score = Math.max(0, this.score - 25);
+                }
+                
+                // Bonus for very modern browsers
+                if (browser.name === 'Chrome' && browser.version >= 80) {
+                    this.score = Math.min(100, this.score + 5);
+                }
+            },
+            
+            getBrowserInfo: function(ua) {
+                var browsers = [
+                    { name: 'Chrome', pattern: /Chrome\/(\d+)/ },
+                    { name: 'Firefox', pattern: /Firefox\/(\d+)/ },
+                    { name: 'Safari', pattern: /Safari\/\d+.*Version\/(\d+)/ },
+                    { name: 'Edge', pattern: /Edge\/(\d+)/ },
+                    { name: 'IE', pattern: /MSIE (\d+)|Trident.*rv:(\d+)/ },
+                    { name: 'Opera', pattern: /Opera.*Version\/(\d+)|OPR\/(\d+)/ }
+                ];
+                
+                for (var i = 0; i < browsers.length; i++) {
+                    var match = ua.match(browsers[i].pattern);
+                    if (match) {
+                        return {
+                            name: browsers[i].name,
+                            version: parseInt(match[1] || match[2]) || 0
+                        };
+                    }
+                }
+                
+                return { name: 'Unknown', version: 0 };
+            },
+            
+            testReactServer: function() {
+                var self = this;
+                var reactAvailable = false;
+                
+                // Try to fetch from React server with timeout
+                var timeout = setTimeout(function() {
+                    self.completeDetection(reactAvailable);
+                }, 3000);
+                
+                try {
+                    if (typeof fetch !== 'undefined') {
+                        fetch('/', { method: 'HEAD' })
+                            .then(function(response) {
+                                clearTimeout(timeout);
+                                reactAvailable = response.ok;
+                                self.completeDetection(reactAvailable);
+                            })
+                            .catch(function() {
+                                clearTimeout(timeout);
+                                self.completeDetection(false);
+                            });
+                    } else {
+                        // Fallback for browsers without fetch
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('HEAD', '/', true);
+                        xhr.timeout = 3000;
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4) {
+                                clearTimeout(timeout);
+                                reactAvailable = xhr.status === 200;
+                                self.completeDetection(reactAvailable);
+                            }
+                        };
+                        xhr.onerror = function() {
+                            clearTimeout(timeout);
+                            self.completeDetection(false);
+                        };
+                        xhr.send();
+                    }
+                } catch (e) {
+                    clearTimeout(timeout);
+                    self.completeDetection(false);
+                }
+            },
+            
+            completeDetection: function(reactAvailable) {
+                this.generateRecommendation(reactAvailable);
+                this.showResults();
+            },
+            
+            generateRecommendation: function(reactAvailable) {
+                if (this.score >= 85 && reactAvailable) {
+                    this.recommendation = 'react';
+                    this.redirectUrl = '/';
+                } else if (this.score >= 70) {
+                    this.recommendation = 'modern';
+                    this.redirectUrl = 'modern-demo.html';
+                } else {
+                    this.recommendation = 'compatible';
+                    this.redirectUrl = 'compatible-demo.html';
+                }
+            },
+            
+            showResults: function() {
+                var self = this;
+                
+                var recommendations = {
+                    react: {
+                        title: '🚀 Excellent! Launching Full Platform',
+                        description: 'Your browser supports all modern features and our React server is available.',
+                        detail: 'Score: ' + this.score + '% • Full features • Optimal performance'
+                    },
+                    modern: {
+                        title: '⚡ Great! Using Enhanced HTML Version',
+                        description: 'Your browser supports most modern features. Perfect for our advanced HTML experience.',
+                        detail: 'Score: ' + this.score + '% • Core features • Good performance'
+                    },
+                    compatible: {
+                        title: '🛡️ Using Maximum Compatibility Mode',
+                        description: 'Optimized version for your browser with full educational features.',
+                        detail: 'Score: ' + this.score + '% • Essential features • Universal support'
+                    }
+                };
+                
+                var rec = recommendations[this.recommendation];
+                
+                this.updateStatus(rec.title, rec.description + '<br><small>' + rec.detail + '</small>');
+                
+                // Show redirect info
+                var redirectInfo = document.getElementById('redirectInfo');
+                redirectInfo.innerHTML = 
+                    '<strong>🎯 Redirecting in 5 seconds...</strong><br>' +
+                    '<small>You can also choose manually below or wait for automatic redirect.</small>';
+                redirectInfo.style.display = 'block';
+                
+                // Show manual options
+                document.getElementById('manualOptions').style.display = 'block';
+                
+                // Auto-redirect after 5 seconds
+                var countdown = 5;
+                var countdownInterval = setInterval(function() {
+                    countdown--;
+                    if (countdown > 0) {
+                        redirectInfo.innerHTML = 
+                            '<strong>🎯 Redirecting in ' + countdown + ' seconds...</strong><br>' +
+                            '<small>You can also choose manually below or wait for automatic redirect.</small>';
+                    } else {
+                        clearInterval(countdownInterval);
+                        window.location.href = self.redirectUrl;
+                    }
+                }, 1000);
+            },
+            
+            updateStatus: function(title, detail) {
+                var statusElement = document.getElementById('detectionStatus');
+                var isComplete = title.indexOf('🚀') !== -1 || title.indexOf('⚡') !== -1 || title.indexOf('🛡️') !== -1;
+                
+                statusElement.innerHTML = 
+                    (isComplete ? '' : '<div class="spinner"></div>') +
+                    '<div class="status-text">' + title + '</div>' +
+                    '<div class="status-detail">' + detail + '</div>';
+            }
+        };
+        
+        // Initialize detection when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                SmartDetector.init();
+            });
+        } else {
+            SmartDetector.init();
+        }
+    </script>
+</body>
+</html>

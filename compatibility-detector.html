@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform - Browser Compatibility Detection</title>
+    <style>
+        /* Maximum compatibility CSS - Works in IE8+ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .detection-progress {
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .capability-list {
+            text-align: left;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .capability-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .capability-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status.supported {
+            background: #e8f5e8;
+            color: #2d6e3d;
+        }
+        
+        .status.unsupported {
+            background: #ffeaea;
+            color: #d32f2f;
+        }
+        
+        .status.testing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .recommendation {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        
+        .recommendation.modern {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .recommendation.compatible {
+            background: #fff3cd;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .recommendation.fallback {
+            background: #ffeaea;
+            border-left: 4px solid #f44336;
+        }
+        
+        .action-buttons {
+            margin-top: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .browser-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-size: 14px;
+            text-align: left;
+        }
+        
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #667eea;
+        }
+        
+        /* Responsive design for older browsers */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎓 Learning Platform</div>
+        <div class="subtitle">Optimizing your learning experience...</div>
+        
+        <div class="detection-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div id="progressText">Initializing browser compatibility detection...</div>
+        </div>
+        
+        <div class="capability-list" id="capabilityList" style="display: none;">
+            <!-- Capabilities will be populated by JavaScript -->
+        </div>
+        
+        <div class="browser-info" id="browserInfo" style="display: none;">
+            <!-- Browser information will be populated -->
+        </div>
+        
+        <div class="score-display" id="scoreDisplay" style="display: none;">
+            <!-- Compatibility score will be shown -->
+        </div>
+        
+        <div class="recommendation" id="recommendation" style="display: none;">
+            <!-- Recommendation will be populated -->
+        </div>
+        
+        <div class="action-buttons" id="actionButtons" style="display: none;">
+            <!-- Action buttons will be populated -->
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive Browser Capability Detection System
+        // Compatible with IE8+ and all modern browsers
+        
+        var CompatibilityDetector = {
+            capabilities: {},
+            score: 0,
+            recommendation: '',
+            redirectUrl: '',
+            
+            // Feature detection tests
+            tests: [
+                {
+                    name: 'ES6 Support',
+                    test: function() {
+                        try {
+                            eval('const x = () => {}');
+                            return true;
+                        } catch (e) {
+                            return false;
+                        }
+                    },
+                    weight: 15
+                },
+                {
+                    name: 'Flexbox',
+                    test: function() {
+                        var div = document.createElement('div');
+                        try {
+                            div.style.display = 'flex';
+                            return div.style.display === 'flex';
+                        } catch (e) {
+                            return false;
+                        }
+                    },
+                    weight: 15
+                },
+                {
+                    name: 'CSS calc()',
+                    test: function() {
+                        var div = document.createElement('div');
+                        try {
+                            div.style.width = 'calc(50% + 10px)';
+                            return div.style.width.indexOf('calc') !== -1;
+                        } catch (e) {
+                            return false;
+                        }
+                    },
+                    weight: 10
+                },
+                {
+                    name: 'Fetch API',
+                    test: function() {
+                        return typeof fetch !== 'undefined';
+                    },
+                    weight: 12
+                },
+                {
+                    name: 'Promises',
+                    test: function() {
+                        return typeof Promise !== 'undefined';
+                    },
+                    weight: 12
+                },
+                {
+                    name: 'IntersectionObserver',
+                    test: function() {
+                        return typeof IntersectionObserver !== 'undefined';
+                    },
+                    weight: 10
+                },
+                {
+                    name: 'ClassList API',
+                    test: function() {
+                        return 'classList' in document.createElement('div');
+                    },
+                    weight: 8
+                },
+                {
+                    name: 'Local Storage',
+                    test: function() {
+                        try {
+                            return typeof localStorage !== 'undefined' && localStorage !== null;
+                        } catch (e) {
+                            return false;
+                        }
+                    },
+                    weight: 8
+                },
+                {
+                    name: 'JSON Support',
+                    test: function() {
+                        return typeof JSON !== 'undefined';
+                    },
+                    weight: 5
+                },
+                {
+                    name: 'Touch Events',
+                    test: function() {
+                        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                    },
+                    weight: 5
+                }
+            ],
+            
+            init: function() {
+                this.updateProgress(0, 'Starting browser capability detection...');
+                this.detectBrowserInfo();
+                this.runTests();
+            },
+            
+            detectBrowserInfo: function() {
+                var ua = navigator.userAgent;
+                var browserInfo = {
+                    userAgent: ua,
+                    platform: navigator.platform,
+                    language: navigator.language || navigator.userLanguage,
+                    cookieEnabled: navigator.cookieEnabled,
+                    onLine: navigator.onLine,
+                    screenWidth: screen.width,
+                    screenHeight: screen.height,
+                    colorDepth: screen.colorDepth
+                };
+                
+                // Detect browser name and version
+                var browser = this.getBrowserName(ua);
+                browserInfo.browser = browser.name;
+                browserInfo.version = browser.version;
+                
+                this.browserInfo = browserInfo;
+                this.displayBrowserInfo();
+            },
+            
+            getBrowserName: function(ua) {
+                var browsers = [
+                    { name: 'Chrome', pattern: /Chrome\/(\d+)/ },
+                    { name: 'Firefox', pattern: /Firefox\/(\d+)/ },
+                    { name: 'Safari', pattern: /Safari\/\d+.*Version\/(\d+)/ },
+                    { name: 'Edge', pattern: /Edge\/(\d+)/ },
+                    { name: 'IE', pattern: /MSIE (\d+)|Trident.*rv:(\d+)/ },
+                    { name: 'Opera', pattern: /Opera.*Version\/(\d+)|OPR\/(\d+)/ }
+                ];
+                
+                for (var i = 0; i < browsers.length; i++) {
+                    var match = ua.match(browsers[i].pattern);
+                    if (match) {
+                        return {
+                            name: browsers[i].name,
+                            version: match[1] || match[2] || 'Unknown'
+                        };
+                    }
+                }
+                
+                return { name: 'Unknown', version: 'Unknown' };
+            },
+            
+            runTests: function() {
+                var self = this;
+                var testIndex = 0;
+                var totalWeight = this.tests.reduce(function(sum, test) {
+                    return sum + test.weight;
+                }, 0);
+                
+                function runNextTest() {
+                    if (testIndex >= self.tests.length) {
+                        self.calculateScore(totalWeight);
+                        self.generateRecommendation();
+                        self.displayResults();
+                        return;
+                    }
+                    
+                    var test = self.tests[testIndex];
+                    var progress = ((testIndex + 1) / self.tests.length) * 100;
+                    
+                    self.updateProgress(progress, 'Testing: ' + test.name + '...');
+                    
+                    // Add small delay for visual feedback
+                    setTimeout(function() {
+                        try {
+                            var result = test.test();
+                            self.capabilities[test.name] = {
+                                supported: result,
+                                weight: test.weight
+                            };
+                            self.displayCapability(test.name, result);
+                        } catch (e) {
+                            self.capabilities[test.name] = {
+                                supported: false,
+                                weight: test.weight
+                            };
+                            self.displayCapability(test.name, false);
+                        }
+                        
+                        testIndex++;
+                        runNextTest();
+                    }, 200);
+                }
+                
+                // Show capability list
+                document.getElementById('capabilityList').style.display = 'block';
+                runNextTest();
+            },
+            
+            calculateScore: function(totalWeight) {
+                var earnedWeight = 0;
+                for (var capability in this.capabilities) {
+                    if (this.capabilities[capability].supported) {
+                        earnedWeight += this.capabilities[capability].weight;
+                    }
+                }
+                
+                this.score = Math.round((earnedWeight / totalWeight) * 100);
+                
+                // Apply browser-specific penalties
+                var browser = this.browserInfo.browser;
+                var version = parseInt(this.browserInfo.version);
+                
+                if (browser === 'IE' && version < 11) {
+                    this.score = Math.max(0, this.score - 30);
+                } else if (browser === 'Chrome' && version < 50) {
+                    this.score = Math.max(0, this.score - 15);
+                } else if (browser === 'Firefox' && version < 45) {
+                    this.score = Math.max(0, this.score - 15);
+                } else if (browser === 'Safari' && version < 9) {
+                    this.score = Math.max(0, this.score - 20);
+                }
+            },
+            
+            generateRecommendation: function() {
+                if (this.score >= 80) {
+                    this.recommendation = 'modern';
+                    this.redirectUrl = '/'; // React version
+                } else if (this.score >= 60) {
+                    this.recommendation = 'compatible';
+                    this.redirectUrl = 'modern-demo.html'; // Modern HTML version
+                } else {
+                    this.recommendation = 'fallback';
+                    this.redirectUrl = 'compatible-demo.html'; // Maximum compatibility version
+                }
+            },
+            
+            displayResults: function() {
+                this.updateProgress(100, 'Analysis complete!');
+                
+                // Show score
+                var scoreDisplay = document.getElementById('scoreDisplay');
+                scoreDisplay.textContent = this.score + '%';
+                scoreDisplay.style.display = 'block';
+                
+                // Show recommendation
+                var recommendation = document.getElementById('recommendation');
+                var actionButtons = document.getElementById('actionButtons');
+                
+                if (this.recommendation === 'modern') {
+                    recommendation.className = 'recommendation modern';
+                    recommendation.innerHTML = '<h3>🚀 Excellent Browser Compatibility!</h3>' +
+                        '<p>Your browser supports all modern web features. You\'ll get the best possible experience with our full React-powered learning platform.</p>' +
+                        '<ul>' +
+                        '<li>✅ Full interactive features</li>' +
+                        '<li>✅ Real-time AI tutoring</li>' +
+                        '<li>✅ Advanced animations and transitions</li>' +
+                        '<li>✅ Optimal performance</li>' +
+                        '</ul>';
+                    
+                    actionButtons.innerHTML = 
+                        '<a href="' + this.redirectUrl + '" class="btn btn-primary">Launch Full Platform 🚀</a>' +
+                        '<a href="modern-demo.html" class="btn btn-secondary">Try HTML Version</a>';
+                        
+                } else if (this.recommendation === 'compatible') {
+                    recommendation.className = 'recommendation compatible';
+                    recommendation.innerHTML = '<h3>⚡ Good Browser Compatibility</h3>' +
+                        '<p>Your browser supports most modern features. We recommend our enhanced HTML version for the best experience.</p>' +
+                        '<ul>' +
+                        '<li>✅ Core learning features</li>' +
+                        '<li>✅ AI tutoring with fallbacks</li>' +
+                        '<li>⚠️ Limited animations</li>' +
+                        '<li>✅ Good performance</li>' +
+                        '</ul>';
+                    
+                    actionButtons.innerHTML = 
+                        '<a href="' + this.redirectUrl + '" class="btn btn-primary">Launch Enhanced Version ⚡</a>' +
+                        '<a href="compatible-demo.html" class="btn btn-secondary">Maximum Compatibility</a>';
+                        
+                } else {
+                    recommendation.className = 'recommendation fallback';
+                    recommendation.innerHTML = '<h3>🛡️ Maximum Compatibility Mode</h3>' +
+                        '<p>Your browser has limited modern feature support. We\'ve created a special version that works on virtually all browsers.</p>' +
+                        '<ul>' +
+                        '<li>✅ Essential learning features</li>' +
+                        '<li>✅ Offline-capable content</li>' +
+                        '<li>✅ Lightweight and fast</li>' +
+                        '<li>✅ Works on devices from 2009+</li>' +
+                        '</ul>';
+                    
+                    actionButtons.innerHTML = 
+                        '<a href="' + this.redirectUrl + '" class="btn btn-primary">Launch Compatible Version 🛡️</a>' +
+                        '<a href="index.html" class="btn btn-secondary">Try React Version</a>';
+                }
+                
+                recommendation.style.display = 'block';
+                actionButtons.style.display = 'block';
+                
+                // Auto-redirect after 10 seconds
+                setTimeout(function() {
+                    if (confirm('Redirecting to the recommended version in 3 seconds. Continue?')) {
+                        window.location.href = this.redirectUrl;
+                    }
+                }.bind(this), 7000);
+            },
+            
+            displayBrowserInfo: function() {
+                var browserInfo = document.getElementById('browserInfo');
+                browserInfo.innerHTML = 
+                    '<strong>Browser:</strong> ' + this.browserInfo.browser + ' ' + this.browserInfo.version + '<br>' +
+                    '<strong>Platform:</strong> ' + this.browserInfo.platform + '<br>' +
+                    '<strong>Screen:</strong> ' + this.browserInfo.screenWidth + 'x' + this.browserInfo.screenHeight + '<br>' +
+                    '<strong>Language:</strong> ' + this.browserInfo.language;
+                browserInfo.style.display = 'block';
+            },
+            
+            displayCapability: function(name, supported) {
+                var capabilityList = document.getElementById('capabilityList');
+                var item = document.createElement('div');
+                item.className = 'capability-item';
+                
+                var statusClass = supported ? 'supported' : 'unsupported';
+                var statusText = supported ? 'Supported' : 'Not Supported';
+                
+                item.innerHTML = 
+                    '<span>' + name + '</span>' +
+                    '<span class="status ' + statusClass + '">' + statusText + '</span>';
+                
+                capabilityList.appendChild(item);
+            },
+            
+            updateProgress: function(percent, text) {
+                var progressFill = document.getElementById('progressFill');
+                var progressText = document.getElementById('progressText');
+                
+                progressFill.style.width = percent + '%';
+                progressText.textContent = text;
+            }
+        };
+        
+        // Initialize when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                CompatibilityDetector.init();
+            });
+        } else {
+            CompatibilityDetector.init();
+        }
+    </script>
+</body>
+</html>

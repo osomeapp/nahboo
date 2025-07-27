@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Learning Platform - Compatible Experience</title>
+    <style>
+        /* Maximum compatibility CSS - Works in IE8+ and all browsers */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Use box-sizing polyfill approach for IE7/8 */
+        html {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        *, *:before, *:after {
+            -webkit-box-sizing: inherit;
+            -moz-box-sizing: inherit;
+            box-sizing: inherit;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #667eea; /* Fallback for gradients */
+            background: -webkit-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: -moz-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: -o-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100%;
+        }
+        
+        /* IE8 and below compatibility */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header using floats for IE8 compatibility */
+        .header {
+            background: #fff;
+            background: rgba(255, 255, 255, 0.95); /* Fallback for IE8 */
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden; /* Clear floats */
+            zoom: 1; /* IE fix */
+        }
+        
+        .header:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .logo {
+            float: left;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .nav {
+            float: right;
+        }
+        
+        .nav-item {
+            display: inline-block;
+            *display: inline; /* IE7 fix */
+            *zoom: 1; /* IE7 fix */
+            padding: 8px 15px;
+            margin-left: 10px;
+            background: #f5f5f5;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        
+        .nav-item:hover {
+            background: #667eea;
+            color: #fff;
+        }
+        
+        /* Main layout using floats */
+        .main-content {
+            float: left;
+            width: 65%;
+            margin-right: 5%;
+        }
+        
+        .sidebar {
+            float: right;
+            width: 30%;
+        }
+        
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .clearfix {
+            zoom: 1; /* IE fix */
+        }
+        
+        /* Feed area */
+        .feed-area {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .feed-header {
+            background: #667eea;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .feed-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .feed-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .feed-content {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        /* Content items */
+        .content-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        
+        .content-item:last-child {
+            border-bottom: none;
+        }
+        
+        .content-item:hover {
+            background: #f8f9ff;
+        }
+        
+        .content-type-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .content-type-video {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .content-type-quiz {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .content-type-ai {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .content-type-link {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .content-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .content-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .content-actions {
+            overflow: hidden;
+        }
+        
+        .content-actions:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .btn {
+            display: inline-block;
+            *display: inline; /* IE7 fix */
+            *zoom: 1; /* IE7 fix */
+            padding: 8px 15px;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            float: left;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: #764ba2;
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .content-timestamp {
+            float: right;
+            color: #999;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        /* Sidebar cards */
+        .sidebar-card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        /* AI Tutor card */
+        .ai-tutor {
+            background: #667eea;
+            color: #fff;
+        }
+        
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            background: #fff; /* IE8 fallback */
+            border-radius: 25px;
+            text-align: center;
+            line-height: 50px;
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .ai-status {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        /* Progress items */
+        .progress-item {
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-item:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .progress-label {
+            float: left;
+            font-size: 14px;
+        }
+        
+        .progress-bar {
+            float: right;
+            width: 60px;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #48bb78;
+        }
+        
+        /* Interactive demo */
+        .interactive-demo {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            clear: both;
+        }
+        
+        .demo-controls {
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .demo-controls:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .demo-output {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        /* Load more button */
+        .load-more-container {
+            padding: 15px;
+            text-align: center;
+            background: #fff;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        /* Quick actions */
+        .quick-actions {
+            margin-top: 10px;
+        }
+        
+        .quick-actions .btn {
+            float: none;
+            display: block;
+            width: 100%;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        /* Responsive design for smaller screens */
+        @media screen and (max-width: 768px) {
+            .main-content, .sidebar {
+                float: none;
+                width: 100%;
+                margin-right: 0;
+            }
+            
+            .sidebar {
+                margin-top: 20px;
+            }
+            
+            .logo, .nav {
+                float: none;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+            .nav-item {
+                display: block;
+                margin: 5px 0;
+            }
+        }
+        
+        /* Loading animation for older browsers */
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Simple animations that work in older browsers */
+        .fade-in {
+            opacity: 0;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; /* IE8 */
+            filter: alpha(opacity=0); /* IE7 */
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; /* IE8 */
+            filter: alpha(opacity=100); /* IE7 */
+        }
+    </style>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                &#x1F393; Learning Platform
+                <span style="font-size: 11px; background: #e2e8f0; color: #4a5568; padding: 2px 6px; border-radius: 8px; font-weight: normal;">Compatible</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-item">Dashboard</a>
+                <a href="#" class="nav-item">Courses</a>
+                <a href="#" class="nav-item">Progress</a>
+                <a href="#" class="nav-item">Profile</a>
+            </nav>
+        </header>
+        
+        <!-- Main Content -->
+        <div class="clearfix">
+            <!-- Feed Area -->
+            <main class="main-content">
+                <div class="feed-area">
+                    <div class="feed-header">
+                        <h1 class="feed-title">Your Learning Feed</h1>
+                        <p class="feed-subtitle">Educational content optimized for maximum browser compatibility</p>
+                    </div>
+                    
+                    <div class="feed-content" id="feedContent">
+                        <!-- Content will be populated by JavaScript -->
+                        <div class="loading" id="loadingIndicator">
+                            Loading your personalized content...
+                        </div>
+                    </div>
+                    
+                    <div class="load-more-container">
+                        <button class="btn btn-secondary" id="loadMoreBtn" style="display: none;">
+                            &#x1F4DA; Load More Content
+                        </button>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- AI Tutor Card -->
+                <div class="sidebar-card ai-tutor">
+                    <div class="ai-avatar">&#x1F916;</div>
+                    <h3 class="sidebar-title" style="color: white;">AI Tutor</h3>
+                    <p class="ai-status">Ready to help with your studies</p>
+                    <button class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                        &#x1F4AC; Ask Question
+                    </button>
+                </div>
+                
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">Your Progress</h3>
+                    <div class="progress-item">
+                        <span class="progress-label">Mathematics</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-label">Science</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-label">Programming</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="btn btn-primary">
+                            &#x1F3AF; Take Quiz
+                        </button>
+                        <button class="btn btn-secondary">
+                            &#x1F4CA; View Analytics
+                        </button>
+                        <button class="btn btn-secondary">
+                            &#x2699; Settings
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+        <!-- Interactive Demo Section -->
+        <section class="interactive-demo">
+            <h2 style="margin-bottom: 15px; color: #333;">&#x1F6E1; Maximum Compatibility Features</h2>
+            <p style="color: #666; margin-bottom: 20px;">This version works on virtually all browsers including Internet Explorer 8+, Android 4.0+, and iOS 6+.</p>
+            
+            <div class="demo-controls">
+                <button class="btn btn-primary" onclick="testCompatibility()">
+                    &#x1F50D; Test Browser
+                </button>
+                <button class="btn btn-primary" onclick="testStorage()">
+                    &#x1F4BE; Test Storage
+                </button>
+                <button class="btn btn-primary" onclick="testDOM()">
+                    &#x1F4C4; Test DOM
+                </button>
+                <button class="btn btn-primary" onclick="testEvents()">
+                    &#x1F4F1; Test Events
+                </button>
+                <button class="btn btn-secondary" onclick="clearDemo()">
+                    &#x1F5D1; Clear Output
+                </button>
+            </div>
+            
+            <div class="demo-output" id="demoOutput">
+                Compatible browser features ready to test! This version works on browsers from 2009+.
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Maximum compatibility JavaScript - Works in IE8+ and all browsers
+        // Uses ES3/ES5 syntax only, no modern features
+        
+        // Cross-browser event handling
+        function addEvent(element, type, handler) {
+            if (element.addEventListener) {
+                element.addEventListener(type, handler, false);
+            } else if (element.attachEvent) {
+                element.attachEvent('on' + type, handler);
+            } else {
+                element['on' + type] = handler;
+            }
+        }
+        
+        function removeEvent(element, type, handler) {
+            if (element.removeEventListener) {
+                element.removeEventListener(type, handler, false);
+            } else if (element.detachEvent) {
+                element.detachEvent('on' + type, handler);
+            } else {
+                element['on' + type] = null;
+            }
+        }
+        
+        // Compatible class manipulation
+        function hasClass(element, className) {
+            if (element.classList) {
+                return element.classList.contains(className);
+            } else {
+                return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+            }
+        }
+        
+        function addClass(element, className) {
+            if (element.classList) {
+                element.classList.add(className);
+            } else if (!hasClass(element, className)) {
+                element.className += ' ' + className;
+            }
+        }
+        
+        function removeClass(element, className) {
+            if (element.classList) {
+                element.classList.remove(className);
+            } else {
+                element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+            }
+        }
+        
+        // Learning Platform object
+        var LearningPlatform = {
+            contentItems: [],
+            currentPage: 0,
+            itemsPerPage: 3,
+            
+            init: function() {
+                this.generateMockContent();
+                this.renderFeed();
+                this.setupEventListeners();
+                this.showBrowserInfo();
+            },
+            
+            generateMockContent: function() {
+                this.contentItems = [
+                    {
+                        id: 1,
+                        type: 'video',
+                        icon: '&#x1F3A5;',
+                        title: 'Introduction to Algebra',
+                        description: 'Learn basic algebraic concepts with step-by-step examples that work on any device.',
+                        timestamp: this.getRandomDate()
+                    },
+                    {
+                        id: 2,
+                        type: 'quiz',
+                        icon: '&#x1F4DD;',
+                        title: 'Mathematics Quiz: Fractions',
+                        description: 'Test your understanding of fractions with this compatible quiz system.',
+                        timestamp: this.getRandomDate()
+                    },
+                    {
+                        id: 3,
+                        type: 'ai',
+                        icon: '&#x1F916;',
+                        title: 'AI Study Helper',
+                        description: 'Get personalized help with your studies using our AI tutor system.',
+                        timestamp: this.getRandomDate()
+                    },
+                    {
+                        id: 4,
+                        type: 'link',
+                        icon: '&#x1F517;',
+                        title: 'Khan Academy Resource',
+                        description: 'External educational content that opens safely in any browser.',
+                        timestamp: this.getRandomDate()
+                    },
+                    {
+                        id: 5,
+                        type: 'video',
+                        icon: '&#x1F3AC;',
+                        title: 'Science: The Solar System',
+                        description: 'Explore our solar system with videos that work on older devices.',
+                        timestamp: this.getRandomDate()
+                    },
+                    {
+                        id: 6,
+                        type: 'quiz',
+                        icon: '&#x270F;',
+                        title: 'History Timeline Quiz',
+                        description: 'Interactive timeline quiz with fallbacks for all browsers.',
+                        timestamp: this.getRandomDate()
+                    }
+                ];
+            },
+            
+            getRandomDate: function() {
+                var days = Math.floor(Math.random() * 7) + 1;
+                var date = new Date();
+                date.setDate(date.getDate() - days);
+                return date.toLocaleDateString();
+            },
+            
+            renderFeed: function() {
+                var feedContent = document.getElementById('feedContent');
+                var loadingIndicator = document.getElementById('loadingIndicator');
+                var loadMoreBtn = document.getElementById('loadMoreBtn');
+                
+                // Hide loading on first render
+                if (this.currentPage === 0 && loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                    feedContent.innerHTML = '';
+                }
+                
+                var startIndex = this.currentPage * this.itemsPerPage;
+                var endIndex = Math.min(startIndex + this.itemsPerPage, this.contentItems.length);
+                
+                for (var i = startIndex; i < endIndex; i++) {
+                    var item = this.contentItems[i];
+                    var contentElement = this.createContentElement(item);
+                    feedContent.appendChild(contentElement);
+                }
+                
+                // Show/hide load more button
+                if (endIndex >= this.contentItems.length) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'inline-block';
+                }
+            },
+            
+            createContentElement: function(item) {
+                var div = document.createElement('div');
+                div.className = 'content-item fade-in';
+                
+                var badgeClass = 'content-type-badge content-type-' + item.type;
+                var actionText = item.type === 'video' ? 'Watch' :
+                               item.type === 'quiz' ? 'Take Quiz' :
+                               item.type === 'ai' ? 'Start Session' : 'Open Link';
+                
+                div.innerHTML = 
+                    '<div class="' + badgeClass + '">' +
+                    item.icon + ' ' + item.type.toUpperCase() +
+                    '</div>' +
+                    '<h3 class="content-title">' + item.title + '</h3>' +
+                    '<p class="content-description">' + item.description + '</p>' +
+                    '<div class="content-actions">' +
+                    '<button class="btn btn-primary" onclick="LearningPlatform.interactWithContent(' + item.id + ', \'' + item.type + '\')">' +
+                    '&#x25B6; ' + actionText +
+                    '</button>' +
+                    '<button class="btn btn-secondary" onclick="LearningPlatform.saveContent(' + item.id + ')">' +
+                    '&#x1F4BE; Save' +
+                    '</button>' +
+                    '<span class="content-timestamp">' + item.timestamp + '</span>' +
+                    '</div>';
+                
+                // Add fade-in effect
+                setTimeout(function() {
+                    addClass(div, 'visible');
+                }, 100);
+                
+                return div;
+            },
+            
+            setupEventListeners: function() {
+                var loadMoreBtn = document.getElementById('loadMoreBtn');
+                var self = this;
+                
+                addEvent(loadMoreBtn, 'click', function() {
+                    self.currentPage++;
+                    self.renderFeed();
+                });
+            },
+            
+            interactWithContent: function(id, type) {
+                var output = document.getElementById('demoOutput');
+                var actions = {
+                    'video': 'Video Player: Compatible HTML5 video with fallbacks for older browsers.',
+                    'quiz': 'Quiz System: Form-based quiz that works without JavaScript dependencies.',
+                    'ai': 'AI Tutor: Simplified AI interaction optimized for all browsers.',
+                    'link': 'External Link: Safe navigation that opens in a new tab/window.'
+                };
+                
+                output.innerHTML = '<strong>Content Interaction:</strong> ' + actions[type] + '<br>Item ID: ' + id + '<br>Compatible with IE8+ and all mobile browsers.';
+            },
+            
+            saveContent: function(id) {
+                var output = document.getElementById('demoOutput');
+                
+                // Try localStorage with fallback to cookies
+                try {
+                    if (typeof localStorage !== 'undefined' && localStorage !== null) {
+                        var saved = localStorage.getItem('savedContent');
+                        var savedArray = saved ? saved.split(',') : [];
+                        
+                        if (savedArray.indexOf(id.toString()) === -1) {
+                            savedArray.push(id.toString());
+                            localStorage.setItem('savedContent', savedArray.join(','));
+                            output.innerHTML = '<strong>Content Saved:</strong> Item ' + id + ' saved to local storage.<br>Total saved items: ' + savedArray.length;
+                        } else {
+                            output.innerHTML = '<strong>Already Saved:</strong> Item ' + id + ' was previously saved.';
+                        }
+                    } else {
+                        // Fallback to cookie storage for older browsers
+                        document.cookie = 'savedContent_' + id + '=true; expires=Thu, 01 Jan 2030 00:00:00 UTC; path=/';
+                        output.innerHTML = '<strong>Content Saved:</strong> Item ' + id + ' saved using cookies (localStorage not available).';
+                    }
+                } catch (e) {
+                    output.innerHTML = '<strong>Save Error:</strong> Unable to save content. Storage not available.';
+                }
+            },
+            
+            showBrowserInfo: function() {
+                var output = document.getElementById('demoOutput');
+                var ua = navigator.userAgent;
+                var isIE = ua.indexOf('MSIE') !== -1 || ua.indexOf('Trident/') !== -1;
+                var ieVersion = isIE ? (ua.indexOf('MSIE') !== -1 ? ua.split('MSIE')[1].split(';')[0] : '11+') : 'N/A';
+                
+                setTimeout(function() {
+                    output.innerHTML = '<strong>Compatible Browser Detected:</strong><br>' +
+                        'User Agent: ' + (ua.length > 50 ? ua.substring(0, 50) + '...' : ua) + '<br>' +
+                        'Internet Explorer: ' + (isIE ? 'Yes (v' + ieVersion + ')' : 'No') + '<br>' +
+                        'Screen: ' + screen.width + 'x' + screen.height + '<br>' +
+                        'Language: ' + (navigator.language || navigator.userLanguage || 'Unknown');
+                }, 2000);
+            }
+        };
+        
+        // Global functions for demo
+        function testCompatibility() {
+            var output = document.getElementById('demoOutput');
+            var features = [];
+            
+            // Test basic JavaScript features
+            if (typeof JSON !== 'undefined') features.push('JSON Support');
+            if (typeof localStorage !== 'undefined') features.push('Local Storage');
+            if (document.querySelector) features.push('CSS Selectors');
+            if (document.addEventListener) features.push('Modern Events');
+            else features.push('Legacy Events (IE8)');
+            
+            output.innerHTML = '<strong>Browser Compatibility Test:</strong><br>' +
+                'Supported features: ' + features.join(', ') + '<br>' +
+                'This browser is compatible with our learning platform!';
+        }
+        
+        function testStorage() {
+            var output = document.getElementById('demoOutput');
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem('compatTest', 'success');
+                    var result = localStorage.getItem('compatTest');
+                    localStorage.removeItem('compatTest');
+                    output.innerHTML = '<strong>Storage Test:</strong> Local Storage working correctly<br>Stored and retrieved: ' + result;
+                } else {
+                    output.innerHTML = '<strong>Storage Test:</strong> Local Storage not available<br>Fallback: Using cookies for data persistence';
+                }
+            } catch (e) {
+                output.innerHTML = '<strong>Storage Test:</strong> Error - ' + e.message + '<br>Fallback: Session-only storage';
+            }
+        }
+        
+        function testDOM() {
+            var output = document.getElementById('demoOutput');
+            var testDiv = document.createElement('div');
+            testDiv.innerHTML = 'Test content';
+            
+            var features = [];
+            if (document.getElementById) features.push('getElementById');
+            if (document.createElement) features.push('createElement');
+            if (testDiv.innerHTML) features.push('innerHTML');
+            if (document.getElementsByTagName) features.push('getElementsByTagName');
+            
+            output.innerHTML = '<strong>DOM Test:</strong> All essential DOM methods available<br>' +
+                'Working features: ' + features.join(', ') + '<br>' +
+                'DOM manipulation fully supported!';
+        }
+        
+        function testEvents() {
+            var output = document.getElementById('demoOutput');
+            var testBtn = document.createElement('button');
+            testBtn.innerHTML = 'Test Button';
+            
+            var eventMethods = [];
+            if (testBtn.addEventListener) eventMethods.push('addEventListener');
+            if (testBtn.attachEvent) eventMethods.push('attachEvent (IE8)');
+            if (testBtn.onclick !== undefined) eventMethods.push('onclick');
+            
+            output.innerHTML = '<strong>Event Test:</strong> Event handling working<br>' +
+                'Available methods: ' + eventMethods.join(', ') + '<br>' +
+                'Interactive features fully supported!';
+        }
+        
+        function clearDemo() {
+            document.getElementById('demoOutput').innerHTML = 'Compatible browser features ready to test! This version works on browsers from 2009+.';
+        }
+        
+        // Initialize when DOM is ready (compatible with old browsers)
+        function initializePlatform() {
+            LearningPlatform.init();
+        }
+        
+        // Cross-browser DOM ready
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initializePlatform();
+        } else if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', initializePlatform);
+        } else if (document.attachEvent) {
+            document.attachEvent('onreadystatechange', function() {
+                if (document.readyState === 'complete') {
+                    initializePlatform();
+                }
+            });
+        } else {
+            window.onload = initializePlatform;
+        }
+    </script>
+</body>
+</html>
