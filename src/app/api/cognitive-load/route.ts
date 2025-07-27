@@ -265,7 +265,7 @@ async function handleGetOptimizationRecommendations(body: any) {
     return NextResponse.json({
       success: true,
       optimization_recommendations: enhancedRecommendations,
-      effectiveness_predictions: predictRecommendationEffectiveness(enhancedRecommendations),
+      effectiveness_predictions: predictRecommendationEffectiveness(enhancedRecommendations, user_profile),
       alternative_strategies: generateAlternativeStrategies(current_load, user_profile)
     })
 
