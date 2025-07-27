@@ -479,9 +479,10 @@ function identifyStrengthsAndWeaknesses(performance: any, events: any[]): {
 
   // Subject-specific strengths
   Object.entries(performance.subjectScores).forEach(([subject, score]) => {
-    if (score >= 85) {
+    const numScore = Number(score)
+    if (numScore >= 85) {
       strengths.push(`Strong proficiency in ${subject}`)
-    } else if (score < 60) {
+    } else if (numScore < 60) {
       improvementAreas.push(`Additional practice needed in ${subject}`)
     }
   })
