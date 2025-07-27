@@ -221,9 +221,9 @@ function generateLearningInsights(behavior: any): any {
 // Generate adaptation recommendations
 function generateAdaptationRecommendations(behavior: any): any {
   const recommendations = {
-    immediate: [],
-    shortTerm: [],
-    longTerm: [],
+    immediate: [] as any[],
+    shortTerm: [] as any[],
+    longTerm: [] as any[],
     contentStrategy: {},
     difficultyAdjustment: {},
     styleOptimization: {}
