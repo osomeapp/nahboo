@@ -794,6 +794,25 @@ function generatePeakPerformanceWindows(): any {
   ]
 }
 
+function assessOptimizationPotential(profile: CognitiveLoadProfile): any {
+  return {
+    overall_potential: 75,
+    areas_for_improvement: ['Working memory optimization', 'Attention focus enhancement'],
+    expected_load_reduction: 25,
+    implementation_priority: 'medium'
+  }
+}
+
+function generatePersonalizationRecommendations(profile: CognitiveLoadProfile): any {
+  return {
+    content_pacing: 'moderate',
+    interaction_frequency: 'balanced',
+    break_intervals: '15-20 minutes',
+    difficulty_progression: 'gradual',
+    multimodal_support: true
+  }
+}
+
 export async function GET(request: NextRequest) {
   return NextResponse.json({
     success: true,
