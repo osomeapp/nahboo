@@ -566,7 +566,7 @@ function updateMetric(currentValue: number, feedbackValue: number): number {
 function extractUserPreferences(feedbackData: any): Record<string, any> {
   return {
     preferredAdaptationTypes: Object.entries(feedbackData.adaptations || {})
-      .filter(([_, rating]) => rating > 0.7)
+      .filter(([_, rating]) => Number(rating) > 0.7)
       .map(([type, _]) => type),
     preferredPacing: feedbackData.ratings?.pacingComfortable > 0.7 ? 'current' : 'slower',
     supportLevel: feedbackData.ratings?.supportHelpful > 0.7 ? 'current' : 'more',
