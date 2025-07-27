@@ -813,6 +813,15 @@ function generatePersonalizationRecommendations(profile: CognitiveLoadProfile): 
   }
 }
 
+function identifyNextOptimizations(profile: CognitiveLoadProfile): any {
+  return {
+    immediate_actions: ['Adjust content chunking', 'Implement adaptive pacing'],
+    short_term_goals: ['Enhance memory consolidation', 'Optimize attention management'],
+    long_term_strategies: ['Develop metacognitive skills', 'Build cognitive resilience'],
+    priority_ranking: ['high', 'medium', 'low']
+  }
+}
+
 export async function GET(request: NextRequest) {
   return NextResponse.json({
     success: true,
