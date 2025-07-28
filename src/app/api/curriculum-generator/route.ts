@@ -384,64 +384,22 @@ async function generateLearningObjectives(
       assessment_criteria: [
         {
           criterion_id: `crit_${Date.now()}_${i}`,
+          name: `${goal} Assessment`,
           description: `Assessment of ${goal} understanding`,
-          performance_levels: [
-            {
-              level_id: 'novice',
-              name: 'Novice',
-              description: 'Basic understanding',
-              score_range: { min: 1, max: 3 },
-              indicators: ['Recalls basic facts', 'Identifies key concepts']
-            },
-            {
-              level_id: 'proficient',
-              name: 'Proficient',
-              description: 'Solid understanding',
-              score_range: { min: 4, max: 6 },
-              indicators: ['Explains concepts clearly', 'Applies knowledge correctly']
-            },
-            {
-              level_id: 'advanced',
-              name: 'Advanced',
-              description: 'Deep understanding',
-              score_range: { min: 7, max: 9 },
-              indicators: ['Analyzes complex scenarios', 'Creates innovative solutions']
-            },
-            {
-              level_id: 'expert',
-              name: 'Expert',
-              description: 'Mastery level',
-              score_range: { min: 10, max: 10 },
-              indicators: ['Teaches others effectively', 'Leads projects independently']
-            }
-          ],
           weight: 1.0,
-          assessment_method: 'performance_based',
-          rubric: [
-            {
-              level: 'Excellent',
-              score: 9,
-              criteria: 'Exceeds expectations in all areas',
-              indicators: ['Innovative thinking', 'Clear communication', 'Deep understanding']
-            },
-            {
-              level: 'Good',
-              score: 7,
-              criteria: 'Meets expectations in most areas',
-              indicators: ['Solid understanding', 'Effective application', 'Clear reasoning']
-            },
-            {
-              level: 'Satisfactory',
-              score: 5,
-              criteria: 'Meets basic expectations',
-              indicators: ['Basic understanding', 'Some application', 'Limited reasoning']
-            },
-            {
-              level: 'Needs Improvement',
-              score: 3,
-              criteria: 'Below expectations',
-              indicators: ['Unclear understanding', 'Incorrect application', 'Weak reasoning']
-            }
+          performance_indicators: [
+            'Recalls basic facts',
+            'Identifies key concepts',
+            'Explains concepts clearly',
+            'Applies knowledge correctly',
+            'Analyzes complex scenarios',
+            'Creates innovative solutions'
+          ],
+          rubric_levels: [
+            'Excellent',
+            'Good',
+            'Satisfactory',
+            'Needs Improvement'
           ]
         }
       ],
@@ -841,16 +799,17 @@ async function generateCurriculumBlueprint(request: CurriculumGenerationRequest)
     learning_pathways: generateLearningPathways(request.learning_objectives),
     metadata: {
       created_date: new Date().toISOString(),
+      last_modified: new Date().toISOString(),
       version: '1.0.0',
-      authors: ['AI Curriculum Generator'],
-      educational_standards: ['Common Core', 'Next Generation Science Standards'],
-      accreditation_info: 'Designed to meet institutional accreditation requirements',
-      last_updated: new Date().toISOString(),
-      review_cycle: 'annual',
-      quality_assurance_level: 'comprehensive',
-      localization_info: 'Adaptable to local educational contexts',
-      technology_requirements: determineTechnologyRequirements(request.target_audience),
-      estimated_cost: estimateCurriculumCost(request)
+      author: 'AI Curriculum Generator',
+      institution: 'Learning Platform',
+      standards_alignment: ['Common Core', 'Next Generation Science Standards'],
+      quality_assurance: {
+        review_status: 'draft' as const,
+        reviewers: ['AI System'],
+        quality_score: 0.9,
+        improvement_suggestions: ['Test with target audience', 'Gather feedback from educators']
+      }
     }
   }
 }

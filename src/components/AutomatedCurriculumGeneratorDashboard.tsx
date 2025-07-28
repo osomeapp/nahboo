@@ -79,36 +79,28 @@ const AutomatedCurriculumGeneratorDashboard: React.FC = () => {
       max_duration_weeks: 16,
       budget_level: 'medium',
       class_size: 25,
-      technology_limitations: [],
-      institutional_requirements: [],
-      regulatory_compliance: []
+      available_resources: ['textbooks', 'computers', 'lab_equipment']
     },
     pedagogical_preferences: {
-      preferred_teaching_styles: ['interactive', 'collaborative'],
-      learning_theory_emphasis: ['constructivism', 'social_learning'],
-      assessment_philosophy: 'balanced_formative_summative',
-      technology_integration_preference: 'moderate',
-      cultural_considerations: ['inclusive_practices']
+      teaching_methods: ['interactive', 'collaborative'],
+      learning_theories: ['constructivism', 'social_learning'],
+      engagement_strategies: ['group_work', 'hands_on_activities'],
+      technology_integration_preference: 'moderate'
     },
     assessment_requirements: {
-      required_assessment_types: ['formative', 'summative', 'peer_assessment'],
-      frequency_requirements: 'weekly_formative_biweekly_summative',
-      grading_criteria: ['rubric_based', 'standards_aligned'],
-      accommodation_requirements: ['extended_time', 'alternative_formats'],
-      standards_alignment: ['state_standards', 'national_frameworks']
+      frequency: 'weekly_formative_biweekly_summative',
+      types: ['formative', 'summative', 'peer_assessment'],
+      weight_distribution: { 'formative': 0.3, 'summative': 0.7 }
     },
     customization_parameters: {
       flexibility_level: 'high',
-      adaptation_domains: ['difficulty', 'pacing', 'content_format', 'assessment_type'],
-      personalization_depth: 'advanced',
-      user_control_level: 'instructor'
+      adaptation_options: ['difficulty', 'pacing', 'content_format', 'assessment_type'],
+      personalization_features: ['adaptive_content', 'learning_style_matching']
     },
     quality_standards: {
-      minimum_quality_score: 8.0,
-      required_accessibility_level: 'wcag_aa',
-      pedagogical_compliance: ['evidence_based', 'best_practices'],
-      content_accuracy_requirements: ['peer_reviewed', 'expert_validated'],
-      engagement_benchmarks: [7.5, 8.0, 8.5] // minimum scores for different engagement metrics
+      minimum_score: 8.0,
+      required_certifications: ['wcag_aa', 'accessibility_compliant'],
+      compliance_requirements: ['evidence_based', 'best_practices']
     }
   })
 
