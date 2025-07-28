@@ -394,14 +394,14 @@ export class ContentRecommendationEngine {
     `
 
     try {
-      const response = await multiModelAI.generateContent(
-        prompt,
-        'analytics',
-        {
-          response_format: 'json',
-          max_tokens: 500
-        }
-      )
+      const response = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'analytics', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: prompt,
+        requestType: 'content',
+        priority: 'medium',
+        maxTokens: 500
+      })
 
       const optimizedWeights = JSON.parse(response.content)
       
@@ -618,10 +618,10 @@ export class ContentRecommendationEngine {
     Available Content: ${availableContent.map(c => ({
       id: c.id,
       title: c.title,
-      type: c.type,
+      type: c.content_type,
       difficulty: c.difficulty,
       subject: c.subject,
-      estimatedTime: c.estimatedTime
+      estimatedTime: c.estimated_time
     }))}
     
     Analyze the user's learning patterns and recommend the top 8 most suitable content items.
@@ -631,9 +631,13 @@ export class ContentRecommendationEngine {
     `
 
     try {
-      const response = await multiModelAI.generateContent(prompt, 'education', {
-        response_format: 'json',
-        max_tokens: 1000
+      const response = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'education', level: 'expert', age_group: 'adult', use_case: 'personal' } as any,
+        context: prompt,
+        requestType: 'content',
+        priority: 'medium',
+        maxTokens: 1000
       })
 
       const aiRecommendations = JSON.parse(response.content)
@@ -1112,7 +1116,7 @@ export class ContentRecommendationEngine {
     // Check if content aligns with progression recommendations
     const relevantRecs = progressionRecs.filter(rec => 
       content.subject === rec.skillId.split('_')[0] ||
-      content.tags?.some(tag => rec.skillId.toLowerCase().includes(tag.toLowerCase()))
+      content.subject.toLowerCase().includes(rec.skillId.toLowerCase())
     )
 
     if (relevantRecs.length === 0) return 0
@@ -1369,7 +1373,7 @@ export class ContentRecommendationEngine {
     }
 
     // Check if content tags or title contain skill-related terms
-    const contentText = `${content.title} ${content.description || ''} ${(content.tags || []).join(' ')}`.toLowerCase()
+    const contentText = `${content.title} ${content.description || ''} ${content.subject}`.toLowerCase()
     
     // Look for skill area keywords in content
     const skillKeywords = skillArea.split('_')

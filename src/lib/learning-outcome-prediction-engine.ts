@@ -359,13 +359,16 @@ export class LearningOutcomePredictionEngine {
     `
     
     try {
-      const analysis = await multiModelAI.generateContent(
-        analysisPrompt,
-        'learner_analysis',
-        { temperature: 0.3 }
-      )
+      const analysis = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'analysis', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: analysisPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3
+      })
       
-      return this.parseLearnerAnalysis(analysis)
+      return this.parseLearnerAnalysis(analysis.content)
     } catch (error) {
       console.error('Learner profile analysis failed:', error)
       return {
@@ -406,13 +409,16 @@ export class LearningOutcomePredictionEngine {
       `
       
       try {
-        const prediction = await multiModelAI.generateContent(
-          predictionPrompt,
-          'outcome_prediction',
-          { temperature: 0.2 }
-        )
+        const prediction = await multiModelAI.generateContent({
+          useCase: 'content_explanation',
+          userProfile: { subject: 'prediction', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+          context: predictionPrompt,
+          requestType: 'explanation',
+          priority: 'medium',
+          temperature: 0.2
+        })
         
-        const parsedPrediction = this.parseObjectivePrediction(prediction, objective.objective_id)
+        const parsedPrediction = this.parseObjectivePrediction(prediction.content, objective.objective_id)
         predictions.push(parsedPrediction)
         
       } catch (error) {
@@ -461,13 +467,16 @@ export class LearningOutcomePredictionEngine {
     `
     
     try {
-      const trajectory = await multiModelAI.generateContent(
-        trajectoryPrompt,
-        'trajectory_prediction',
-        { temperature: 0.3 }
-      )
+      const trajectory = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'trajectory', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: trajectoryPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3
+      })
       
-      return this.parsePerformanceTrajectory(trajectory, context.duration_weeks)
+      return this.parsePerformanceTrajectory(trajectory.content, context.duration_weeks)
       
     } catch (error) {
       console.error('Performance trajectory prediction failed:', error)
@@ -529,13 +538,16 @@ export class LearningOutcomePredictionEngine {
     `
     
     try {
-      const recommendations = await multiModelAI.generateContent(
-        recommendationPrompt,
-        'recommendation_generation',
-        { temperature: 0.4 }
-      )
+      const recommendations = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'recommendations', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: recommendationPrompt,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.4
+      })
       
-      return this.parseRecommendations(recommendations)
+      return this.parseRecommendations(recommendations.content)
       
     } catch (error) {
       console.error('Recommendation generation failed:', error)
@@ -660,11 +672,14 @@ export class LearningOutcomePredictionEngine {
     `
     
     try {
-      const update = await multiModelAI.generateContent(
-        updatePrompt,
-        'prediction_update',
-        { temperature: 0.2 }
-      )
+      const update = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'prediction', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: updatePrompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.2
+      })
       
       const predictionUpdate: PredictionUpdate = {
         update_id: `update_${predictionId}_${Date.now()}`,
@@ -672,8 +687,8 @@ export class LearningOutcomePredictionEngine {
         timestamp: new Date(),
         update_type: updateType,
         new_data: newData,
-        revised_predictions: this.parseUpdateResponse(update),
-        prediction_drift: this.calculatePredictionDrift(existingPrediction, update)
+        revised_predictions: this.parseUpdateResponse(update.content),
+        prediction_drift: this.calculatePredictionDrift(existingPrediction, update.content)
       }
       
       // Store update history

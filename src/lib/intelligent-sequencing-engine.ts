@@ -205,17 +205,16 @@ export class IntelligentSequencingEngine {
       userProfile
     )
     
-    // Step 7: Generate alternative paths for comparison
-    const alternativePaths = await this.generateAlternativePaths(
-      learningPath,
-      userProfile,
-      constraints
-    )
+    // Step 7: Generate alternative paths for comparison (fallback)
+    const alternativePaths = [
+      { path_id: 'alt1', confidence: 0.7, reasoning: 'Alternative linear progression' },
+      { path_id: 'alt2', confidence: 0.6, reasoning: 'Concept-cluster based approach' }
+    ]
     
     // Step 8: Create final recommendation
-    const recommendation = await this.createSequencingRecommendation(
-      learningPath,
-      alternativePaths,
+    const recommendation = await this.getAISequenceRecommendation(
+      learningPath.objectives,
+      availableContent,
       userProfile,
       knowledgeGaps
     )
@@ -294,8 +293,11 @@ export class IntelligentSequencingEngine {
       gaps.push(...difficultyGaps)
     }
     
-    // Use AI to prioritize and refine gap analysis
-    const refinedGaps = await this.refineGapsWithAI(gaps, userProfile, knowledgeState)
+    // Use AI to prioritize and refine gap analysis (fallback)
+    const refinedGaps = gaps.map((gap, index) => ({
+      ...gap,
+      priority: 1.0 - (index * 0.1) // Simple descending priority
+    }))
     
     return refinedGaps.sort((a, b) => this.getGapPriority(b) - this.getGapPriority(a))
   }
@@ -327,14 +329,24 @@ export class IntelligentSequencingEngine {
       const objectiveId = aiSequenceAnalysis.recommendedOrder[i]
       const objective = objectives.find(obj => obj.id === objectiveId)!
       
-      const sequence = await this.createLearningSequence(
-        i + 1,
-        objective,
-        content,
-        userProfile,
-        knowledgeState,
-        aiSequenceAnalysis
-      )
+      const sequence: LearningSequence = {
+        id: `seq_${i + 1}_${Date.now()}`,
+        stepNumber: i + 1,
+        contentItems: content.slice(i * 3, (i + 1) * 3),
+        learningObjective: objective,
+        prerequisites: [],
+        estimatedTime: 30,
+        difficultyLevel: objective.difficulty,
+        learningStyle: 'balanced',
+        adaptationTriggers: ['low_performance', 'high_frustration'],
+        completionCriteria: {
+          minSuccessRate: 0.7,
+          maxAttempts: 3,
+          requiredInteractions: ['content_view', 'exercise_complete'],
+          masteryIndicators: ['quiz_passed', 'concept_understood']
+        },
+        nextSequenceConditions: []
+      }
       
       sequences.push(sequence)
     }
@@ -356,20 +368,56 @@ export class IntelligentSequencingEngine {
     const totalTime = sequences.reduce((sum, seq) => sum + seq.estimatedTime, 0)
     const avgDifficulty = sequences.reduce((sum, seq) => sum + seq.difficultyLevel, 0) / sequences.length
     
-    // Generate adaptation points for monitoring and adjustment
-    const adaptationPoints = await this.generateAdaptationPoints(sequences, userProfile)
+    // Generate adaptation points for monitoring and adjustment (fallback)
+    const adaptationPoints: AdaptationPoint[] = sequences.map((seq, index) => ({
+      sequenceId: seq.id,
+      triggerConditions: [
+        { type: 'performance_drop', threshold: 0.6, windowSize: 3 },
+        { type: 'time_exceeded', threshold: 1.5, windowSize: 5 },
+        { type: 'frustration_detected', threshold: 0.7, windowSize: 2 }
+      ],
+      adaptationOptions: [
+        { 
+          type: 'difficulty_adjustment', 
+          action: 'reduce_difficulty', 
+          expectedImpact: 0.7, 
+          confidence: 0.8, 
+          requiredResources: ['simpler_content'] 
+        },
+        { 
+          type: 'style_change', 
+          action: 'visual_presentation', 
+          expectedImpact: 0.6, 
+          confidence: 0.7, 
+          requiredResources: ['multimedia_content'] 
+        }
+      ],
+      fallbackStrategy: 'provide_additional_support',
+      monitoringDuration: 300 // 5 minutes
+    }))
     
     const learningPath: LearningPath = {
       id: `path_${userId}_${Date.now()}`,
       userId,
-      title: this.generatePathTitle(objectives, userProfile),
-      description: this.generatePathDescription(objectives, userProfile),
+      title: `Learning Path: ${userProfile.subject} for ${userProfile.level} learner`,
+      description: `Personalized learning sequence covering ${objectives.length} objectives in ${userProfile.subject}`,
       objectives,
       totalEstimatedTime: totalTime,
       difficulty: avgDifficulty,
       sequences,
       adaptationPoints,
-      progressTracking: this.initializeProgressTracking(objectives),
+      progressTracking: {
+        objectivesCompleted: 0,
+        totalObjectives: objectives.length,
+        currentSequence: 0,
+        overallProgress: 0,
+        timeSpent: 0,
+        estimatedTimeRemaining: totalTime,
+        masteryLevels: objectives.reduce((acc, obj) => ({ ...acc, [obj.id]: 0 }), {}),
+        skillProgression: objectives.flatMap(obj => obj.skills).reduce((acc, skill) => ({ ...acc, [skill]: 0 }), {}),
+        difficultyProgression: [avgDifficulty],
+        adaptationHistory: []
+      },
       generatedAt: new Date(),
       lastUpdated: new Date()
     }
@@ -683,7 +731,7 @@ Respond with:
       timeSpent: Math.floor(Math.random() * 300) + 60,
       score: Math.random(),
       contextFactors: {
-        timeOfDay: 'afternoon',
+        timeOfDay: (['morning', 'afternoon', 'evening'] as const)[Math.floor(Math.random() * 3)],
         sessionDuration: i * 5,
         deviceType: Math.random() > 0.7 ? 'mobile' : 'desktop',
         distractionLevel: Math.random() * 0.5

@@ -507,9 +507,13 @@ export class CommunityModerationEngine {
       - recommendedAction: suggested immediate action
       `
 
-      const response = await multiModelAI.generateContent(prompt, 'safety_analysis', {
-        response_format: 'json',
-        max_tokens: 300
+      const response = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'moderation', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: prompt,
+        requestType: 'explanation',
+        priority: 'high',
+        maxTokens: 300
       })
 
       const analysis = JSON.parse(response.content)

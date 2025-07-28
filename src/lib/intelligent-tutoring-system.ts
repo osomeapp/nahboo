@@ -379,12 +379,13 @@ Generate a warm, welcoming opening message that:
 Keep it conversational and match your personality traits. The message should be 2-3 sentences.`
 
     const response = await multiModelAI.generateContent({
-      prompt,
-      useCase: 'tutoring',
-      options: {
-        temperature: 0.7,
-        maxTokens: 200
-      }
+      useCase: 'general_tutoring',
+      userProfile: { subject: 'tutoring', level: 'expert', age_group: 'adult', use_case: 'personal' } as any,
+      context: prompt,
+      requestType: 'content',
+      priority: 'medium',
+      temperature: 0.7,
+      maxTokens: 200
     })
 
     const openingMessage: ConversationMessage = {
@@ -467,12 +468,13 @@ Base your assessment on:
 
     try {
       const response = await multiModelAI.generateContent({
-        prompt,
-        useCase: 'analysis',
-        options: {
-          temperature: 0.3,
-          maxTokens: 400
-        }
+        useCase: 'content_explanation',
+        userProfile: { subject: 'analysis', level: 'expert', age_group: 'adult', use_case: 'personal' } as any,
+        context: prompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3,
+        maxTokens: 400
       })
 
       const assessment = JSON.parse(response.content)
@@ -601,12 +603,13 @@ Response requirements:
 Generate an appropriate response:`
 
     const response = await multiModelAI.generateContent({
-      prompt,
-      useCase: 'tutoring',
-      options: {
-        temperature: 0.7,
-        maxTokens: 300
-      }
+      useCase: 'general_tutoring',
+      userProfile: { subject: 'tutoring', level: 'expert', age_group: 'adult', use_case: 'personal' } as any,
+      context: prompt,
+      requestType: 'content',
+      priority: 'medium',
+      temperature: 0.7,
+      maxTokens: 300
     })
 
     return {
@@ -726,12 +729,13 @@ Concepts mastered: ${context.sessionMetrics.conceptsMastered.join(', ') || 'None
 Provide a 2-3 sentence summary of what was accomplished in this session.`
 
     const response = await multiModelAI.generateContent({
-      prompt,
-      useCase: 'tutoring',
-      options: {
-        temperature: 0.5,
-        maxTokens: 150
-      }
+      useCase: 'general_tutoring',
+      userProfile: { subject: 'tutoring', level: 'expert', age_group: 'adult', use_case: 'personal' } as any,
+      context: prompt,
+      requestType: 'content',
+      priority: 'medium',
+      temperature: 0.5,
+      maxTokens: 150
     })
 
     return response.content

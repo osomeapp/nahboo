@@ -720,9 +720,9 @@ class CurriculumIntegrationEngine {
         { feature: 'Mobile Learning', adoptionRate: 0.89, userSatisfaction: 4.3 }
       ],
       deviceUsage: [
-        { device: 'desktop', percentage: 45 },
-        { device: 'mobile', percentage: 35 },
-        { device: 'tablet', percentage: 20 }
+        { device: 'desktop' as const, percentage: 45 },
+        { device: 'mobile' as const, percentage: 35 },
+        { device: 'tablet' as const, percentage: 20 }
       ],
       accessibilityMetrics: {
         studentsUsingAssistiveTech: students.filter(s => s.learningProfile.accessibilityNeeds?.length).length,

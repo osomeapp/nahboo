@@ -333,9 +333,8 @@ export class ContentSafetyEngine {
     Content: ${JSON.stringify({
       title: content.title,
       description: content.description,
-      type: content.type,
-      subject: content.subject,
-      tags: content.tags
+      type: content.content_type,
+      subject: content.subject
     })}
     
     User: ${userProfile.age_group} learner studying ${userProfile.subject}
@@ -358,9 +357,13 @@ export class ContentSafetyEngine {
     `
 
     try {
-      const response = await multiModelAI.generateContent(prompt, 'education', {
-        response_format: 'json',
-        max_tokens: 800
+      const response = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'safety', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: prompt,
+        requestType: 'explanation',
+        priority: 'high',
+        maxTokens: 800
       })
 
       const analysis = JSON.parse(response.content)
@@ -412,7 +415,7 @@ export class ContentSafetyEngine {
     let ageRating: SafetyClassification['ageRating'] = 'all'
 
     // Check content type appropriateness
-    if (content.type === 'link' && userAge < 13) {
+    if (content.content_type === 'link' && userAge < 13) {
       riskFactors.push({
         riskType: 'privacy',
         severity: 'medium',
@@ -420,7 +423,7 @@ export class ContentSafetyEngine {
         ageImpact: { 'child': 0.8, 'teen': 0.3, 'adult': 0.1 }
       })
       safetyLevel = 'caution'
-      ageRating = '13+'
+      ageRating = '12+'
     }
 
     // Check subject matter
@@ -614,7 +617,7 @@ export class ContentSafetyEngine {
       case 'subject':
         return content.subject === restriction.value
       case 'content_type':
-        return content.type === restriction.value
+        return content.content_type === restriction.value
       case 'difficulty':
         return (content.difficulty || 0) > restriction.value
       default:

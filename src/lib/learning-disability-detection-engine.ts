@@ -334,12 +334,13 @@ class LearningDisabilityDetectionEngine {
 
     // Use multi-model AI for analysis
     const aiResponse = await multiModelAI.generateContent({
-      prompt: analysisPrompt,
-      useCase: 'educational_assessment',
-      options: {
-        maxTokens: 3000,
-        temperature: 0.2 // Lower temperature for more consistent analysis
-      }
+      useCase: 'content_explanation',
+      userProfile: { subject: 'assessment', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+      context: analysisPrompt,
+      requestType: 'explanation',
+      priority: 'high',
+      maxTokens: 3000,
+      temperature: 0.2
     })
 
     // Parse AI insights
@@ -1053,13 +1054,5 @@ export const learningDisabilityDetectionEngine = new LearningDisabilityDetection
 })
 
 export {
-  LearningDisabilityDetectionEngine,
-  type LearningDisabilityIndicator,
-  type LearnerAssessmentData,
-  type DisabilityDetectionResult,
-  type Accommodation,
-  type EvaluationReferral,
-  type MonitoringPlan,
-  type InterventionStrategy,
-  type SupportSystemConfig
+  LearningDisabilityDetectionEngine
 }

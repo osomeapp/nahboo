@@ -58,6 +58,9 @@ export interface ModelComparisonResult {
   recommendedModel: string
   reasoning: string[]
   contextualFactors: string[]
+  
+  // Metadata
+  timestamp: Date
 }
 
 export interface ModelOptimizationRecommendation {
@@ -575,7 +578,8 @@ export class ModelPerformanceAnalytics {
       reasoning: scoreA > scoreB 
         ? [`Model A shows better overall performance (score: ${scoreA.toFixed(3)} vs ${scoreB.toFixed(3)})`]
         : [`Model B shows better overall performance (score: ${scoreB.toFixed(3)} vs ${scoreA.toFixed(3)})`],
-      contextualFactors: ['User satisfaction weighted heavily', 'Response time considered', 'Cost efficiency factored']
+      contextualFactors: ['User satisfaction weighted heavily', 'Response time considered', 'Cost efficiency factored'],
+      timestamp: new Date()
     }
   }
 

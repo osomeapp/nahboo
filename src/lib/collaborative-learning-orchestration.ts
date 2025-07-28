@@ -248,12 +248,102 @@ export interface AdaptationStrategy {
   timeline: string
 }
 
+export interface OrchestrationPlan {
+  plan_id: string
+  coordination_strategy: string
+  activity_sequence: string[]
+  resource_allocation: Record<string, any>
+  timing_schedule: Record<string, any>
+  interaction_patterns: string[]
+  facilitation_guidelines: string[]
+}
+
+export interface ActivityFlow {
+  flow_id: string
+  activity_sequence: ActivityStep[]
+  flow_type: 'linear' | 'branching' | 'parallel' | 'adaptive'
+  estimated_duration: number
+  complexity_level: number
+}
+
+export interface ActivityStep {
+  step_id: string
+  step_name: string
+  description: string
+  duration_minutes: number
+  required_resources: string[]
+  participant_roles: string[]
+}
+
+export interface FacilitationFramework {
+  framework_id: string
+  facilitation_style: 'directive' | 'non_directive' | 'collaborative'
+  intervention_strategies: string[]
+  monitoring_protocols: string[]
+  support_mechanisms: string[]
+}
+
+export interface AssessmentStrategy {
+  strategy_id: string
+  assessment_methods: string[]
+  evaluation_criteria: string[]
+  feedback_mechanisms: string[]
+  quality_assurance: string[]
+}
+
+export interface AnalyticsTracking {
+  tracking_id: string
+  metrics_collected: string[]
+  collection_frequency: string
+  analysis_methods: string[]
+  reporting_schedule: string
+}
+
+export interface SessionTimeline {
+  timeline_id: string
+  milestones: TimelineMilestone[]
+  duration_total: number
+  phase_breakdown: string[]
+}
+
+export interface TimelineMilestone {
+  milestone_id: string
+  milestone_name: string
+  target_time: number
+  success_criteria: string[]
+  dependencies: string[]
+}
+
+export interface ResourceAllocation {
+  allocation_id: string
+  resource_types: string[]
+  distribution_strategy: string
+  availability_windows: string[]
+  utilization_limits: Record<string, number>
+}
+
+export interface QualityAssurance {
+  qa_id: string
+  quality_metrics: string[]
+  monitoring_frequency: string
+  intervention_thresholds: Record<string, number>
+  improvement_protocols: string[]
+}
+
 export interface ContributionTracking {
   contribution_types: ContributionType[]
   quality_metrics: QualityMetric[]
   impact_assessment: ImpactAssessment
   recognition_system: RecognitionSystem
   improvement_opportunities: ImprovementOpportunity[]
+}
+
+export interface QualityMetric {
+  metric_name: string
+  measurement_criteria: string[]
+  threshold_values: Record<string, number>
+  calculation_method: string
+  frequency: 'real_time' | 'periodic' | 'milestone'
 }
 
 export interface ContributionType {

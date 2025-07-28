@@ -357,12 +357,12 @@ class MultimodalContentGenerator {
     `
 
     const analysis = await multiModelAI.generateContent({
-      prompt: analysisPrompt,
-      useCase: 'educational_design',
-      options: {
-        maxTokens: 1500,
-        temperature: 0.3
-      }
+      useCase: 'content_explanation',
+      userProfile: { subject: 'design', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+      context: analysisPrompt,
+      requestType: 'explanation',
+      priority: 'medium',
+      temperature: 0.3
     })
 
     // Parse AI analysis and return structured strategies
@@ -415,12 +415,17 @@ class MultimodalContentGenerator {
     `
 
     const textResponse = await multiModelAI.generateContent({
-      prompt: textPrompt,
-      useCase: request.context.use_case,
-      options: {
-        maxTokens: 3000,
-        temperature: 0.4
-      }
+      useCase: 'content_explanation',
+      userProfile: { 
+        subject: request.subject, 
+        level: 'intermediate', 
+        age_group: request.target_audience.age_group, 
+        use_case: 'personal' 
+      } as any,
+      context: textPrompt,
+      requestType: 'content',
+      priority: 'medium',
+      temperature: 0.4
     })
 
     return this.parseTextContent(textResponse.content, request)
@@ -449,12 +454,17 @@ class MultimodalContentGenerator {
     `
 
     const audioResponse = await multiModelAI.generateContent({
-      prompt: audioPrompt,
-      useCase: request.context.use_case,
-      options: {
-        maxTokens: 2500,
-        temperature: 0.5
-      }
+      useCase: 'content_explanation',
+      userProfile: { 
+        subject: request.subject, 
+        level: 'intermediate', 
+        age_group: request.target_audience.age_group, 
+        use_case: 'personal' 
+      } as any,
+      context: audioPrompt,
+      requestType: 'content',
+      priority: 'medium',
+      temperature: 0.5
     })
 
     return this.parseAudioContent(audioResponse.content, request)
@@ -484,12 +494,17 @@ class MultimodalContentGenerator {
     `
 
     const visualResponse = await multiModelAI.generateContent({
-      prompt: visualPrompt,
-      useCase: request.context.use_case,
-      options: {
-        maxTokens: 2000,
-        temperature: 0.4
-      }
+      useCase: 'content_explanation',
+      userProfile: { 
+        subject: request.subject, 
+        level: 'intermediate', 
+        age_group: request.target_audience.age_group, 
+        use_case: 'personal' 
+      } as any,
+      context: visualPrompt,
+      requestType: 'content',
+      priority: 'medium',
+      temperature: 0.4
     })
 
     return this.parseVisualContent(visualResponse.content, request)
@@ -519,12 +534,17 @@ class MultimodalContentGenerator {
     `
 
     const interactiveResponse = await multiModelAI.generateContent({
-      prompt: interactivePrompt,
-      useCase: request.context.use_case,
-      options: {
-        maxTokens: 2500,
-        temperature: 0.6
-      }
+      useCase: 'content_explanation',
+      userProfile: { 
+        subject: request.subject, 
+        level: 'intermediate', 
+        age_group: request.target_audience.age_group, 
+        use_case: 'personal' 
+      } as any,
+      context: interactivePrompt,
+      requestType: 'content',
+      priority: 'medium',
+      temperature: 0.6
     })
 
     return this.parseInteractiveContent(interactiveResponse.content, request)
@@ -556,12 +576,17 @@ class MultimodalContentGenerator {
     `
 
     const multimodalResponse = await multiModelAI.generateContent({
-      prompt: multimodalPrompt,
-      useCase: request.context.use_case,
-      options: {
-        maxTokens: 2000,
-        temperature: 0.5
-      }
+      useCase: 'content_explanation',
+      userProfile: { 
+        subject: request.subject, 
+        level: 'intermediate', 
+        age_group: request.target_audience.age_group, 
+        use_case: 'personal' 
+      } as any,
+      context: multimodalPrompt,
+      requestType: 'content',
+      priority: 'medium',
+      temperature: 0.5
     })
 
     return this.parseMultimodalContent(multimodalResponse.content, request, existingOptions)
@@ -872,8 +897,8 @@ class MultimodalContentGenerator {
       learning_objectives: request.learning_objectives,
       engagement_score: 0.95,
       format_specific: {
-        primary_format: existingOptions.length > 0 ? existingOptions[0].type : 'text',
-        supporting_formats: existingOptions.slice(1).map(opt => opt.type),
+        primary_format: existingOptions.length > 0 && existingOptions[0].type !== 'multimodal' ? existingOptions[0].type : 'text',
+        supporting_formats: existingOptions.slice(1).filter(opt => opt.type !== 'multimodal').map(opt => opt.type),
         content_components: {},
         integration_strategy: 'layered',
         synchronization_points: [],
@@ -1134,15 +1159,5 @@ export const multimodalContentGenerator = new MultimodalContentGenerator({
 })
 
 export {
-  MultimodalContentGenerator,
-  type ContentGenerationRequest,
-  type ContentGenerationResult,
-  type AnyContentFormat,
-  type TextContent,
-  type AudioContent,
-  type VisualContent,
-  type InteractiveContent,
-  type MultimodalContent,
-  type ContentOptimizationConfig,
-  type ContentPerformanceMetrics
+  MultimodalContentGenerator
 }

@@ -360,12 +360,12 @@ export interface OptimizedAttentionSystem {
   original_request: AttentionOptimizationRequest
   attention_enhancement_strategies: AttentionEnhancementStrategy[]
   focus_optimization_plan: FocusOptimizationPlan
-  distraction_mitigation: DistractionMitigation
-  adaptive_interventions: AdaptiveIntervention[]
-  monitoring_framework: AttentionMonitoringFramework
-  personalization_engine: PersonalizationEngine
-  performance_predictions: AttentionPerformancePrediction[]
-  continuous_optimization: ContinuousOptimization
+  distraction_mitigation: MitigationStrategy
+  adaptive_interventions: InterventionStrategy[]
+  monitoring_framework: MonitoringProtocol
+  personalization_engine: PersonalizationAdaptation
+  performance_predictions: PerformanceForecasting[]
+  continuous_optimization: OptimizationObjective
 }
 
 export interface AttentionEnhancementStrategy {
@@ -565,8 +565,8 @@ export interface FocusOptimizationPlan {
   focus_enhancement_techniques: FocusEnhancementTechnique[]
   attention_regulation_strategies: AttentionRegulationStrategy[]
   cognitive_training_program: CognitiveTrainingProgram
-  environmental_optimization: EnvironmentalOptimization
-  technology_integration: TechnologyIntegration
+  environmental_optimization: EnvironmentFactor
+  technology_integration: EnhancementTechnique
 }
 
 export interface OptimizationObjective {

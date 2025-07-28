@@ -275,16 +275,19 @@ export class ContentSynthesisEngine {
     `
     
     try {
-      const evaluation = await multiModelAI.generateContent(
-        analysisPrompt + '\n\nSources:\n' + sources.map(s => 
+      const evaluation = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'analysis', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: analysisPrompt + '\n\nSources:\n' + sources.map(s => 
           `${s.source_id}: ${s.metadata.title} (${s.type}, ${s.metadata.academic_level})`
         ).join('\n'),
-        'content_analysis',
-        { temperature: 0.3 }
-      )
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3
+      })
       
       // Parse AI evaluation and apply filtering logic
-      const sourceScores = this.parseSourceEvaluation(evaluation)
+      const sourceScores = this.parseSourceEvaluation(evaluation.content)
       
       // Apply synthesis parameters to filter sources
       const scoredSources = sources.map((source, index) => {
@@ -340,15 +343,18 @@ export class ContentSynthesisEngine {
     `
     
     try {
-      const extractionResult = await multiModelAI.generateContent(
-        extractionPrompt + '\n\nSources:\n' + sources.map(s => 
+      const extractionResult = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'synthesis', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: extractionPrompt + '\n\nSources:\n' + sources.map(s => 
           `Source ${s.source_id}: ${s.content.substring(0, 1000)}...`
         ).join('\n\n'),
-        'content_analysis',
-        { temperature: 0.2 }
-      )
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.2
+      })
       
-      return this.parseContentExtraction(extractionResult, sources)
+      return this.parseContentExtraction(extractionResult.content, sources)
       
     } catch (error) {
       console.error('Content extraction failed:', error)
@@ -404,13 +410,16 @@ export class ContentSynthesisEngine {
     `
     
     try {
-      const synthesizedContent = await multiModelAI.generateContent(
-        synthesisPrompt,
-        'content_generation',
-        { temperature: 0.4 }
-      )
+      const synthesizedContent = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'synthesis', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: synthesisPrompt,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.4
+      })
       
-      return this.parseSynthesizedContent(synthesizedContent)
+      return this.parseSynthesizedContent(synthesizedContent.content)
       
     } catch (error) {
       console.error('AI synthesis failed:', error)
@@ -445,13 +454,16 @@ export class ContentSynthesisEngine {
     `
     
     try {
-      const validation = await multiModelAI.generateContent(
-        validationPrompt,
-        'content_analysis',
-        { temperature: 0.2 }
-      )
+      const validation = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'validation', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: validationPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.2
+      })
       
-      return this.parseQualityMetrics(validation)
+      return this.parseQualityMetrics(validation.content)
       
     } catch (error) {
       console.error('Quality validation failed:', error)
@@ -526,13 +538,16 @@ export class ContentSynthesisEngine {
     `
     
     try {
-      const networkData = await multiModelAI.generateContent(
-        networkPrompt,
-        'knowledge_structuring',
-        { temperature: 0.3 }
-      )
+      const networkData = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'knowledge', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: networkPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3
+      })
       
-      const conceptNetworks = this.parseConceptNetwork(networkData, synthesizedContent.topic)
+      const conceptNetworks = this.parseConceptNetwork(networkData.content, synthesizedContent.topic)
       this.conceptNetworks.set(synthesizedContent.synthesis_id, conceptNetworks)
       
       return conceptNetworks
@@ -569,15 +584,18 @@ export class ContentSynthesisEngine {
     `
     
     try {
-      const updatedContent = await multiModelAI.generateContent(
-        updatePrompt,
-        'content_generation',
-        { temperature: 0.3 }
-      )
+      const updatedContent = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'updates', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: updatePrompt,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.3
+      })
       
       const updatedSynthesis = {
         ...existingSynthesis,
-        content: this.parseSynthesizedContent(updatedContent),
+        content: this.parseSynthesizedContent(updatedContent.content),
         synthesis_metadata: {
           ...existingSynthesis.synthesis_metadata,
           last_updated: new Date(),
@@ -619,16 +637,19 @@ export class ContentSynthesisEngine {
     `
     
     try {
-      const adaptedContent = await multiModelAI.generateContent(
-        adaptationPrompt,
-        'content_adaptation',
-        { temperature: 0.4 }
-      )
+      const adaptedContent = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'adaptation', level: 'expert', age_group: 'adult', use_case: 'personal' } as any,
+        context: adaptationPrompt,
+        requestType: 'content',
+        priority: 'medium',
+        temperature: 0.4
+      })
       
       const adaptedSynthesis = {
         ...existingSynthesis,
         synthesis_id: `${synthesisId}_adapted_${Date.now()}`,
-        content: this.parseSynthesizedContent(adaptedContent),
+        content: this.parseSynthesizedContent(adaptedContent.content),
         synthesis_metadata: {
           ...existingSynthesis.synthesis_metadata,
           created_at: new Date(),

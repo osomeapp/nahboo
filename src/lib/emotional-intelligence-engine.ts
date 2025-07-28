@@ -312,12 +312,13 @@ Consider:
 
     try {
       const response = await multiModelAI.generateContent({
-        prompt,
-        useCase: 'analysis',
-        options: {
-          temperature: 0.3,
-          maxTokens: 300
-        }
+        useCase: 'content_explanation',
+        userProfile: { subject: 'emotional', level: 'expert', age_group: 'adult', use_case: 'personal' } as any,
+        context: prompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3,
+        maxTokens: 300
       })
 
       const analysis = JSON.parse(response.content)
@@ -1133,6 +1134,7 @@ Consider:
       ],
       // Add more emotion-specific strategies
       joy: ['Celebrate your successes', 'Share your enthusiasm with others'],
+      excitement: ['Channel this energy productively', 'Focus excitement on learning goals'],
       curiosity: ['Explore related topics', 'Ask more questions'],
       confusion: ['Ask for help', 'Review prerequisite concepts'],
       pride: ['Reflect on your growth', 'Set new challenging goals'],

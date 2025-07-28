@@ -208,15 +208,17 @@ class AutomatedModelRouter {
     try {
       // Simple test request to check model availability
       const testPrompt = "Respond with 'OK' if you're working properly."
-      const response = await multiModelAI.generateResponse({
-        prompt: testPrompt,
-        useCase: 'health_check',
-        forceModel: modelId,
+      const response = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'test', level: 'beginner', age_group: 'adult', use_case: 'personal' } as any,
+        context: testPrompt,
+        requestType: 'content',
+        priority: 'low',
         maxTokens: 10,
         temperature: 0
       })
 
-      return { success: response.success && response.content.toLowerCase().includes('ok') }
+      return { success: response.content && response.content.toLowerCase().includes('ok') }
     } catch (error) {
       return { success: false, error: error as Error }
     }
@@ -449,7 +451,7 @@ class AutomatedModelRouter {
       cumulative += weight as number
       if (random <= cumulative) {
         return {
-          selectedModel: modelId,
+          selectedModel: String(modelId),
           reason: `Load-balanced selection (weight: ${((weight as number) * 100).toFixed(1)}%)`,
           confidence: 0.8
         }
@@ -458,7 +460,7 @@ class AutomatedModelRouter {
 
     // Fallback to first available model
     return {
-      selectedModel: availableWeights[0][0],
+      selectedModel: String(availableWeights[0][0]),
       reason: 'Load balancing fallback to first available model',
       confidence: 0.6
     }

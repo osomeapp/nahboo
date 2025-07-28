@@ -846,11 +846,4 @@ class ModelComparisonEngine {
 // Export singleton instance
 export const modelComparisonEngine = new ModelComparisonEngine()
 
-// Export types
-export type {
-  ModelTest,
-  ComparisonMetric,
-  TestResults,
-  OptimizationRecommendation,
-  BenchmarkResult
-}
+// All interfaces are already exported individually above

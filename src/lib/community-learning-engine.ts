@@ -948,7 +948,7 @@ class CommunityLearningEngine {
       newContent: periodContent.length,
       averageRating: communityContent.reduce((sum, c) => sum + c.engagement.rating, 0) / Math.max(communityContent.length, 1),
       completionRate: communityContent.reduce((sum, c) => sum + (c.engagement.completions / Math.max(c.engagement.views, 1)), 0) / Math.max(communityContent.length, 1),
-      engagementRate: communityContent.reduce((sum, c) => sum + ((c.engagement.likes + c.engagement.comments) / Math.max(c.engagement.views, 1)), 0) / Math.max(communityContent.length, 1)
+      engagementRate: communityContent.reduce((sum, c) => sum + (c.engagement.likes / Math.max(c.engagement.views, 1)), 0) / Math.max(communityContent.length, 1)
     }
     
     const activityMetrics = {

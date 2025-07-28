@@ -167,12 +167,13 @@ export class KnowledgeGraphGenerator {
     Return a JSON array of concept objects.`
 
     const response = await multiModelAI.generateContent({
-      prompt,
-      useCase: 'curriculum_design',
-      options: {
-        temperature: 0.3, // More structured output
-        maxTokens: 4000
-      }
+      useCase: 'content_explanation',
+      userProfile: { subject: 'curriculum', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+      context: prompt,
+      requestType: 'explanation',
+      priority: 'medium',
+      temperature: 0.3,
+      maxTokens: 4000
     })
 
     try {
@@ -235,12 +236,13 @@ export class KnowledgeGraphGenerator {
     Return a JSON array of relationship objects with fromConceptId, toConceptId, type, strength, direction, and description.`
 
     const response = await multiModelAI.generateContent({
-      prompt,
-      useCase: 'analysis',
-      options: {
-        temperature: 0.2,
-        maxTokens: 3000
-      }
+      useCase: 'content_explanation',
+      userProfile: { subject: 'analysis', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+      context: prompt,
+      requestType: 'explanation',
+      priority: 'medium',
+      temperature: 0.2,
+      maxTokens: 3000
     })
 
     try {
@@ -472,12 +474,13 @@ export class KnowledgeGraphGenerator {
 
     try {
       const response = await multiModelAI.generateContent({
-        prompt,
-        useCase: 'analysis',
-        options: {
-          temperature: 0.3,
-          maxTokens: 2000
-        }
+        useCase: 'content_explanation',
+        userProfile: { subject: 'analysis', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: prompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3,
+        maxTokens: 2000
       })
 
       const gapsData = JSON.parse(response.content)

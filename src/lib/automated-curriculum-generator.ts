@@ -755,6 +755,7 @@ export class AutomatedCurriculumGenerator {
             differentiation_notes: this.parseDifferentiationNotes(response),
             technology_requirements: this.parseTechnologyRequirements(response),
             preparation_time: this.estimatePreparationTime(response),
+            duration_minutes: lesson.duration_minutes || 60,
             cognitive_load_analysis: this.analyzeCognitiveLoad(response, request.target_audience)
           }
           
@@ -1460,15 +1461,15 @@ export class AutomatedCurriculumGenerator {
         opportunity_id: 'formative_check',
         type: 'formative',
         timing: 'during_instruction',
-        method: 'questioning',
-        description: 'Check for understanding through targeted questions'
+        description: 'Check for understanding through targeted questions',
+        criteria: ['Student participation', 'Correct responses', 'Understanding indicators']
       },
       {
         opportunity_id: 'exit_ticket',
         type: 'formative',
         timing: 'lesson_end',
-        method: 'written_response',
-        description: 'Quick written assessment of key concepts'
+        description: 'Quick written assessment of key concepts',
+        criteria: ['Key concept understanding', 'Application ability', 'Misconception identification']
       }
     ]
   }
@@ -1478,16 +1479,13 @@ export class AutomatedCurriculumGenerator {
       intrinsic_load: 6,
       extraneous_load: 3,
       germane_load: 7,
-      total_load: 16,
-      load_management_strategies: [
+      recommendations: [
         'Break complex concepts into smaller chunks',
         'Use visual organizers',
-        'Provide scaffolding'
-      ],
-      overload_indicators: [
-        'Student confusion signals',
-        'Decreased participation',
-        'Difficulty with practice activities'
+        'Provide scaffolding',
+        'Monitor for confusion signals',
+        'Encourage active participation',
+        'Adjust difficulty based on practice performance'
       ]
     }
   }
@@ -1533,12 +1531,16 @@ export class AutomatedCurriculumGenerator {
         title: `${module.title} - Progress Check`,
         type: 'formative',
         objectives_measured: module.objectives,
-        format: { type: 'mixed', question_count: 5, time_limit: 15 },
+        format: 'multiple_choice',
         questions: [],
         rubrics: [],
         time_allocation: 15,
         difficulty_level: 5,
-        adaptive_parameters: { difficulty_adjustment: true, pacing_modification: true },
+        adaptive_parameters: {
+          difficulty_scaling: true,
+          personalization_level: 5,
+          feedback_timing: 'immediate'
+        },
         feedback_templates: [],
         scoring_guidelines: []
       }
@@ -1551,14 +1553,9 @@ export class AutomatedCurriculumGenerator {
       curriculum_id: blueprint.blueprint_id,
       categories: ['textbooks', 'online_resources', 'multimedia'],
       essential_resources: [
-        {
-          resource_id: 'basic_textbook',
-          title: 'Core Textbook',
-          type: 'textbook',
-          description: 'Primary learning resource',
-          accessibility_level: 'high',
-          cost_category: 'medium'
-        }
+        'Core Textbook - Primary learning resource',
+        'Student Workbook - Practice exercises and activities',
+        'Online Learning Portal - Digital resources and assessments'
       ],
       supplementary_resources: [],
       multimedia_resources: [],
@@ -1567,7 +1564,12 @@ export class AutomatedCurriculumGenerator {
       instructor_resources: [],
       accessibility_resources: [],
       cost_analysis: { total_cost_low: 100, total_cost_high: 500 },
-      usage_guidelines: 'Follow institutional guidelines for resource usage'
+      usage_guidelines: [
+        'Follow institutional guidelines for resource usage',
+        'Ensure equitable access to all resources',
+        'Monitor resource utilization and effectiveness',
+        'Provide training for new technology tools'
+      ]
     }
   }
 
@@ -1576,50 +1578,69 @@ export class AutomatedCurriculumGenerator {
       guide_id: `fallback_guide_${blueprint.blueprint_id}`,
       curriculum_id: blueprint.blueprint_id,
       implementation_phases: [
-        {
-          phase_id: 'preparation',
-          name: 'Preparation Phase',
-          duration_weeks: 2,
-          activities: ['Review curriculum', 'Prepare materials'],
-          deliverables: ['Implementation plan', 'Resource inventory']
-        }
+        'Preparation Phase - Review curriculum and prepare materials (2 weeks)',
+        'Launch Phase - Begin implementation with pilot group (1 week)',
+        'Full Implementation - Deploy to all target learners (ongoing)',
+        'Evaluation Phase - Assess effectiveness and make adjustments (4 weeks)'
       ],
-      preparation_requirements: {
-        instructor_qualifications: ['Subject matter expertise', 'Teaching experience'],
-        material_preparation: ['Gather resources', 'Set up technology'],
-        time_investment: 20
-      },
-      instructor_training: {
-        required_training_hours: 8,
-        training_modules: ['Curriculum overview', 'Assessment strategies'],
-        certification_requirements: []
-      },
-      technology_setup: {
-        hardware_requirements: ['Computer', 'Internet'],
-        software_requirements: ['Basic productivity software'],
-        network_requirements: 'Standard internet connection'
-      },
-      student_onboarding: {
-        orientation_duration: 2,
-        orientation_activities: ['Course introduction', 'Expectation setting'],
-        prerequisite_assessments: ['Basic skills check']
-      },
-      ongoing_support: {
-        support_channels: ['Email', 'Office hours'],
-        response_time_sla: '24 hours',
-        escalation_procedures: 'Contact department chair'
-      },
-      quality_assurance: {
-        monitoring_frequency: 'weekly',
-        quality_indicators: ['Student engagement', 'Learning outcomes'],
-        improvement_processes: ['Regular feedback collection', 'Iterative updates']
-      },
+      preparation_requirements: [
+        'Subject matter expertise required for instructors',
+        'Teaching experience with similar age groups',
+        'Gather all necessary learning resources',
+        'Set up required technology and tools',
+        'Allocate 20 hours for initial preparation',
+        'Review curriculum thoroughly before implementation'
+      ],
+      instructor_training: [
+        '8 hours of required training',
+        'Curriculum overview and philosophy',
+        'Assessment strategies and implementation',
+        'Technology integration and tools',
+        'Student engagement techniques',
+        'No specific certification requirements'
+      ],
+      technology_setup: [
+        'Computer access required for all participants',
+        'Reliable internet connection needed',
+        'Basic productivity software (word processing, presentations)',
+        'Web browser with modern capabilities',
+        'Email access for communication',
+        'No specialized software required'
+      ],
+      student_onboarding: [
+        '2-hour orientation session required',
+        'Course introduction and overview',
+        'Expectation setting and goal alignment',
+        'Basic skills assessment and check',
+        'Technology platform familiarization',
+        'Communication protocols and guidelines'
+      ],
+      ongoing_support: [
+        'Email support available during business hours',
+        'Weekly office hours for direct consultation',
+        '24-hour response time for urgent issues',
+        'Escalation procedures through department chair',
+        'Peer support networks and discussion forums',
+        'Resource sharing and best practices exchange'
+      ],
+      quality_assurance: [
+        'Weekly monitoring and evaluation',
+        'Track student engagement metrics',
+        'Monitor learning outcome achievement',
+        'Regular feedback collection from students',
+        'Iterative updates based on performance data',
+        'Continuous improvement processes'
+      ],
       adaptation_strategies: [],
       success_metrics: [],
-      troubleshooting: {
-        common_issues: ['Technology problems', 'Student engagement'],
-        solutions: ['Technical support', 'Engagement strategies']
-      },
+      troubleshooting: [
+        'Technology problems: Contact technical support team',
+        'Student engagement issues: Implement additional engagement strategies',
+        'Content difficulty: Adjust pacing and provide additional scaffolding',
+        'Assessment concerns: Review and modify evaluation criteria',
+        'Resource accessibility: Ensure alternative formats available',
+        'Communication gaps: Establish clear communication protocols'
+      ],
       timeline_milestones: []
     }
   }
@@ -1717,8 +1738,10 @@ export class AutomatedCurriculumGenerator {
   }
 
   private calculateAverageCognitiveLoad(lessons: DetailedLessonPlan[]): number {
-    const totalLoad = lessons.reduce((sum, lesson) => 
-      sum + lesson.cognitive_load_analysis.total_load, 0)
+    const totalLoad = lessons.reduce((sum, lesson) => {
+      const analysis = lesson.cognitive_load_analysis
+      return sum + analysis.intrinsic_load + analysis.extraneous_load + analysis.germane_load
+    }, 0)
     return lessons.length > 0 ? totalLoad / lessons.length : 16
   }
 
@@ -1728,8 +1751,11 @@ export class AutomatedCurriculumGenerator {
   }
 
   private assessOverloadRisk(lessons: DetailedLessonPlan[]): string {
-    const highLoadLessons = lessons.filter(lesson => 
-      lesson.cognitive_load_analysis.total_load > 20).length
+    const highLoadLessons = lessons.filter(lesson => {
+      const analysis = lesson.cognitive_load_analysis
+      const totalLoad = analysis.intrinsic_load + analysis.extraneous_load + analysis.germane_load
+      return totalLoad > 20
+    }).length
     const riskPercentage = highLoadLessons / lessons.length
     
     if (riskPercentage > 0.3) return 'high'
@@ -1802,16 +1828,17 @@ export class AutomatedCurriculumGenerator {
         
         activities.push({
           activity_id: `${module.module_id}_activity_${activityIndex + 1}`,
-          name: name.trim(),
-          type: this.selectActivityType(name, module.learning_objectives),
+          title: name.trim(),
+          description: `${name.trim()} - ${objectives.trim()}`,
+          type: 'interactive',
           duration: parseInt(duration) || 30,
-          learning_objectives: objectives.split(',').map(obj => obj.trim()).slice(0, 3),
-          instructions: this.generateActivityInstructions(name, module.learning_objectives),
-          materials: this.generateRequiredMaterials(name, module.target_audience),
-          technology_requirements: this.generateTechRequirements(name, module.target_audience),
-          assessment_integration: this.generateAssessmentIntegration(name),
-          differentiation_options: this.generateDifferentiationOptions(name),
-          extension_possibilities: this.generateExtensionPossibilities(name)
+          materials: ['Basic supplies', 'Learning materials'],
+          instructions: [
+            'Review the activity objectives',
+            'Follow the provided guidance',
+            'Complete the assigned tasks',
+            'Reflect on learning outcomes'
+          ]
         })
         
         activityIndex++
@@ -1819,13 +1846,34 @@ export class AutomatedCurriculumGenerator {
       
       // Fallback: create default activities if parsing fails
       if (activities.length === 0) {
-        activities.push(...this.createDefaultActivities(module))
+        activities.push({
+          activity_id: `${module.module_id}_default_activity`,
+          title: 'Learning Activity',
+          description: 'Interactive learning activity for the module',
+          type: 'interactive',
+          duration: 30,
+          materials: ['Basic supplies', 'Learning materials'],
+          instructions: [
+            'Review the module objectives',
+            'Complete the learning tasks',
+            'Participate in discussions',
+            'Submit completed work'
+          ]
+        })
       }
       
       return activities
     } catch (error) {
       console.error('Error parsing detailed activities:', error)
-      return this.createDefaultActivities(module)
+      return [{
+        activity_id: `${module.module_id}_fallback_activity`,
+        title: 'Module Activity',
+        description: 'Standard learning activity',
+        type: 'interactive',
+        duration: 30,
+        materials: ['Basic supplies'],
+        instructions: ['Complete the assigned tasks']
+      }]
     }
   }
 
@@ -1843,11 +1891,10 @@ export class AutomatedCurriculumGenerator {
         
         assessments.push({
           assessment_id: `${module.module_id}_formative_${assessmentIndex + 1}`,
-          name: name.trim(),
-          timing: timing.trim(),
-          method: method.trim(),
-          criteria: this.generateAssessmentCriteria(name, module.learning_objectives),
-          feedback_mechanism: this.generateFeedbackMechanism(method)
+          title: name.trim(),
+          type: method.trim(),
+          description: `${name.trim()} - ${timing.trim()}`,
+          criteria: ['Understanding', 'Application', 'Engagement']
         })
         
         assessmentIndex++
@@ -1858,19 +1905,17 @@ export class AutomatedCurriculumGenerator {
         assessments.push(
           {
             assessment_id: `${module.module_id}_formative_1`,
-            name: 'Quick Knowledge Check',
-            timing: 'Mid-lesson',
-            method: 'Interactive Quiz',
-            criteria: ['Understanding of key concepts', 'Application of principles'],
-            feedback_mechanism: 'Immediate automated feedback with explanations'
+            title: 'Quick Knowledge Check',
+            type: 'Interactive Quiz',
+            description: 'Mid-lesson assessment to check understanding',
+            criteria: ['Understanding of key concepts', 'Application of principles']
           },
           {
             assessment_id: `${module.module_id}_formative_2`,
-            name: 'Progress Reflection',
-            timing: 'End of lesson',
-            method: 'Self-assessment',
-            criteria: ['Confidence level', 'Areas of confusion', 'Next steps'],
-            feedback_mechanism: 'Guided reflection prompts and peer discussion'
+            title: 'Progress Reflection',
+            type: 'Self-assessment',
+            description: 'End of lesson reflection on learning progress',
+            criteria: ['Confidence level', 'Areas of confusion', 'Next steps']
           }
         )
       }
@@ -1880,11 +1925,10 @@ export class AutomatedCurriculumGenerator {
       console.error('Error parsing formative assessments:', error)
       return [{
         assessment_id: `${module.module_id}_formative_1`,
-        name: 'Knowledge Check',
-        timing: 'During lesson',
-        method: 'Quick quiz',
-        criteria: ['Basic understanding'],
-        feedback_mechanism: 'Immediate feedback'
+        title: 'Knowledge Check',
+        type: 'Quick quiz',
+        description: 'Basic assessment during lesson',
+        criteria: ['Basic understanding']
       }]
     }
   }
@@ -1903,11 +1947,11 @@ export class AutomatedCurriculumGenerator {
         
         assessments.push({
           assessment_id: `${module.module_id}_summative_${assessmentIndex + 1}`,
-          name: name.trim(),
-          timing: this.determineSummativeTiming(assessmentIndex, module),
-          format: format.trim(),
-          weight: parseInt(weight) / 100 || 0.33,
-          rubric: this.generateAssessmentRubric(name, module.learning_objectives)
+          title: name.trim(),
+          type: format.trim(),
+          description: `${name.trim()} - Summative assessment for module`,
+          criteria: ['Knowledge demonstration', 'Skill application', 'Critical thinking'],
+          weight: parseInt(weight) / 100 || 0.33
         })
         
         assessmentIndex++
@@ -1917,11 +1961,11 @@ export class AutomatedCurriculumGenerator {
       if (assessments.length === 0) {
         assessments.push({
           assessment_id: `${module.module_id}_summative_1`,
-          name: 'Module Completion Assessment',
-          timing: 'End of module',
-          format: 'Mixed: Multiple choice, short answer, and practical application',
-          weight: 1.0,
-          rubric: this.generateAssessmentRubric('Module Assessment', module.learning_objectives)
+          title: 'Module Completion Assessment',
+          type: 'Mixed Assessment',
+          description: 'End of module comprehensive assessment',
+          criteria: ['Knowledge demonstration', 'Skill application', 'Critical thinking'],
+          weight: 1.0
         })
       }
       
@@ -1930,11 +1974,11 @@ export class AutomatedCurriculumGenerator {
       console.error('Error parsing summative assessments:', error)
       return [{
         assessment_id: `${module.module_id}_summative_1`,
-        name: 'Final Assessment',
-        timing: 'End of module',
-        format: 'Comprehensive evaluation',
-        weight: 1.0,
-        rubric: 'Standard assessment rubric'
+        title: 'Final Assessment',
+        type: 'Comprehensive evaluation',
+        description: 'End of module final assessment',
+        criteria: ['Knowledge demonstration', 'Skill application'],
+        weight: 1.0
       }]
     }
   }
@@ -1953,10 +1997,15 @@ export class AutomatedCurriculumGenerator {
         
         strategies.push({
           strategy_id: `differentiation_${strategyIndex + 1}`,
-          learner_characteristic: learnerType.trim(),
-          accommodation_type: this.categorizeAccommodationType(method),
-          implementation: `${strategy.trim()}: ${method.trim()}`,
-          effectiveness_indicators: this.generateEffectivenessIndicators(learnerType, method)
+          name: strategy.trim(),
+          description: `${strategy.trim()}: ${method.trim()}`,
+          target_group: learnerType.trim(),
+          implementation: [
+            'Assess learner needs and preferences',
+            'Adapt content delivery method',
+            'Provide appropriate scaffolding',
+            'Monitor effectiveness and adjust'
+          ]
         })
         
         strategyIndex++
@@ -1967,24 +2016,36 @@ export class AutomatedCurriculumGenerator {
         strategies.push(
           {
             strategy_id: 'differentiation_1',
-            learner_characteristic: 'Visual learners',
-            accommodation_type: 'Content presentation',
-            implementation: 'Provide visual aids, diagrams, and graphic organizers to support understanding',
-            effectiveness_indicators: ['Increased engagement with visual materials', 'Better retention of visual information', 'Improved performance on visual tasks']
+            name: 'Visual Learning Support',
+            description: 'Content presentation strategies for visual learners',
+            target_group: 'Visual learners',
+            implementation: [
+              'Provide visual aids and diagrams',
+              'Use graphic organizers',
+              'Include charts and infographics'
+            ]
           },
           {
             strategy_id: 'differentiation_2',
-            learner_characteristic: 'Struggling learners',
-            accommodation_type: 'Process support',
-            implementation: 'Break tasks into smaller steps, provide additional scaffolding and one-on-one support',
-            effectiveness_indicators: ['Successful completion of smaller tasks', 'Increased confidence', 'Gradual independence']
+            name: 'Struggling Learner Support',
+            description: 'Process support for struggling learners',
+            target_group: 'Struggling learners',
+            implementation: [
+              'Break tasks into smaller steps',
+              'Provide additional scaffolding',
+              'Offer one-on-one support'
+            ]
           },
           {
             strategy_id: 'differentiation_3',
-            learner_characteristic: 'Advanced learners',
-            accommodation_type: 'Product enhancement',
-            implementation: 'Offer extension activities, independent research projects, and mentoring opportunities',
-            effectiveness_indicators: ['Completion of advanced challenges', 'Development of leadership skills', 'Sustained engagement']
+            name: 'Advanced Learner Enhancement',
+            description: 'Product enhancement for advanced learners',
+            target_group: 'Advanced learners',
+            implementation: [
+              'Offer extension activities',
+              'Provide independent research projects',
+              'Create mentoring opportunities'
+            ]
           }
         )
       }
@@ -1994,10 +2055,14 @@ export class AutomatedCurriculumGenerator {
       console.error('Error parsing differentiation strategies:', error)
       return [{
         strategy_id: 'differentiation_default',
-        learner_characteristic: 'All learners',
-        accommodation_type: 'Universal design',
-        implementation: 'Provide multiple ways to access, engage with, and demonstrate learning',
-        effectiveness_indicators: ['Improved accessibility', 'Increased participation']
+        name: 'Universal Design',
+        description: 'Universal design strategies for all learners',
+        target_group: 'All learners',
+        implementation: [
+          'Provide multiple ways to access content',
+          'Offer various engagement options',
+          'Allow different demonstration methods'
+        ]
       }]
     }
   }
@@ -2018,9 +2083,8 @@ export class AutomatedCurriculumGenerator {
           integration_id: `tech_integration_${techIndex + 1}`,
           technology_type: techType.trim(),
           purpose: purpose.trim(),
-          implementation_steps: implementation.split(',').map(step => step.trim()),
-          success_criteria: this.generateTechSuccessCriteria(techType, purpose),
-          troubleshooting_tips: this.generateTechTroubleshooting(techType)
+          implementation: implementation.trim(),
+          requirements: ['Basic technology access', 'Technical support', 'Training materials']
         })
         
         techIndex++
@@ -2028,13 +2092,25 @@ export class AutomatedCurriculumGenerator {
       
       // Default technology integrations based on audience access level
       if (integrations.length === 0) {
-        integrations.push(...this.createDefaultTechIntegrations(audience))
+        integrations.push({
+          integration_id: 'basic_tech_integration',
+          technology_type: 'Digital Tools',
+          purpose: 'Enhanced learning experience',
+          implementation: 'Integrate basic digital tools for content delivery and assessment',
+          requirements: ['Computer access', 'Internet connection', 'Basic digital literacy']
+        })
       }
       
       return integrations
     } catch (error) {
       console.error('Error parsing technology integration:', error)
-      return this.createDefaultTechIntegrations(audience)
+      return [{
+        integration_id: 'fallback_tech_integration',
+        technology_type: 'Basic Tools',
+        purpose: 'Standard learning support',
+        implementation: 'Use basic technology tools for learning activities',
+        requirements: ['Computer access', 'Internet connection']
+      }]
     }
   }
 
@@ -2052,12 +2128,10 @@ export class AutomatedCurriculumGenerator {
         
         activities.push({
           activity_id: `extension_${extensionIndex + 1}`,
-          name: name.trim(),
-          complexity_level: level.trim(),
+          title: name.trim(),
           description: description.trim(),
-          prerequisites: this.generateExtensionPrerequisites(name),
-          estimated_time: this.estimateExtensionTime(level),
-          resources_needed: this.generateExtensionResources(name)
+          difficulty_level: level.trim(),
+          estimated_time: 45
         })
         
         extensionIndex++
@@ -2068,21 +2142,17 @@ export class AutomatedCurriculumGenerator {
         activities.push(
           {
             activity_id: 'extension_1',
-            name: 'Independent Research Project',
-            complexity_level: 'Advanced',
+            title: 'Independent Research Project',
             description: 'Conduct in-depth research on a related topic of personal interest',
-            prerequisites: ['Completion of core module', 'Research skills'],
-            estimated_time: 120,
-            resources_needed: ['Research databases', 'Presentation tools']
+            difficulty_level: 'Advanced',
+            estimated_time: 120
           },
           {
             activity_id: 'extension_2',
-            name: 'Peer Teaching Session',
-            complexity_level: 'Intermediate',
+            title: 'Peer Teaching Session',
             description: 'Prepare and deliver a mini-lesson to classmates on a specific concept',
-            prerequisites: ['Mastery of core concepts', 'Communication skills'],
-            estimated_time: 90,
-            resources_needed: ['Presentation materials', 'Teaching space']
+            difficulty_level: 'Intermediate',
+            estimated_time: 90
           }
         )
       }
@@ -2092,12 +2162,10 @@ export class AutomatedCurriculumGenerator {
       console.error('Error parsing extension activities:', error)
       return [{
         activity_id: 'extension_default',
-        name: 'Additional Practice',
-        complexity_level: 'Standard',
+        title: 'Additional Practice',
         description: 'Complete additional practice exercises for reinforcement',
-        prerequisites: ['Basic understanding'],
-        estimated_time: 60,
-        resources_needed: ['Practice materials']
+        difficulty_level: 'Standard',
+        estimated_time: 60
       }]
     }
   }
@@ -2116,11 +2184,10 @@ export class AutomatedCurriculumGenerator {
         
         strategies.push({
           strategy_id: `remediation_${remediationIndex + 1}`,
-          trigger_conditions: trigger.trim(),
-          intervention_type: this.categorizeInterventionType(intervention),
-          implementation_steps: intervention.split(',').map(step => step.trim()),
-          success_indicators: this.generateRemediationSuccessIndicators(strategy),
-          escalation_criteria: this.generateEscalationCriteria(strategy)
+          name: strategy.trim(),
+          description: `${strategy.trim()}: ${intervention.trim()}`,
+          target_skills: [trigger.trim()],
+          interventions: intervention.split(',').map(step => step.trim())
         })
         
         remediationIndex++
@@ -2131,29 +2198,27 @@ export class AutomatedCurriculumGenerator {
         strategies.push(
           {
             strategy_id: 'remediation_1',
-            trigger_conditions: 'Student scores below 70% on formative assessments',
-            intervention_type: 'Individual support',
-            implementation_steps: [
+            name: 'Individual Support Strategy',
+            description: 'Targeted support for students scoring below 70% on assessments',
+            target_skills: ['Assessment performance', 'Concept understanding'],
+            interventions: [
               'Review specific areas of confusion',
               'Provide additional scaffolding',
               'Offer one-on-one tutoring session',
               'Create personalized practice materials'
-            ],
-            success_indicators: ['Improved assessment scores', 'Increased confidence', 'Better participation'],
-            escalation_criteria: ['No improvement after 2 weeks', 'Continued struggle with basic concepts']
+            ]
           },
           {
             strategy_id: 'remediation_2',
-            trigger_conditions: 'Persistent confusion or frustration observed',
-            intervention_type: 'Alternative explanation',
-            implementation_steps: [
+            name: 'Alternative Explanation Strategy',
+            description: 'Different teaching approaches for persistent confusion',
+            target_skills: ['Concept comprehension', 'Knowledge connection'],
+            interventions: [
               'Use different teaching modality',
               'Provide concrete examples',
               'Break down complex concepts',
               'Connect to prior knowledge'
-            ],
-            success_indicators: ['Demonstrates understanding', 'Asks clarifying questions', 'Attempts practice problems'],
-            escalation_criteria: ['Multiple failed attempts', 'Student disengagement']
+            ]
           }
         )
       }
@@ -2163,11 +2228,10 @@ export class AutomatedCurriculumGenerator {
       console.error('Error parsing remediation strategies:', error)
       return [{
         strategy_id: 'remediation_default',
-        trigger_conditions: 'Learning difficulties identified',
-        intervention_type: 'General support',
-        implementation_steps: ['Provide additional help and resources'],
-        success_indicators: ['Improvement in understanding'],
-        escalation_criteria: ['Continued difficulties']
+        name: 'General Support Strategy',
+        description: 'Basic remediation for identified learning difficulties',
+        target_skills: ['General comprehension'],
+        interventions: ['Provide additional help and resources']
       }]
     }
   }
@@ -2245,7 +2309,7 @@ export class AutomatedCurriculumGenerator {
           : undefined,
         correct_answer: randomType === 'multiple_choice' ? 'Option A' : 'Sample answer',
         difficulty_level: Math.floor(Math.random() * 5) + 3,
-        cognitive_level: this.getRandomCognitiveLevel(),
+        cognitive_level: 'apply',
         points: randomType === 'essay' ? 10 : 5,
         estimated_time_minutes: randomType === 'essay' ? 15 : 3
       })
@@ -2346,13 +2410,17 @@ export class AutomatedCurriculumGenerator {
     const performanceRanges = ['excellent', 'good', 'satisfactory', 'needs_improvement']
     
     performanceRanges.forEach(range => {
+      const feedbackMessages = {
+        excellent: `Outstanding work! You demonstrate mastery of the concepts.`,
+        good: `Good progress! You show solid understanding with room for growth.`,
+        satisfactory: `You're on the right track. Keep practicing to strengthen your understanding.`,
+        needs_improvement: `This is a learning opportunity. Let's focus on building these skills together.`
+      }
+      
       templates.push({
         template_id: `${range}_${assessmentType}_${Date.now()}`,
-        performance_range: range,
-        feedback_content: this.generateFeedbackContent(range, assessmentType),
-        improvement_suggestions: this.generateImprovementSuggestions(range),
-        encouragement_level: this.getEncouragementLevel(range),
-        next_steps: this.generateNextSteps(range, assessmentType)
+        scenario: `Student performance in ${range} range for ${assessmentType} assessment`,
+        message: feedbackMessages[range as keyof typeof feedbackMessages] || feedbackMessages.satisfactory
       })
     })
     
@@ -2390,314 +2458,15 @@ export class AutomatedCurriculumGenerator {
 
 
 
-  private parseDetailedActivities(response: string, module: any): any[] {
-    const activities: any[] = []
-    const activityTypes = ['exploration', 'instruction', 'practice', 'application', 'reflection']
-    
-    activityTypes.forEach((type, index) => {
-      activities.push({
-        activity_id: `${type}_${module.module_id}_${Date.now()}`,
-        name: `${type.charAt(0).toUpperCase() + type.slice(1)} Activity`,
-        type: type as ContentFormat,
-        duration: 30,
-        learning_objectives: module.objectives,
-        instructions: this.generateActivityInstructions(type, module),
-        materials: this.generateActivityMaterials(type),
-        technology_requirements: this.generateTechnologyRequirements(type),
-        assessment_integration: this.generateAssessmentIntegration(type),
-        differentiation_options: this.generateDifferentiationOptions(type),
-        extension_possibilities: this.generateExtensionPossibilities(type),
-        cognitive_load: this.calculateActivityCognitiveLoad(type),
-        engagement_level: this.calculateEngagementLevel(type)
-      })
-    })
-    
-    return activities
-  }
 
-  private parseFormativeAssessments(response: string, module: any): any[] {
-    return [
-      {
-        assessment_id: `formative_${module.module_id}_entry`,
-        name: 'Entry Ticket',
-        timing: 'lesson_start',
-        method: 'quick_questions',
-        criteria: ['prior_knowledge', 'readiness_level'],
-        feedback_mechanism: 'immediate_digital',
-        duration: 5,
-        question_count: 3
-      },
-      {
-        assessment_id: `formative_${module.module_id}_checkpoint`,
-        name: 'Learning Checkpoint',
-        timing: 'mid_lesson',
-        method: 'think_pair_share',
-        criteria: ['understanding', 'application'],
-        feedback_mechanism: 'peer_and_instructor',
-        duration: 10,
-        question_count: 2
-      },
-      {
-        assessment_id: `formative_${module.module_id}_exit`,
-        name: 'Exit Ticket',
-        timing: 'lesson_end',
-        method: 'reflection_prompt',
-        criteria: ['comprehension', 'confidence_level'],
-        feedback_mechanism: 'instructor_review',
-        duration: 5,
-        question_count: 2
-      }
-    ]
-  }
 
-  private parseSummativeAssessments(response: string, module: any): any[] {
-    return [
-      {
-        assessment_id: `summative_${module.module_id}_project`,
-        name: 'Module Culminating Project',
-        timing: 'module_end',
-        format: 'authentic_assessment',
-        weight: 0.6,
-        duration_days: 3,
-        rubric: 'comprehensive_project_rubric',
-        objectives_assessed: module.objectives,
-        evaluation_criteria: [
-          'knowledge_application',
-          'problem_solving',
-          'communication',
-          'creativity'
-        ]
-      },
-      {
-        assessment_id: `summative_${module.module_id}_exam`,
-        name: 'Module Assessment Exam',
-        timing: 'module_end',
-        format: 'comprehensive_exam',
-        weight: 0.4,
-        duration: 90,
-        rubric: 'exam_scoring_rubric',
-        objectives_assessed: module.objectives,
-        question_distribution: {
-          multiple_choice: 0.4,
-          short_answer: 0.3,
-          essay: 0.2,
-          problem_solving: 0.1
-        }
-      }
-    ]
-  }
 
-  private parseDifferentiationStrategies(response: string): any[] {
-    return [
-      {
-        strategy_id: 'content_differentiation',
-        learner_characteristic: 'learning_style',
-        accommodation_type: 'multiple_modalities',
-        implementation: 'Provide visual, auditory, and kinesthetic options for all content',
-        effectiveness_indicators: ['increased_engagement', 'improved_comprehension']
-      },
-      {
-        strategy_id: 'process_differentiation',
-        learner_characteristic: 'ability_level',
-        accommodation_type: 'flexible_grouping',
-        implementation: 'Create ability-based and interest-based groups for activities',
-        effectiveness_indicators: ['peer_collaboration', 'skill_development']
-      },
-      {
-        strategy_id: 'product_differentiation',
-        learner_characteristic: 'interests_strengths',
-        accommodation_type: 'choice_in_demonstration',
-        implementation: 'Allow multiple ways to demonstrate learning (presentation, project, performance)',
-        effectiveness_indicators: ['student_ownership', 'quality_of_work']
-      }
-    ]
-  }
 
-  private parseTechnologyIntegration(response: string, audience: any): any[] {
-    const techLevel = audience.technology_access
-    
-    const integrations = [
-      {
-        integration_id: 'basic_digital_tools',
-        technology_type: 'productivity_software',
-        purpose: 'content_creation_collaboration',
-        implementation_steps: [
-          'Introduce basic word processing and presentation tools',
-          'Provide tutorials and practice opportunities',
-          'Integrate into regular assignments'
-        ],
-        success_criteria: ['student_proficiency', 'improved_productivity'],
-        troubleshooting_tips: ['Provide technical support', 'Create backup plans']
-      }
-    ]
-    
-    if (techLevel === 'high') {
-      integrations.push({
-        integration_id: 'advanced_learning_platforms',
-        technology_type: 'adaptive_learning_systems',
-        purpose: 'personalized_learning',
-        implementation_steps: [
-          'Set up personalized learning profiles',
-          'Train students on platform navigation',
-          'Monitor progress and adjust accordingly'
-        ],
-        success_criteria: ['personalization_effectiveness', 'learning_acceleration'],
-        troubleshooting_tips: ['Regular platform updates', 'Student orientation sessions']
-      })
-    }
-    
-    return integrations
-  }
 
-  private parseExtensionActivities(response: string): any[] {
-    return [
-      {
-        activity_id: 'research_project_extension',
-        name: 'Independent Research Project',
-        target_learners: 'advanced_students',
-        complexity_increase: 'autonomous_investigation',
-        implementation: 'Students choose related topic for deep dive research',
-        assessment_modification: 'Self-directed learning rubric with presentation component'
-      },
-      {
-        activity_id: 'peer_teaching_extension',
-        name: 'Peer Teaching Opportunity',
-        target_learners: 'students_who_grasp_quickly',
-        complexity_increase: 'teaching_others',
-        implementation: 'Advanced students become tutors for struggling peers',
-        assessment_modification: 'Teaching effectiveness and communication skills assessment'
-      },
-      {
-        activity_id: 'real_world_application',
-        name: 'Community Connection Project',
-        target_learners: 'all_interested_students',
-        complexity_increase: 'authentic_application',
-        implementation: 'Connect learning to local community issues or projects',
-        assessment_modification: 'Impact assessment and reflection portfolio'
-      }
-    ]
-  }
 
-  private parseRemediationStrategies(response: string): any[] {
-    return [
-      {
-        strategy_id: 'prerequisite_skill_building',
-        trigger_conditions: ['low_assessment_scores', 'confusion_indicators'],
-        intervention_type: 'skill_gap_remediation',
-        implementation_steps: [
-          'Identify specific skill gaps through diagnostic assessment',
-          'Provide targeted mini-lessons for missing prerequisites',
-          'Practice activities with immediate feedback',
-          'Re-assess to confirm skill acquisition'
-        ],
-        success_criteria: ['skill_mastery', 'increased_confidence'],
-        escalation_path: 'Refer to learning specialist if gaps persist'
-      },
-      {
-        strategy_id: 'alternative_explanation_methods',
-        trigger_conditions: ['repeated_incorrect_responses', 'learning_style_mismatch'],
-        intervention_type: 'instructional_approach_modification',
-        implementation_steps: [
-          'Analyze student learning preferences',
-          'Provide same content through different modalities',
-          'Use concrete examples and analogies',
-          'Increase interactive elements'
-        ],
-        success_criteria: ['improved_understanding', 'engagement_increase'],
-        escalation_path: 'Consider individual tutoring support'
-      }
-    ]
-  }
 
-  private parseLessonStructure(response: string): any {
-    return {
-      opening: {
-        duration: 15,
-        activities: ['warm_up', 'review_previous', 'introduce_objectives'],
-        purpose: 'activate_prior_knowledge_set_expectations'
-      },
-      main_content: {
-        duration: 80,
-        activities: [
-          'direct_instruction',
-          'guided_practice',
-          'collaborative_activity',
-          'independent_practice'
-        ],
-        purpose: 'deliver_content_practice_skills'
-      },
-      closure: {
-        duration: 25,
-        activities: ['summarize_key_points', 'check_understanding', 'preview_next', 'reflection'],
-        purpose: 'consolidate_learning_prepare_transition'
-      }
-    }
-  }
 
-  private parseLessonActivities(response: string): any[] {
-    return [
-      {
-        activity_id: 'opening_warmup',
-        name: 'Engaging Warm-Up',
-        duration: 10,
-        type: 'interactive',
-        description: 'Quick activity to engage students and activate prior knowledge',
-        materials: ['digital_presentation', 'student_response_system'],
-        group_structure: 'whole_class_with_individual_responses'
-      },
-      {
-        activity_id: 'main_instruction',
-        name: 'Core Content Delivery',
-        duration: 25,
-        type: 'multimedia_instruction',
-        description: 'Multi-modal presentation of key concepts with examples',
-        materials: ['interactive_presentation', 'video_clips', 'real_world_examples'],
-        group_structure: 'whole_class_with_partner_discussions'
-      },
-      {
-        activity_id: 'guided_practice',
-        name: 'Scaffolded Practice',
-        duration: 30,
-        type: 'collaborative_problem_solving',
-        description: 'Students practice new skills with instructor guidance',
-        materials: ['practice_worksheets', 'manipulatives', 'digital_tools'],
-        group_structure: 'small_groups_with_instructor_rotation'
-      },
-      {
-        activity_id: 'independent_application',
-        name: 'Individual Practice',
-        duration: 25,
-        type: 'independent_work',
-        description: 'Students apply learning independently with support available',
-        materials: ['individual_assignments', 'reference_materials', 'help_resources'],
-        group_structure: 'individual_with_peer_assistance_option'
-      },
-      {
-        activity_id: 'lesson_closure',
-        name: 'Reflection and Summary',
-        duration: 10,
-        type: 'reflection_discussion',
-        description: 'Students reflect on learning and preview next steps',
-        materials: ['exit_tickets', 'reflection_prompts'],
-        group_structure: 'individual_reflection_whole_class_sharing'
-      }
-    ]
-  }
 
-  private parseMaterialsNeeded(response: string): string[] {
-    return [
-      'Interactive whiteboard or projection system',
-      'Student devices (tablets, laptops, or smartphones)',
-      'Printed handouts and worksheets',
-      'Manipulatives or hands-on materials',
-      'Reference books and resources',
-      'Art supplies for creative activities',
-      'Timer for activity management',
-      'Assessment tools (rubrics, checklists)',
-      'Technology tools and software',
-      'Backup materials for technology failures'
-    ]
-  }
 
   private parseResourceCategories(response: string): any[] {
     return [
@@ -3054,9 +2823,9 @@ export class AutomatedCurriculumGenerator {
           name: name.trim(),
           duration: duration.trim(),
           key_activities: activities.split(',').map(activity => activity.trim()),
-          success_criteria: this.generatePhaseSuccessCriteria(name),
-          deliverables: this.generatePhaseDeliverables(name),
-          stakeholders: this.generatePhaseStakeholders(name)
+          success_criteria: [`${name.trim()} objectives achieved`, 'Stakeholder satisfaction confirmed', 'Timeline adherence maintained'],
+          deliverables: [`${name.trim()} completion report`, 'Progress documentation', 'Next phase preparation'],
+          stakeholders: ['Instructors', 'Students', 'Administration', 'Technology support']
         })
         
         phaseIndex++

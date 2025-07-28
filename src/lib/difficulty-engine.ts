@@ -489,8 +489,8 @@ export class DifficultyAdjustmentEngine {
       description: `Content automatically adjusted to difficulty level ${targetDifficulty}`,
       content_type: 'text',
       subject: 'general',
-      difficulty_level: targetDifficulty <= 3 ? 'beginner' : targetDifficulty <= 6 ? 'intermediate' : 'advanced',
-      estimated_duration: 15,
+      difficulty: targetDifficulty,
+      estimated_time: 15,
       created_at: new Date().toISOString(),
       metadata: {
         adaptedDifficulty: targetDifficulty,

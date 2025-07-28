@@ -12,7 +12,7 @@ import type {
 
 // Analyze content item complexity and reading time
 export function analyzeContent(item: FeedItem): ContentAnalysis {
-  const bodyWordCount = item.body.split(/\s+/).length
+  const bodyWordCount = (item.description || '').split(/\s+/).length
   const titleWordCount = item.title.split(/\s+/).length
   const totalWords = bodyWordCount + titleWordCount
   
@@ -22,7 +22,7 @@ export function analyzeContent(item: FeedItem): ContentAnalysis {
   // Additional time for different content types
   let estimatedReadTime = baseReadTime
   
-  switch (item.type) {
+  switch (item.content_type) {
     case 'video':
       // Use actual video duration if available
       estimatedReadTime = item.metadata?.video_duration || 180 // 3 minutes default
@@ -46,9 +46,9 @@ export function analyzeContent(item: FeedItem): ContentAnalysis {
   
   return {
     hasLongText: totalWords > 200,
-    hasVideo: item.type === 'video',
-    hasInteractive: ['quiz', 'ai_lesson'].includes(item.type),
-    hasLink: item.type === 'link',
+    hasVideo: item.content_type === 'video',
+    hasInteractive: ['quiz', 'ai_lesson'].includes(item.content_type),
+    hasLink: item.content_type === 'link',
     estimatedReadTime: Math.round(estimatedReadTime),
     complexity: totalWords > 400 ? 'complex' : 
                 totalWords > 150 ? 'medium' : 'simple'

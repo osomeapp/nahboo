@@ -417,20 +417,20 @@ class ModelPerformanceBenchmarking {
         try {
           const promptStartTime = Date.now()
           
-          const response = await multiModelAI.generateResponse({
-            prompt: prompt.prompt,
-            context: prompt.context,
-            useCase: test.useCase,
-            forceModel: modelId,
+          const response = await multiModelAI.generateContent({
+            useCase: 'general_tutoring',
+            userProfile: { subject: 'benchmark', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+            context: `${prompt.prompt}\n\nContext: ${prompt.context}`,
+            requestType: 'content',
+            priority: 'medium',
             maxTokens: 1000,
-            temperature: 0.3,
-            timeout: test.timeoutMs
+            temperature: 0.3
           })
 
           const latency = Date.now() - promptStartTime
           totalLatency += latency
 
-          if (response.success) {
+          if (response.content) {
             successCount++
             
             // Evaluate the response
@@ -444,7 +444,7 @@ class ModelPerformanceBenchmarking {
               promptId: `${prompt.promptId}_${iteration}`,
               response: response.content,
               latency,
-              cost: response.usage?.total_tokens ? response.usage.total_tokens * 0.0001 : 0.001,
+              cost: response.tokensUsed ? response.tokensUsed * 0.0001 : 0.001,
               success: true,
               criteriaScores: evaluation.criteriaScores,
               overallScore: evaluation.overallScore,
@@ -460,7 +460,7 @@ class ModelPerformanceBenchmarking {
               latency,
               cost: 0,
               success: false,
-              error: response.error,
+              error: 'Response content not available',
               criteriaScores: {},
               overallScore: 0
             })
@@ -618,14 +618,17 @@ class ModelPerformanceBenchmarking {
         Score:
       `
 
-      const judgeResponse = await multiModelAI.generateResponse({
-        prompt: judgePrompt,
-        useCase: 'evaluation',
+      const judgeResponse = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'evaluation', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: judgePrompt,
+        requestType: 'explanation',
+        priority: 'high',
         maxTokens: 50,
         temperature: 0.1
       })
 
-      if (judgeResponse.success) {
+      if (judgeResponse.content) {
         const score = parseInt(judgeResponse.content.trim())
         return isNaN(score) ? 0 : Math.max(0, Math.min(100, score))
       }
@@ -658,14 +661,17 @@ class ModelPerformanceBenchmarking {
         }
       `
 
-      const evalResponse = await multiModelAI.generateResponse({
-        prompt: evaluationPrompt,
-        useCase: 'evaluation',
+      const evalResponse = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'evaluation', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: evaluationPrompt,
+        requestType: 'explanation',
+        priority: 'high',
         maxTokens: 300,
         temperature: 0.2
       })
 
-      if (evalResponse.success) {
+      if (evalResponse.content) {
         try {
           return JSON.parse(evalResponse.content)
         } catch {
@@ -710,14 +716,17 @@ class ModelPerformanceBenchmarking {
     `
 
     try {
-      const rubricResponse = await multiModelAI.generateResponse({
-        prompt: rubricPrompt,
-        useCase: 'evaluation',
+      const rubricResponse = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'evaluation', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: rubricPrompt,
+        requestType: 'explanation',
+        priority: 'high',
         maxTokens: 10,
         temperature: 0.1
       })
 
-      if (rubricResponse.success) {
+      if (rubricResponse.content) {
         const score = parseInt(rubricResponse.content.trim())
         const validScore = rubric.find(item => item.score === score)
         return validScore ? score : rubric[Math.floor(rubric.length / 2)].score
@@ -798,14 +807,17 @@ class ModelPerformanceBenchmarking {
         }
       `
 
-      const summaryResponse = await multiModelAI.generateResponse({
-        prompt: summaryPrompt,
-        useCase: 'analysis',
+      const summaryResponse = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'analysis', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: summaryPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
         maxTokens: 400,
         temperature: 0.3
       })
 
-      if (summaryResponse.success) {
+      if (summaryResponse.content) {
         try {
           return JSON.parse(summaryResponse.content)
         } catch {
@@ -933,7 +945,7 @@ class ModelPerformanceBenchmarking {
     const strengths: string[] = []
     
     // Analyze category performance
-    const categoryScores: Record<string, number> = {}
+    const categoryScores: Record<string, number[]> = {}
     results.forEach(result => {
       Object.entries(result.categoryScores).forEach(([category, score]) => {
         if (!categoryScores[category]) categoryScores[category] = []
@@ -988,7 +1000,7 @@ class ModelPerformanceBenchmarking {
 
   // Identify best use case for model
   private identifyBestUseCase(results: BenchmarkResult[]): string {
-    const useCaseScores: Record<string, number> = {}
+    const useCaseScores: Record<string, number[]> = {}
     
     results.forEach(result => {
       const test = this.benchmarkTests.get(result.testId)
@@ -1016,7 +1028,7 @@ class ModelPerformanceBenchmarking {
 
   // Calculate category winners
   private calculateCategoryWinners(results: BenchmarkResult[]): Record<string, string> {
-    const categoryPerformance: Record<string, Record<string, number>> = {}
+    const categoryPerformance: Record<string, Record<string, number[]>> = {}
     
     results.forEach(result => {
       Object.entries(result.categoryScores).forEach(([category, score]) => {
@@ -1100,14 +1112,17 @@ class ModelPerformanceBenchmarking {
         }
       `
 
-      const insightsResponse = await multiModelAI.generateResponse({
-        prompt: insightsPrompt,
-        useCase: 'analysis',
+      const insightsResponse = await multiModelAI.generateContent({
+        useCase: 'content_explanation',
+        userProfile: { subject: 'analysis', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: insightsPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
         maxTokens: 300,
         temperature: 0.3
       })
 
-      if (insightsResponse.success) {
+      if (insightsResponse.content) {
         try {
           return JSON.parse(insightsResponse.content)
         } catch {
