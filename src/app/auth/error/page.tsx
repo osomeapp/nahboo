@@ -2,9 +2,10 @@
 
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { AlertCircle, ArrowLeft } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Loader2 } from 'lucide-react'
+import { Suspense } from 'react'
 
-export default function AuthError() {
+function AuthErrorContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const message = searchParams.get('message') || 'An authentication error occurred'
@@ -46,5 +47,27 @@ export default function AuthError() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function AuthError() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+          <div className="flex justify-center mb-4">
+            <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
+          </div>
+          <h1 className="text-xl font-semibold text-gray-900 mb-2">
+            Loading...
+          </h1>
+          <p className="text-gray-600">
+            Please wait while we prepare the error details...
+          </p>
+        </div>
+      </div>
+    }>
+      <AuthErrorContent />
+    </Suspense>
   )
 }

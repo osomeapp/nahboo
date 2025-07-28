@@ -175,7 +175,7 @@ export class StyleAwareDifficultyEngine {
     )
     
     // Calculate personalization insights
-    const personalizationInsights = this.calculatePersonalizationInsights(
+    const personalizationInsights = await this.calculatePersonalizationInsights(
       styleAwareProfile,
       styleOptimizations,
       contentToAnalyze
@@ -521,11 +521,16 @@ export class StyleAwareDifficultyEngine {
   /**
    * Calculate personalization insights
    */
-  private calculatePersonalizationInsights(
+  private async calculatePersonalizationInsights(
     profile: StyleAwareDifficultyProfile,
     styleOptimizations: any,
     content?: ContentItem
-  ): Promise<any> {
+  ): Promise<{
+    optimalStyle: LearningStyleType;
+    styleMatchScore: number;
+    difficultyMatchScore: number;
+    combinedEffectivenessScore: number;
+  }> {
     
     const optimalStyle = styleOptimizations.primaryStyle.style
     const styleMatchScore = content ? this.getContentStyleMatch(content, optimalStyle) : 0.5
@@ -631,7 +636,7 @@ export class StyleAwareDifficultyEngine {
     const stylePerformance = analysis.stylePerformance
     
     return Object.entries(stylePerformance)
-      .sort((a, b) => b[1].effectiveness - a[1].effectiveness)
+      .sort((a, b) => (b[1] as any).effectiveness - (a[1] as any).effectiveness)
       .slice(0, count)
       .map(([style]) => style as LearningStyleType)
   }

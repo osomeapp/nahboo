@@ -5,7 +5,7 @@ import type { FeedItem } from '@/types'
 
 // Generate large content sets for performance testing
 export function generateLargeContentSet(count: number = 100): FeedItem[] {
-  const contentTypes: FeedItem['type'][] = ['video', 'text', 'quiz', 'link', 'ai_lesson']
+  const contentTypes: FeedItem['content_type'][] = ['video', 'quiz', 'link', 'ai_lesson', 'interactive', 'text']
   const subjects = ['Mathematics', 'Science', 'History', 'English', 'Computer Science', 'Business']
   const items: FeedItem[] = []
 
@@ -20,9 +20,12 @@ export function generateLargeContentSet(count: number = 100): FeedItem[] {
     items.push({
       id: `perf-test-${i}`,
       user_id: 'test-user',
-      type,
+      content_type: type,
       title: `${type === 'ai_lesson' ? '🤖 ' : ''}${subject} Content Item ${i + 1}`,
-      body,
+      description: body,
+      subject,
+      difficulty: Math.floor(Math.random() * 10) + 1,
+      estimated_time: Math.floor(Math.random() * 30) + 5,
       created_at: new Date(Date.now() - i * 60000).toISOString(), // Stagger by minutes
       relevance_score: Math.random(),
       age_rating: 'all',

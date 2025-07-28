@@ -345,12 +345,12 @@ class ScalableLearningPathPersonalizer {
     
     // Use multi-model AI for optimal path generation
     const aiResponse = await multiModelAI.generateContent({
-      prompt: pathGenerationPrompt,
-      useCase: 'educational_design',
-      options: {
-        maxTokens: 4000,
-        temperature: 0.3
-      }
+      useCase: 'general_tutoring',
+      userProfile: { subject: 'education', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+      context: pathGenerationPrompt,
+      requestType: 'planning',
+      priority: 'medium',
+      temperature: 0.3
     })
 
     // Parse AI response into structured path
@@ -1175,13 +1175,5 @@ export const scalableLearningPathPersonalizer = new ScalableLearningPathPersonal
 })
 
 export {
-  ScalableLearningPathPersonalizer,
-  type LearnerProfile,
-  type PersonalizedLearningPath,
-  type LearningPathNode,
-  type LearnerCluster,
-  type PersonalizationTemplate,
-  type AdaptationEvent,
-  type PersonalizationAnalytics,
-  type ScalabilityConfig
+  ScalableLearningPathPersonalizer
 }

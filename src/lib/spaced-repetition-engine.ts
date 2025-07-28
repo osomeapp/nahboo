@@ -573,13 +573,16 @@ export class SpacedRepetitionEngine {
     `
     
     try {
-      const optimization = await multiModelAI.generateContent(
-        optimizationPrompt,
-        'spaced_repetition_optimization',
-        { temperature: 0.3 }
-      )
+      const optimization = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'learning', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: optimizationPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3
+      })
       
-      return this.parseOptimizationResults(optimization, relevantStates)
+      return this.parseOptimizationResults(optimization.content, relevantStates)
       
     } catch (error) {
       console.error('Interval optimization failed:', error)
@@ -710,13 +713,16 @@ export class SpacedRepetitionEngine {
     `
     
     try {
-      const recommendations = await multiModelAI.generateContent(
-        optimizationPrompt,
-        'temporal_optimization',
-        { temperature: 0.4 }
-      )
+      const recommendations = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'learning', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: optimizationPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.4
+      })
       
-      return this.parseTimeRecommendations(recommendations)
+      return this.parseTimeRecommendations(recommendations.content)
       
     } catch (error) {
       console.error('Optimal time analysis failed:', error)

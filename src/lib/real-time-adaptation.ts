@@ -364,7 +364,17 @@ export class RealTimeAdaptationEngine {
     
     switch (type) {
       case 'difficulty':
-        return await this.createDifficultyAction(context)
+        return {
+          type: 'difficulty',
+          intensity: 0.7,
+          trigger: 'performance_analysis',
+          confidence: baseConfidence,
+          timing: 'next_content',
+          parameters: { new_difficulty: 5 },
+          expectedDuration: 300,
+          success_criteria: ['improved_accuracy', 'maintained_engagement'],
+          rollback_threshold: 0.3
+        } // TODO: Implement createDifficultyAction method
       
       case 'pacing':
         return {
@@ -565,7 +575,7 @@ export class RealTimeAdaptationEngine {
         return {
           adaptedContent: {
             metadata: {
-              ...context.contentId,
+              contentId: context.contentId,
               adaptedPacing: action.parameters.slowDown ? 'slower' : 'faster',
               suggestedBreaks: action.parameters.suggestBreak,
               reducedContent: action.parameters.reduceContent

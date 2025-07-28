@@ -272,7 +272,7 @@ export function optimizeLayoutForContent(
   }
 
   // Text-only content can be more dense
-  if (hasOnlyText && config.itemsPerPage === 1 && !config.hasTouch) {
+  if (hasOnlyText && config.itemsPerPage === 1) {
     optimizedConfig.itemsPerPage = Math.min(3, optimizedConfig.itemsPerPage + 1)
     optimizedConfig.contentPadding = Math.max(16, optimizedConfig.contentPadding - 8)
   }

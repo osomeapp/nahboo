@@ -113,7 +113,7 @@ export class UseCaseEngagementEngine {
     })
 
     // Corporate Training Configuration
-    this.useCaseConfigs.set('corporate_training', {
+    this.useCaseConfigs.set('work', {
       primaryObjectives: [
         'Job performance improvement',
         'Compliance training',
@@ -137,7 +137,7 @@ export class UseCaseEngagementEngine {
     })
 
     // K-12 Education Configuration
-    this.useCaseConfigs.set('k12_education', {
+    this.useCaseConfigs.set('student', {
       primaryObjectives: [
         'Curriculum mastery',
         'Critical thinking development',
@@ -161,7 +161,7 @@ export class UseCaseEngagementEngine {
     })
 
     // Higher Education Configuration
-    this.useCaseConfigs.set('higher_education', {
+    this.useCaseConfigs.set('college', {
       primaryObjectives: [
         'Deep subject mastery',
         'Research skills development',
@@ -185,7 +185,7 @@ export class UseCaseEngagementEngine {
     })
 
     // Professional Development Configuration
-    this.useCaseConfigs.set('professional_development', {
+    this.useCaseConfigs.set('lifelong', {
       primaryObjectives: [
         'Career advancement',
         'Industry knowledge update',
@@ -209,7 +209,7 @@ export class UseCaseEngagementEngine {
     })
 
     // Hobbyist Learning Configuration
-    this.useCaseConfigs.set('hobbyist', {
+    this.useCaseConfigs.set('personal', {
       primaryObjectives: [
         'Personal interest pursuit',
         'Creative expression',
@@ -333,17 +333,20 @@ export class UseCaseEngagementEngine {
 
     // Use case-specific actions
     switch (userProfile.use_case) {
-      case 'corporate_training':
+      case 'work':
         actions.push(...await this.generateCorporateActions(userId, metrics, context))
         break
-      case 'k12_education':
+      case 'student':
         actions.push(...await this.generateK12Actions(userId, metrics, context))
         break
-      case 'higher_education':
+      case 'college':
         actions.push(...await this.generateHigherEdActions(userId, metrics, context))
         break
+      case 'lifelong':
+        actions.push(...await this.generatePersonalActions(userId, metrics, context))
+        break
+      case 'tutor':
       case 'personal':
-      case 'hobbyist':
         actions.push(...await this.generatePersonalActions(userId, metrics, context))
         break
     }
@@ -371,7 +374,7 @@ export class UseCaseEngagementEngine {
     }
 
     switch (userProfile.use_case) {
-      case 'corporate_training':
+      case 'work':
         return {
           ...baseConfig,
           trackingGranularity: 'standard',
@@ -386,7 +389,7 @@ export class UseCaseEngagementEngine {
           certificationTracking: true
         }
 
-      case 'k12_education':
+      case 'student':
         return {
           ...baseConfig,
           trackingGranularity: 'micro',
@@ -401,7 +404,7 @@ export class UseCaseEngagementEngine {
           certificationTracking: false
         }
 
-      case 'higher_education':
+      case 'college':
         return {
           ...baseConfig,
           trackingGranularity: 'standard',
@@ -415,7 +418,7 @@ export class UseCaseEngagementEngine {
           certificationTracking: true
         }
 
-      case 'professional_development':
+      case 'lifelong':
         return {
           ...baseConfig,
           trackingGranularity: 'macro',
@@ -484,7 +487,7 @@ export class UseCaseEngagementEngine {
 
     // Add use case-specific sections
     switch (userProfile.use_case) {
-      case 'corporate_training':
+      case 'work':
         return {
           ...baseReport,
           corporate: {
@@ -495,7 +498,7 @@ export class UseCaseEngagementEngine {
           }
         }
 
-      case 'k12_education':
+      case 'student':
         return {
           ...baseReport,
           academic: {
@@ -506,7 +509,7 @@ export class UseCaseEngagementEngine {
           }
         }
 
-      case 'higher_education':
+      case 'college':
         return {
           ...baseReport,
           academic: {

@@ -724,14 +724,16 @@ class OptimizationRecommendationsEngine {
         Focus on actionable improvements that would have the highest impact.
       `
       
-      const aiResponse = await multiModelAI.generateResponse({
-        prompt: analysisPrompt,
-        useCase: 'system_analysis',
-        maxTokens: 500,
+      const aiResponse = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'optimization', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: analysisPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
         temperature: 0.3
       })
       
-      if (aiResponse.success && aiResponse.content) {
+      if (aiResponse.content) {
         // Parse AI recommendations (simplified - in practice would use more sophisticated parsing)
         const aiInsights = aiResponse.content
         

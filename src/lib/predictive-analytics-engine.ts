@@ -475,12 +475,12 @@ Focus on actionable early warnings that could prevent academic failure.`
 
     try {
       const response = await multiModelAI.generateContent({
-        prompt,
-        useCase: 'analysis',
-        options: {
-          temperature: 0.3,
-          maxTokens: 500
-        }
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'analytics', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: prompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3
       })
 
       const aiSignals = JSON.parse(response.content)
@@ -795,12 +795,12 @@ Return JSON array of recommendations:
 
     try {
       const response = await multiModelAI.generateContent({
-        prompt,
-        useCase: 'analysis',
-        options: {
-          temperature: 0.4,
-          maxTokens: 800
-        }
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'analytics', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: prompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.4
       })
 
       const aiRecommendations = JSON.parse(response.content)

@@ -215,10 +215,12 @@ export class RealTimeContentMonitor {
       const mockUserProfile: UserProfile = {
         id: 'monitor',
         name: 'System Monitor',
+        language: 'en',
         subject: content.subject || 'General',
         level: 'intermediate',
         age_group: 'adult',
-        use_case: 'personal'
+        use_case: 'personal',
+        created_at: new Date().toISOString()
       }
 
       const safetyClassification = await contentSafetyEngine.analyzeContentSafety(content, mockUserProfile)
@@ -262,7 +264,7 @@ export class RealTimeContentMonitor {
     Content: ${JSON.stringify({
       title: content.title,
       description: content.description,
-      type: content.type,
+      content_type: content.content_type,
       subject: content.subject,
       metadata: content.metadata
     })}
@@ -286,9 +288,13 @@ export class RealTimeContentMonitor {
     `
 
     try {
-      const response = await multiModelAI.generateContent(analysisPrompt, 'safety_analysis', {
-        response_format: 'json',
-        max_tokens: 1000
+      const response = await multiModelAI.generateContent({
+        useCase: 'general_tutoring',
+        userProfile: { subject: 'safety', level: 'expert', age_group: 'adult', use_case: 'corporate' } as any,
+        context: analysisPrompt,
+        requestType: 'explanation',
+        priority: 'medium',
+        temperature: 0.3
       })
 
       return JSON.parse(response.content)
@@ -357,7 +363,7 @@ export class RealTimeContentMonitor {
         value = content.description
         break
       case 'content.type':
-        value = content.type
+        value = content.content_type
         break
       case 'analysis.safetyLevel':
         value = analysis.safetyLevel
@@ -419,7 +425,7 @@ export class RealTimeContentMonitor {
       status: 'active',
       contextData: {
         contentTitle: content.title,
-        contentType: content.type,
+        contentType: content.content_type,
         safetyLevel: analysis.safetyLevel,
         analysisConfidence: analysis.confidenceScore
       }
@@ -604,7 +610,7 @@ export class RealTimeContentMonitor {
     if (condition.field.includes('language') || condition.value.includes('profanity')) {
       return 'inappropriate_language'
     }
-    return 'inappropriate_content'
+    return 'inappropriate_language'
   }
 
   private calculateAlertSeverity(issues: DetectedIssue[], triggeredRules: string[]): MonitoringAlert['severity'] {
@@ -619,7 +625,7 @@ export class RealTimeContentMonitor {
   }
 
   private determineAlertType(issues: DetectedIssue[]): MonitoringAlert['alertType'] {
-    if (issues.some(i => i.issueType === 'inappropriate_language' || i.issueType === 'inappropriate_content')) {
+    if (issues.some(i => i.issueType === 'inappropriate_language')) {
       return 'inappropriate_content'
     }
     return 'safety_violation'
