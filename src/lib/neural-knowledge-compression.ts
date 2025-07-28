@@ -475,7 +475,8 @@ export class NeuralKnowledgeCompression {
       // Generate optimization suggestions
       const optimizationSuggestions = await this.generateOptimizationSuggestions(
         effectivenessAnalysis,
-        adaptations
+        adaptationNeeds,
+        performanceMetrics
       )
       
       return {
@@ -928,6 +929,24 @@ export class NeuralKnowledgeCompression {
       'Introduce peer collaboration activities for social learning benefits',
       'Optimize cognitive load by chunking complex information more effectively'
     ]
+  }
+
+  // Calculate overall learning effectiveness score
+  private async calculateOverallEffectiveness(learningData: any): Promise<number> {
+    // TODO: Implement proper overall effectiveness calculation logic
+    const baseEffectiveness = 0.75
+    const performanceBonus = learningData.completion_rate ? learningData.completion_rate * 0.1 : 0
+    const engagementBonus = learningData.engagement_score ? learningData.engagement_score * 0.05 : 0
+    return Math.min(0.95, baseEffectiveness + performanceBonus + engagementBonus)
+  }
+
+  // Measure learning acceleration based on performance data
+  private async measureLearningAcceleration(learningData: any): Promise<number> {
+    // TODO: Implement proper learning acceleration measurement logic
+    const initialRate = learningData.initial_learning_rate || 0.5
+    const currentRate = learningData.current_learning_rate || 0.7
+    const acceleration = (currentRate - initialRate) / initialRate
+    return Math.max(-0.5, Math.min(2.0, acceleration)) // Cap between -50% and 200%
   }
 }
 
