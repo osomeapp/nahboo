@@ -235,7 +235,7 @@ export interface AssessmentMaterial {
 export interface DetailedModule {
   module_id: string
   basic_info: CurriculumModule
-  lesson_sequence: LessonPlan[]
+  lesson_sequence: DetailedLessonPlan[]
   detailed_activities: DetailedActivity[]
   formative_assessments: FormativeAssessment[]
   summative_assessments: SummativeAssessment[]
@@ -419,6 +419,14 @@ export interface ScoringGuideline {
   descriptors: string[]
 }
 
+export interface CurriculumGenerationAnalytics {
+  total_curricula_generated: number
+  average_generation_time: number
+  success_rate: number
+  common_subjects: string[]
+  user_satisfaction: number
+}
+
 // Type definitions
 
 export type ContentFormat = 
@@ -464,7 +472,7 @@ export interface CurriculumModule {
 export interface DetailedModule {
   module_id: string
   basic_info: CurriculumModule
-  lesson_sequence: LessonPlan[]
+  lesson_sequence: DetailedLessonPlan[]
   detailed_activities: DetailedActivity[]
   formative_assessments: FormativeAssessment[]
   summative_assessments: SummativeAssessment[]
@@ -740,7 +748,6 @@ export class AutomatedCurriculumGenerator {
             module_id: module.module_id,
             title: lesson.title,
             objectives: lesson.objectives,
-            duration_minutes: lesson.duration_minutes,
             lesson_structure: this.parseLessonStructure(response),
             activities: this.parseLessonActivities(response),
             materials_needed: this.parseMaterialsNeeded(response),
@@ -1253,15 +1260,12 @@ export class AutomatedCurriculumGenerator {
   private parsePedagogicalApproach(response: string, request: CurriculumGenerationRequest): PedagogicalApproach {
     return {
       approach_id: `pedagogy_${Date.now()}`,
-      primary_theories: ['constructivism', 'social_learning_theory', 'cognitive_load_theory'],
-      teaching_methods: this.selectTeachingMethods(request.target_audience),
-      learning_modalities: ['visual', 'auditory', 'kinesthetic', 'reading_writing'],
-      engagement_strategies: this.generateEngagementStrategies(request.target_audience),
-      differentiation_techniques: this.generateDifferentiationTechniques(request.target_audience),
-      technology_integration_level: this.determineTechnologyIntegrationLevel(request.target_audience),
-      assessment_integration: 'seamless_embedded',
-      cultural_responsiveness: this.generateCulturalResponsivenessStrategies(request.target_audience),
-      inclusion_strategies: this.generateInclusionStrategies(request.target_audience)
+      name: 'Comprehensive Learning Approach',
+      description: 'Multi-modal approach incorporating modern pedagogical theories',
+      methodologies: ['constructivist', 'collaborative', 'inquiry_based'],
+      learning_theories: ['constructivism', 'social_learning_theory', 'cognitive_load_theory'],
+      instructional_strategies: ['direct_instruction', 'guided_practice', 'independent_work'],
+      engagement_techniques: ['gamification', 'interactive_activities', 'real_world_applications']
     }
   }
 
@@ -1284,12 +1288,10 @@ export class AutomatedCurriculumGenerator {
 
   private generateContentOutline(objectives: LearningObjective[]): ContentOutline[] {
     return objectives.map((obj, index) => ({
-      section_id: `section_${index + 1}`,
-      topic: obj.title,
-      subtopics: obj.learning_outcomes,
-      estimated_time: obj.estimated_time_hours,
-      content_type: this.selectContentType(obj),
-      complexity_level: obj.difficulty_level
+      outline_id: `outline_${index + 1}`,
+      title: obj.title,
+      description: obj.description,
+      sections: obj.learning_outcomes
     }))
   }
 
@@ -1297,21 +1299,17 @@ export class AutomatedCurriculumGenerator {
     return objectives.flatMap(obj => [
       {
         activity_id: `intro_${obj.objective_id}`,
-        name: `Introduction to ${obj.title}`,
-        type: 'lecture' as ContentFormat,
-        duration_minutes: 30,
-        description: `Overview and foundation concepts for ${obj.title}`,
-        materials: ['presentation', 'handouts'],
-        cognitive_level: 'understand'
+        title: `Introduction to ${obj.title}`,
+        type: 'lecture',
+        duration: 30,
+        instructions: [`Overview and foundation concepts for ${obj.title}`, 'Review key concepts', 'Ask questions']
       },
       {
         activity_id: `practice_${obj.objective_id}`,
-        name: `${obj.title} Practice`,
-        type: 'hands_on_activity' as ContentFormat,
-        duration_minutes: 60,
-        description: `Hands-on practice applying ${obj.title} concepts`,
-        materials: ['worksheets', 'tools', 'technology'],
-        cognitive_level: obj.cognitive_level
+        title: `${obj.title} Practice`,
+        type: 'hands_on_activity',
+        duration: 60,
+        instructions: [`Hands-on practice applying ${obj.title} concepts`, 'Work through examples', 'Complete exercises']
       }
     ])
   }
@@ -1358,31 +1356,8 @@ export class AutomatedCurriculumGenerator {
       total_curricula_generated: 342,
       average_generation_time: 14.5, // minutes
       success_rate: 0.94,
-      popular_subjects: {
-        'Computer Science': 0.28,
-        'Mathematics': 0.22,
-        'Science': 0.18,
-        'Language Arts': 0.16,
-        'Social Studies': 0.16
-      },
-      quality_scores: {
-        average_overall_quality: 8.7,
-        average_alignment_score: 9.1,
-        average_engagement_score: 8.4,
-        average_feasibility_score: 8.9
-      },
-      customization_usage: {
-        duration_adjustments: 0.76,
-        difficulty_modifications: 0.68,
-        assessment_customizations: 0.84,
-        technology_adaptations: 0.59
-      },
-      user_satisfaction: {
-        overall_rating: 4.6,
-        ease_of_use: 4.7,
-        curriculum_quality: 4.5,
-        implementation_support: 4.4
-      }
+      common_subjects: ['Computer Science', 'Mathematics', 'Science', 'Language Arts', 'Social Studies'],
+      user_satisfaction: 4.6
     }
   }
 
@@ -1414,7 +1389,7 @@ export class AutomatedCurriculumGenerator {
   }
 
   // More implementation methods would continue...
-  private parseLessonSequence(response: string, module: CurriculumModule): LessonPlan[] {
+  private parseLessonSequence(response: string, module: CurriculumModule): DetailedLessonPlan[] {
     // Basic lesson sequence generation
     return module.objectives.map((objId, index) => ({
       lesson_id: `lesson_${module.module_id}_${index + 1}`,
@@ -1435,12 +1410,10 @@ export class AutomatedCurriculumGenerator {
 
   private createBasicLessonStructure(): LessonStructure {
     return {
-      opening: { duration_minutes: 10, activities: ['review', 'objective_introduction'] },
-      main_content: { 
-        duration_minutes: 60, 
-        activities: ['instruction', 'guided_practice', 'independent_practice'] 
-      },
-      closure: { duration_minutes: 20, activities: ['summary', 'assessment', 'preview'] }
+      introduction: 'Review previous concepts and introduce objectives',
+      main_content: ['instruction', 'guided_practice', 'independent_practice'],
+      conclusion: 'Summarize key points and preview next lesson',
+      transitions: ['transition_to_practice', 'transition_to_closure']
     }
   }
 
@@ -1449,38 +1422,34 @@ export class AutomatedCurriculumGenerator {
       {
         activity_id: 'warmup',
         name: 'Warm-up Activity',
-        duration_minutes: 10,
+        duration: 10,
         type: 'discussion',
         description: 'Review previous concepts and introduce new topic',
-        materials: ['whiteboard'],
-        group_structure: 'whole_class'
+        materials: ['whiteboard']
       },
       {
         activity_id: 'main_instruction',
         name: 'Main Instruction',
-        duration_minutes: 40,
+        duration: 40,
         type: 'interactive_lesson',
         description: 'Core content delivery with examples and demonstrations',
         materials: ['presentation', 'handouts'],
-        group_structure: 'whole_class'
       },
       {
         activity_id: 'practice',
         name: 'Guided Practice',
-        duration_minutes: 30,
+        duration: 30,
         type: 'hands_on_activity',
         description: 'Students practice with instructor support',
         materials: ['worksheets', 'manipulatives'],
-        group_structure: 'small_groups'
       },
       {
         activity_id: 'closure',
         name: 'Lesson Closure',
-        duration_minutes: 10,
+        duration: 10,
         type: 'discussion',
         description: 'Summary and check for understanding',
         materials: ['exit_ticket'],
-        group_structure: 'whole_class'
       }
     ]
   }
@@ -1835,7 +1804,7 @@ export class AutomatedCurriculumGenerator {
           activity_id: `${module.module_id}_activity_${activityIndex + 1}`,
           name: name.trim(),
           type: this.selectActivityType(name, module.learning_objectives),
-          duration_minutes: parseInt(duration) || 30,
+          duration: parseInt(duration) || 30,
           learning_objectives: objectives.split(',').map(obj => obj.trim()).slice(0, 3),
           instructions: this.generateActivityInstructions(name, module.learning_objectives),
           materials: this.generateRequiredMaterials(name, module.target_audience),
@@ -2419,46 +2388,7 @@ export class AutomatedCurriculumGenerator {
 
 
 
-  private parsePedagogicalApproach(response: string, request: any): any {
-    const audience = request.target_audience
-    
-    return {
-      approach_id: `pedagogy_${Date.now()}`,
-      primary_theories: this.selectPedagogicalTheories(audience),
-      teaching_methods: this.selectTeachingMethods(audience),
-      learning_modalities: ['visual', 'auditory', 'kinesthetic', 'reading_writing'],
-      engagement_strategies: this.generateEngagementStrategies(audience),
-      differentiation_techniques: this.generateDifferentiationTechniques(audience),
-      technology_integration_level: this.determineTechnologyIntegrationLevel(audience),
-      assessment_integration: 'seamless_embedded',
-      cultural_responsiveness: this.generateCulturalResponsivenessStrategies(audience),
-      inclusion_strategies: this.generateInclusionStrategies(audience)
-    }
-  }
 
-  private parseLessonSequence(response: string, module: any): any[] {
-    const lessonCount = Math.ceil(module.duration_hours / 2) // 2-hour lessons
-    const lessons: any[] = []
-    
-    for (let i = 0; i < lessonCount; i++) {
-      lessons.push({
-        lesson_id: `lesson_${module.module_id}_${i + 1}`,
-        module_id: module.module_id,
-        title: `${module.title} - Lesson ${i + 1}`,
-        objectives: module.objectives.slice(i, i + 1), // Distribute objectives
-        duration_minutes: 120,
-        sequence_order: i + 1,
-        prerequisite_lessons: i > 0 ? [`lesson_${module.module_id}_${i}`] : [],
-        learning_outcomes: [
-          `Students will understand key concepts from lesson ${i + 1}`,
-          `Students will apply skills learned in lesson ${i + 1}`,
-          `Students will demonstrate mastery of lesson ${i + 1} objectives`
-        ]
-      })
-    }
-    
-    return lessons
-  }
 
   private parseDetailedActivities(response: string, module: any): any[] {
     const activities: any[] = []
@@ -2469,7 +2399,7 @@ export class AutomatedCurriculumGenerator {
         activity_id: `${type}_${module.module_id}_${Date.now()}`,
         name: `${type.charAt(0).toUpperCase() + type.slice(1)} Activity`,
         type: type as ContentFormat,
-        duration_minutes: 30,
+        duration: 30,
         learning_objectives: module.objectives,
         instructions: this.generateActivityInstructions(type, module),
         materials: this.generateActivityMaterials(type),
@@ -2494,7 +2424,7 @@ export class AutomatedCurriculumGenerator {
         method: 'quick_questions',
         criteria: ['prior_knowledge', 'readiness_level'],
         feedback_mechanism: 'immediate_digital',
-        duration_minutes: 5,
+        duration: 5,
         question_count: 3
       },
       {
@@ -2504,7 +2434,7 @@ export class AutomatedCurriculumGenerator {
         method: 'think_pair_share',
         criteria: ['understanding', 'application'],
         feedback_mechanism: 'peer_and_instructor',
-        duration_minutes: 10,
+        duration: 10,
         question_count: 2
       },
       {
@@ -2514,7 +2444,7 @@ export class AutomatedCurriculumGenerator {
         method: 'reflection_prompt',
         criteria: ['comprehension', 'confidence_level'],
         feedback_mechanism: 'instructor_review',
-        duration_minutes: 5,
+        duration: 5,
         question_count: 2
       }
     ]
@@ -2544,7 +2474,7 @@ export class AutomatedCurriculumGenerator {
         timing: 'module_end',
         format: 'comprehensive_exam',
         weight: 0.4,
-        duration_minutes: 90,
+        duration: 90,
         rubric: 'exam_scoring_rubric',
         objectives_assessed: module.objectives,
         question_distribution: {
@@ -2682,12 +2612,12 @@ export class AutomatedCurriculumGenerator {
   private parseLessonStructure(response: string): any {
     return {
       opening: {
-        duration_minutes: 15,
+        duration: 15,
         activities: ['warm_up', 'review_previous', 'introduce_objectives'],
         purpose: 'activate_prior_knowledge_set_expectations'
       },
       main_content: {
-        duration_minutes: 80,
+        duration: 80,
         activities: [
           'direct_instruction',
           'guided_practice',
@@ -2697,7 +2627,7 @@ export class AutomatedCurriculumGenerator {
         purpose: 'deliver_content_practice_skills'
       },
       closure: {
-        duration_minutes: 25,
+        duration: 25,
         activities: ['summarize_key_points', 'check_understanding', 'preview_next', 'reflection'],
         purpose: 'consolidate_learning_prepare_transition'
       }
@@ -2709,7 +2639,7 @@ export class AutomatedCurriculumGenerator {
       {
         activity_id: 'opening_warmup',
         name: 'Engaging Warm-Up',
-        duration_minutes: 10,
+        duration: 10,
         type: 'interactive',
         description: 'Quick activity to engage students and activate prior knowledge',
         materials: ['digital_presentation', 'student_response_system'],
@@ -2718,7 +2648,7 @@ export class AutomatedCurriculumGenerator {
       {
         activity_id: 'main_instruction',
         name: 'Core Content Delivery',
-        duration_minutes: 25,
+        duration: 25,
         type: 'multimedia_instruction',
         description: 'Multi-modal presentation of key concepts with examples',
         materials: ['interactive_presentation', 'video_clips', 'real_world_examples'],
@@ -2727,7 +2657,7 @@ export class AutomatedCurriculumGenerator {
       {
         activity_id: 'guided_practice',
         name: 'Scaffolded Practice',
-        duration_minutes: 30,
+        duration: 30,
         type: 'collaborative_problem_solving',
         description: 'Students practice new skills with instructor guidance',
         materials: ['practice_worksheets', 'manipulatives', 'digital_tools'],
@@ -2736,7 +2666,7 @@ export class AutomatedCurriculumGenerator {
       {
         activity_id: 'independent_application',
         name: 'Individual Practice',
-        duration_minutes: 25,
+        duration: 25,
         type: 'independent_work',
         description: 'Students apply learning independently with support available',
         materials: ['individual_assignments', 'reference_materials', 'help_resources'],
@@ -2745,7 +2675,7 @@ export class AutomatedCurriculumGenerator {
       {
         activity_id: 'lesson_closure',
         name: 'Reflection and Summary',
-        duration_minutes: 10,
+        duration: 10,
         type: 'reflection_discussion',
         description: 'Students reflect on learning and preview next steps',
         materials: ['exit_tickets', 'reflection_prompts'],
