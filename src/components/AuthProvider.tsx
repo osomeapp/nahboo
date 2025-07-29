@@ -59,14 +59,55 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const userProfile = await getUserProfileWithAuth(currentSession.user.id)
             if (mounted && userProfile) {
               setProfile(userProfile)
+            } else if (mounted) {
+              // If no profile exists, create a minimal profile object to prevent errors
+              console.log('No profile found for user, creating minimal profile state')
+              setProfile({
+                id: currentSession.user.id,
+                email: currentSession.user.email || '',
+                name: currentSession.user.user_metadata?.name || 'User',
+                language: 'en',
+                subject: 'general',
+                subjects: [],
+                level: 'beginner' as const,
+                age_group: 'adult' as const,
+                use_case: 'personal' as const,
+                onboarding_completed: false,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              })
             }
           } catch (profileError) {
             console.error('Failed to load user profile:', profileError)
-            // Don't break auth flow if profile loading fails
+            console.error('Profile error details:', {
+              userId: currentSession.user.id,
+              error: profileError instanceof Error ? profileError.message : profileError
+            })
+            // Create minimal profile even on error to prevent app crashes
+            if (mounted) {
+              setProfile({
+                id: currentSession.user.id,
+                email: currentSession.user.email || '',
+                name: currentSession.user.user_metadata?.name || 'User',
+                language: 'en',
+                subject: 'general',
+                subjects: [],
+                level: 'beginner' as const,
+                age_group: 'adult' as const,
+                use_case: 'personal' as const,
+                onboarding_completed: false,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              })
+            }
           }
         }
       } catch (error) {
         console.error('Auth initialization error:', error)
+        console.error('Auth init error details:', {
+          error: error instanceof Error ? error.message : error,
+          stack: error instanceof Error ? error.stack : undefined
+        })
       } finally {
         if (mounted) {
           setIsLoading(false)
@@ -93,10 +134,43 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // Load user profile when user signs in
         try {
           const userProfile = await getUserProfileWithAuth(newSession.user.id)
-          setProfile(userProfile)
+          if (userProfile) {
+            setProfile(userProfile)
+          } else {
+            // Create minimal profile if none exists
+            console.log('Creating minimal profile for authenticated user')
+            setProfile({
+              id: newSession.user.id,
+              email: newSession.user.email || '',
+              name: newSession.user.user_metadata?.name || 'User',
+              language: 'en',
+              subject: 'general',
+              subjects: [],
+              level: 'beginner' as const,
+              age_group: 'adult' as const,
+              use_case: 'personal' as const,
+              onboarding_completed: false,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            })
+          }
         } catch (error) {
           console.error('Failed to load profile after auth change:', error)
-          setProfile(null)
+          // Create minimal profile even on error
+          setProfile({
+            id: newSession.user.id,
+            email: newSession.user.email || '',
+            name: newSession.user.user_metadata?.name || 'User',
+            language: 'en',
+            subject: 'general',
+            subjects: [],
+            level: 'beginner' as const,
+            age_group: 'adult' as const,
+            use_case: 'personal' as const,
+            onboarding_completed: false,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
         }
       } else {
         // Clear profile when user signs out
