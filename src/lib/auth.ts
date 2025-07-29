@@ -51,6 +51,7 @@ export async function signUp(data: SignUpData) {
     const { email, password, profile } = data
 
     // Create auth user
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000')
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -58,7 +59,8 @@ export async function signUp(data: SignUpData) {
         data: {
           name: profile.name,
           onboarding_completed: false
-        }
+        },
+        emailRedirectTo: `${siteUrl}/auth/callback`
       }
     })
 
@@ -281,8 +283,9 @@ export async function completeOnboarding(
 // Send password reset email
 export async function sendPasswordReset(email: string) {
   try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`
+      redirectTo: `${siteUrl}/reset-password`
     })
 
     if (error) {
@@ -363,10 +366,11 @@ export async function isAuthenticated(): Promise<boolean> {
 // Sign in with Google
 export async function signInWithGoogle() {
   try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`
+        redirectTo: `${siteUrl}/auth/callback`
       }
     })
 
@@ -384,10 +388,11 @@ export async function signInWithGoogle() {
 // Sign in with GitHub
 export async function signInWithGitHub() {
   try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`
+        redirectTo: `${siteUrl}/auth/callback`
       }
     })
 
